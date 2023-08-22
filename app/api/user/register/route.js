@@ -6,10 +6,6 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
     const {first_name, last_name, username, passWord} = await request.json();
     await connectMongoDB();
-    const user = await User.findOne({username});
-    if(user) {
-        return NextResponse.json({message: "User already exists"}, {status: 400});
-    } 
     const salt = await bcryptjs.genSalt(10);
     const password = await bcryptjs.hash(passWord, salt);
     await User.create({first_name, last_name, username, password});

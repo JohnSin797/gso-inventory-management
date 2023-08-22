@@ -2,11 +2,11 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import axios from "axios"
 
 export default function Register() {
-
+    const router = useRouter()
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [userName, setUserName] = useState("")
@@ -14,13 +14,14 @@ export default function Register() {
 
     const register = async () => {
         if(firstName != '' && lastName != '' && userName != '' && passWord != '') {
-            axios.post('/api/user', {first_name:firstName,last_name:lastName,username:userName,password:passWord})
+            axios.post('/api/user/register', {first_name:firstName,last_name:lastName,username:userName,passWord:passWord})
             .then(res => {
                 console.log('res', res.data.message);
-                redirect('/');
+                router.push('/')
             })
             .catch(err => {
-                console.log('error in request', err);
+                // console.log('error in request', err.response.data.message);
+                alert(err.response.data.message)
             });
         }
         else {

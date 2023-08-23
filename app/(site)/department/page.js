@@ -1,5 +1,4 @@
 import Navigation from "@/app/components/navigation"
-import TbCurrencyPeso from "react-icons/tb"
 
 export default function Department() {
     return (
@@ -17,7 +16,6 @@ export default function Department() {
                         />
                     </div>
                     <div>
-                        <TbCurrencyPeso />
                         <input
                             type="text"
                             className="bg-black text-center text-xs border-b border-white"
@@ -25,6 +23,18 @@ export default function Department() {
                         <p className="text-center text-xs">TOTAL</p>
                     </div>
                 </div>
+                <table className="table-fixed w-full">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>OFFICE</th>
+                            <th>Name of EMPLOYEE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
         </div>
     )

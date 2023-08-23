@@ -33,25 +33,6 @@ export default function Register() {
         });
     };
 
-    // useEffect(() => {
-    //     if (strength == 'weak') {
-    //         setErrors({
-    //             ...errors,
-    //             password: 'Password is too weak. It must be at least medium strength.'
-    //         })
-    //         Swal.fire({
-    //             title: 'Password Error',
-    //             icon: 'error',
-    //             text: 'Password should be alphanumeric and contain at least 1 uppercase character.'
-    //         })
-    //     } else {
-    //         setErrors({
-    //             ...errors,
-    //             password: ''
-    //         })
-    //     }
-    // }, [strength, errors])
-
     const validateForm = () => {
         const errors = {};
 

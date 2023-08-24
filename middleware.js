@@ -22,5 +22,6 @@ export const config = {
         '/login',
         '/register',
         '/department',
+        '/data-entry/:path*'
     ],
 }

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 import Swal from "sweetalert2";
-import jwt from "jsonwebtoken";
 
 export default function Login() {
 
@@ -35,9 +34,7 @@ export default function Login() {
         if(isFormValid) {
             try {
                 const response = await axios.post('/api/user/login', {username: userName, password: passWord})
-                // const decoded = jwt.verify(response.data.token, 'gsoinventorymanagementsystem')
-                // console.log(decoded)
-                router.replace('/')
+                router.push('/')
             } catch (error) {
                 console.log(error.response.status)
                 if(error.response.status == 401) {

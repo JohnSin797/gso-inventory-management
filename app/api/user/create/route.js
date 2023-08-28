@@ -1,20 +1,19 @@
 import connectMongoDB from "@/libs/mongodb";
-import User from "@/models/users";
+import Employee from "@/models/employees";
 import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function POST (request) {
     try {
-        const {first_name, last_name, username, password, department} = await request.json();
+        const {first_name, last_name, username, passWord, department} = await request.json();
         await connectMongoDB();
-        const user = await User.findOne({username});
-        if(user) {
+        const employee = await Employee.findOne({username});
+        if(employee) {
             return NextResponse.json({message: 'Username already exists'}, {status: 400});
         }
         const salt = await bcryptjs.genSalt(10);
-        const hashedPassword = await bcryptjs.hash(password, salt);
-        await User.create({first_name, last_name, username, hashedPassword, department});
+        const password = await bcryptjs.hash(passWord, salt);
+        await Employee.create({first_name, last_name, username, password, department});
         return NextResponse.json({message: 'Employee successfully added!'}, {status: 200});
     } catch (error) {
         return NextResponse.json({error: error.message}, {status: 500});

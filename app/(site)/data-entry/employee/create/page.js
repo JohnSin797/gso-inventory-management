@@ -14,7 +14,7 @@ export default function Create () {
         first_name: '',
         last_name: '',
         username: '',
-        passWord: generatePassword(),
+        password: generatePassword(),
         department: '',
     })
 
@@ -45,7 +45,7 @@ export default function Create () {
             error.password = 'Password is too weak'
         }
 
-        if(!formData.passWord.trim()) {
+        if(!formData.password.trim()) {
             error.password = 'Password is required'
         }
 
@@ -110,7 +110,7 @@ export default function Create () {
         const newPassword = generatePassword()
         setFormData({
           ...formData,
-          passWord: newPassword,
+          password: newPassword,
         })
     }
 
@@ -151,7 +151,7 @@ export default function Create () {
                             className="bg-black border-b w-full"
                             placeholder="Password"
                             name="password"
-                            value={formData.passWord}
+                            value={formData.password}
                             onChange={handleChange}
                         />
                         <button 
@@ -161,7 +161,7 @@ export default function Create () {
                             <small>new password</small>
                         </button>
                     </div>
-                    <PasswordStrengthChecker password={formData.passWord} onStrengthChange={setStrength} />
+                    <PasswordStrengthChecker password={formData.password} onStrengthChange={setStrength} />
                     <p className="block h-2 text-red-600 text-xs text-center">{errors.password}</p>
                     <input 
                         type="text"

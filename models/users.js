@@ -19,10 +19,7 @@ const userSchema = new Schema(
             type: String,
             required: [true, "password is required"]
         },
-        department: {
-            type: String,
-            required: [true, "department is required"]
-        },
+        role: String,
         forgotPasswordToken: String,
         forgotPasswordTokenExpiry: Date,
         verifyToken: String,

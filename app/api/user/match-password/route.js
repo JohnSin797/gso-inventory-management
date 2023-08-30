@@ -6,8 +6,9 @@ import { NextResponse } from "next/server";
 export async function POST (request) {
     try {
         const {password} = await request.json();
+        const admin = await request.cookies.get('admin')?.value || '';
         await connectMongoDB();
-        const user = await User.findOne({username: 'test'});
+        const user = await User.findOne({username: 'admin'});
         if(!user) {
             return NextResponse.json({message: 'Can not find user'}, {status: 401});
         }

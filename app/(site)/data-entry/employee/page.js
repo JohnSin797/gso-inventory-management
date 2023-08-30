@@ -1,6 +1,7 @@
 'use client'
 
 import axios from "axios"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 
@@ -55,38 +56,46 @@ export default function Employee () {
 
     return (
         <div className="absolute top-60 p-6 flex justify-center items-center w-full">
-            <div className="w-3/5 border rounded p-6 space-y-2 h-72 scroll-y">
-                <table className="table-fixed border-separate border border-slate-600 w-full">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Department</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {employees.map((item, id)=>{
-                            return (
-                                <tr key={id}>
-                                    <td className="border border-slate-600">{item.first_name}</td>
-                                    <td className="border border-slate-600">{item.last_name}</td>
-                                    <td className="border border-slate-600">{item.department}</td>
-                                    <td className="border border-slate-600">{item.username}</td>
-                                    <td className="border border-slate-600">
-                                        <button 
-                                            className="p-2 w-full text-xs border rounded"
-                                            onClick={()=>showPassword(item.password)}
-                                        >
-                                            get password
-                                        </button>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+            <div className="w-3/5 border rounded p-6 space-y-2">
+                <div className="block border border-slate-600 h-72 scroll overflow-auto">
+                    <table className="table-auto md:table-fixed border-separate w-full">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Department</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {employees.map((item, id)=>{
+                                return (
+                                    <tr key={id}>
+                                        <td className="border border-slate-600">{item.first_name}</td>
+                                        <td className="border border-slate-600">{item.last_name}</td>
+                                        <td className="border border-slate-600">{item.department}</td>
+                                        <td className="border border-slate-600">{item.username}</td>
+                                        <td className="border border-slate-600">
+                                            <button 
+                                                className="p-2 w-full text-xs border rounded"
+                                                onClick={()=>showPassword(item.password)}
+                                            >
+                                                get password
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+                <Link 
+                    href={'/data-entry/employee/create'} 
+                    className="block p-1 w-full text-center border rounded hover:font-bold hover:bg-cyan-900"
+                >
+                    new user
+                </Link>
             </div>
         </div>
     )

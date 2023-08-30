@@ -36,7 +36,7 @@ export default function Login() {
                 const response = await axios.post('/api/user/login', {username: userName, password: passWord})
                 router.push('/')
             } catch (error) {
-                console.log(error.response.status)
+                console.log(error)
                 if(error.response.status == 401) {
                     setErrors({
                         username: error.response.data.message
@@ -82,12 +82,12 @@ export default function Login() {
                     >
                         login
                     </button>
-                    <Link 
+                    {/* <Link 
                         href={'/register'}
                         className="p-1 w-1/2 block border-cyan-400 text-center hover:bg-cyan-400 hover:text-black hover:font-bold"
                     >
                         register
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
         </div>

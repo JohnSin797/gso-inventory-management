@@ -35,7 +35,7 @@ export default function Scan () {
 
     const getItem = async (code) => {
         try {
-            await axios.post('/api/item/create', {barcode_text: code})
+            await axios.post('/api/item/show', {barcode_text: code})
             .then(res=>{
                 setForm(res.data.data)
                 Swal.fire(res.data.message)

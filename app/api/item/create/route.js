@@ -9,7 +9,10 @@ export async function POST (request) {
         const user = await request.cookies.get('token') || request.cookies.get('admin');
         const isItemAlreadyExist = await Item.findOne({barcode_text: item.barcode_text});
         if(isItemAlreadyExist) {
-            return NextResponse.json({message: 'Already exists', data: isItemAlreadyExist}, {status: 201});
+            return NextResponse.json({message: 'Already exists', data: {
+                item_name: isItemAlreadyExist.item_name,
+                barcode_text: isItemAlreadyExist.barcode_text
+            }}, {status: 201});
         }
         const insertItem = {
             item_name: item.item_name,

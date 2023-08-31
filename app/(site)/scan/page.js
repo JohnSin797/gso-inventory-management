@@ -25,6 +25,7 @@ export default function Scan () {
         try {
             await axios.post('/api/item/create', form)
             .then(res=>{
+                setForm(res.data.data)
                 Swal.fire(res.data.message)
             })
         } catch (error) {
@@ -37,6 +38,7 @@ export default function Scan () {
             await axios.post('/api/item/create', {barcode_text: code})
             .then(res=>{
                 setForm(res.data.data)
+                Swal.fire(res.data.message)
             })
         } catch (error) {
             console.log(error.message)

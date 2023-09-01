@@ -38,10 +38,10 @@ export default function Scan () {
             await axios.post('/api/item/show', {barcode_text: code})
             .then(res=>{
                 setForm(res.data.data)
-                Swal.fire(res.data.message)
+                // Swal.fire(res.data.message)
             })
         } catch (error) {
-            console.log(error.message)
+            // console.log(error.message)
         }
     }
 

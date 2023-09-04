@@ -20,7 +20,8 @@ const employeeSchema = new Schema(
             required: [true, "password is required"]
         },
         department: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: 'Department',
             required: [true, "department is required"]
         },
         forgotPasswordToken: String,

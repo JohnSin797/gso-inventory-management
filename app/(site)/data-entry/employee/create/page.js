@@ -9,6 +9,22 @@ export default function Create () {
     const router = useRouter()
     const [errors, setErrors] = useState({})
     const [strength, setStrength] = useState('')
+    const [department, setDepartment] = useState([])
+
+    const getDepartmentArray = async () => {
+        try {
+            await axios.get('/api/department/data-entry')
+            .then(res=>{
+                setDepartment(res.data.data)
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    useEffect(()=>{
+        getDepartmentArray()
+    },[])
 
     const [formData, setFormData] = useState({
         first_name: '',
@@ -62,7 +78,9 @@ export default function Create () {
         try {
             if(isFormValid) {
                 await axios.post('/api/user/create', formData)
-                router.push('/data-entry/employee')
+                .then(res=>{
+                    router.push('/data-entry/employee')
+                })
             }
         } catch (error) {
             console.log(error)
@@ -163,14 +181,29 @@ export default function Create () {
                     </div>
                     <PasswordStrengthChecker password={formData.password} onStrengthChange={setStrength} />
                     <p className="block h-2 text-red-600 text-xs text-center">{errors.password}</p>
-                    <input 
+                    {/* <input 
                         type="text"
                         className="bg-black border-b w-full"
                         placeholder="Department"
                         name="department"
                         value={formData.department}
                         onChange={handleChange}
-                    />
+                    /> */}
+                    <select 
+                        className="bg-black border-b w-full"
+                        name="department"
+                        value={formData.department}
+                        onChange={handleChange}
+                    >
+                        <option>-- Select Department --</option>
+                        {
+                            department.map((item,id)=>{
+                                return(
+                                    <option key={id} value={item.department_name}>{item.department_name}</option>
+                                )
+                            })
+                        }
+                    </select>
                     <p className="block h-2 text-red-600 text-xs text-center">{errors.department}</p>
                     <button
                         className="p-1 w-1/3 border rounded hover:bg-cyan-900"

@@ -8,24 +8,26 @@ import Swal from "sweetalert2";
 
 export default function Scan () {
     const [scanResult, setScanResult] = useState(null);
-    const [form, setForm] = useState({
-        item_name: '',
-        barcode_text: '',
-    })
+    // const [form, setForm] = useState({
+    //     item_name: '',
+    //     barcode_text: '',
+    // })
+    const [itemName, setItemName] = useState('');
+    const [itemCode, setItemCode] = useState('');
 
-    const handleChange = (e) => {
-        const {name, value} = e.target
-        setForm({
-            ...form,
-            [name]: value
-        })
-    }
+    // const handleChange = (e) => {
+    //     const {name, value} = e.target
+    //     setForm({
+    //         ...form,
+    //         [name]: value
+    //     })
+    // }
 
     const saveItem = async () => {
         try {
-            await axios.post('/api/item/create', form)
+            await axios.post('/api/item/create', {item_name: itemName, barcode_text: itemCode})
             .then(res=>{
-                setForm(res.data.data)
+                // setForm(res.data.data)
                 Swal.fire(res.data.message)
             })
         } catch (error) {
@@ -37,11 +39,11 @@ export default function Scan () {
         try {
             await axios.post('/api/item/show', {barcode_text: code})
             .then(res=>{
-                setForm(res.data.data)
-                // Swal.fire(res.data.message)
+                // setForm(res.data.data)
+                Swal.fire(res.data.message)
             })
         } catch (error) {
-            // console.log(error.message)
+            console.log(error.message)
         }
     }
 
@@ -60,10 +62,10 @@ export default function Scan () {
         {
           scanner.clear();
           setScanResult(result);
-          setForm({
-            ...form,
-            barcode_text: result
-          })
+        //   setForm({
+        //     ...form,
+        //     barcode_text: result
+        //   })
           getItem(result);
         }
       
@@ -90,16 +92,16 @@ export default function Scan () {
                         className="w-full bg-black border-b"
                         placeholder="Item Name" 
                         name="item_name"
-                        onChange={handleChange}
-                        value={form.item_name}
+                        value={itemName}
+                        onChange={(e)=>setItemName(e.target.value)}
                     />
                     <input 
                         type="text"
                         className="w-full bg-black border-b"
                         placeholder="Item Code" 
-                        value={form.barcode_text}
+                        value={itemCode}
                         name="barcode_text"
-                        onChange={handleChange}
+                        onChange={(e)=>setItemCode(e.target.value)}
                     />
                     <button 
                         className="border p-1 rounded w-1/6 hover:bg-cyan-900"

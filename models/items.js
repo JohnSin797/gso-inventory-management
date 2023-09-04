@@ -12,7 +12,8 @@ const itemSchema = new Schema(
         },
         user_id: {
             type: Schema.Types.ObjectId,
-            ref: 'users'
+            ref: 'User',
+            required: [true, 'user not found']
         }
     },
     {

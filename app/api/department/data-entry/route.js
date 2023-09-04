@@ -1,0 +1,14 @@
+import connectMongoDB from "@/libs/mongodb";
+import { NextResponse } from "next/server";
+import Department from "@/models/department";
+
+export async function GET () {
+    try {
+        await connectMongoDB();
+        const data = await Department.find({});
+        return NextResponse.json({message: 'OK', data: Object.values(data)}, {status: 200});
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({message: error.message}, {status: 500});
+    }
+}

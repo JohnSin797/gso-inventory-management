@@ -66,6 +66,7 @@ export default function Employee () {
                                 <th>Department</th>
                                 <th>Username</th>
                                 <th>Password</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,14 +75,21 @@ export default function Employee () {
                                     <tr key={id}>
                                         <td className="border border-slate-600">{item.first_name}</td>
                                         <td className="border border-slate-600">{item.last_name}</td>
-                                        <td className="border border-slate-600">{item.department}</td>
+                                        <td className="border border-slate-600">{item.department.department_name}</td>
                                         <td className="border border-slate-600">{item.username}</td>
+                                        <td className="border border-slate-600 text-xs">
+                                            {item.password}
+                                        </td>
                                         <td className="border border-slate-600">
-                                            <button 
-                                                className="p-2 w-full text-xs border rounded"
-                                                onClick={()=>showPassword(item.password)}
+                                            <button
+                                                className="w-1/2 hover:font-bold hover:bg-cyan-600"
                                             >
-                                                get password
+                                                edit
+                                            </button>
+                                            <button
+                                                className="w-1/2 hover:font-bold hover:bg-red-600"
+                                            >
+                                                delete
                                             </button>
                                         </td>
                                     </tr>

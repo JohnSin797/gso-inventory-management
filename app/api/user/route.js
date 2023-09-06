@@ -1,5 +1,6 @@
 import connectMongoDB from "@/libs/mongodb";
 import User from "@/models/users";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -10,4 +11,14 @@ export async function POST(request) {
         return NextResponse.json({message: "User already exists"}, {status: 201});
     }
     return NextResponse.json({message: "User does not exist"}, {status: 400});
+}
+
+export async function GET(request) {
+    try {
+        const token = await request.cookies.get('token')?.value || request.cookies.get('admin')?.value;
+        const decoded = jwt.decode(token, {complete: true});
+        return NextResponse.json({message: 'OK', role: decoded.payload.role}, {status: 200});
+    } catch (error) {
+        return NextResponse.json({message: error.message}, {status: 500});
+    }
 }

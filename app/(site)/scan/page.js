@@ -8,10 +8,12 @@ import Swal from "sweetalert2";
 
 export default function Scan () {
     const [scanResult, setScanResult] = useState(null);
-    // const [form, setForm] = useState({
-    //     item_name: '',
-    //     barcode_text: '',
-    // })
+    const [form, setForm] = useState({
+        item_name: '',
+        barcode_text: '',
+        quantity: '',
+        cost: '',
+    })
     const [itemName, setItemName] = useState('');
     const [itemCode, setItemCode] = useState('');
 

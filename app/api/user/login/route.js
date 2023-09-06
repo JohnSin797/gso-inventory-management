@@ -33,8 +33,10 @@ export async function POST(request) {
         }
         const userData = {
             id: user._id,
+            username: user.username,
             firstName: user.first_name,
             lastName: user.last_name,
+            role: user.role
         }
         const response = NextResponse.json({message: "Login successfully"}, {success: true});
         if(user.role == 'admin') {

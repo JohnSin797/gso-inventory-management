@@ -1,11 +1,23 @@
 import connectMongoDB from "@/libs/mongodb";
 import Item from "@/models/items";
+import Employee from "@/models/employees";
+import User from "@/models/users";
+import Department from "@/models/department";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
-export async function GET () {
+export async function GET (request) {
     try {
         await connectMongoDB();
-        const items = await Item.find({});
+        const token = await request.cookies.get('token')?.value || '';
+        if(token) {
+            const userToken = jwt.decode(token, {complete: true});
+            const user = await User.findById(userToken.payload.id);
+            const employee = await Employee.findOne({username: user.username});
+            const data = await Item.find({employee: employee}).populate('employee').populate('department').exec();
+            return NextResponse.json({message: 'OK', data: data}, {status: 201});
+        }
+        const items = await Item.find({}).populate('employee').populate('department').exec();
         return NextResponse.json({message: 'OK', data: items}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

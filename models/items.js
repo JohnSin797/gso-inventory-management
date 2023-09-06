@@ -1,4 +1,6 @@
 import mongoose, { Schema } from "mongoose";
+import Employee from "./employees";
+import Department from "./department";
 
 const itemSchema = new Schema(
     {
@@ -8,12 +10,24 @@ const itemSchema = new Schema(
         },
         barcode_text: {
             type: String,
-            required: [true, 'barcode is required']
+            required: [true, 'barcode is required'],
+            unique: true
         },
-        user_id: {
+        quantity: {
+            type: String,
+            required: [true, 'quantity is required']
+        },
+        cost: {
+            type: Number,
+            required: [true, 'cost is required']
+        },
+        employee: {
             type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: [true, 'user not found']
+            ref: 'Employee',
+        },
+        department: {
+            type: Schema.Types.ObjectId,
+            ref: 'Department'
         }
     },
     {

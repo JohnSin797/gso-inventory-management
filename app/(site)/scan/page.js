@@ -14,22 +14,25 @@ export default function Scan () {
         quantity: '',
         cost: '',
     })
-    const [itemName, setItemName] = useState('');
-    const [itemCode, setItemCode] = useState('');
 
-    // const handleChange = (e) => {
-    //     const {name, value} = e.target
-    //     setForm({
-    //         ...form,
-    //         [name]: value
-    //     })
-    // }
+    const handleChange = (e) => {
+        const {name, value} = e.target
+        setForm({
+            ...form,
+            [name]: value
+        })
+    }
 
     const saveItem = async () => {
         try {
             await axios.post('/api/item/create', {item_name: itemName, barcode_text: itemCode})
             .then(res=>{
-                // setForm(res.data.data)
+                setForm({
+                    item_name: '',
+                    barcode_text: '',
+                    quantity: '',
+                    cost: '',
+                })
                 Swal.fire(res.data.message)
             })
         } catch (error) {
@@ -41,8 +44,16 @@ export default function Scan () {
         try {
             await axios.post('/api/item/show', {barcode_text: code})
             .then(res=>{
-                // setForm(res.data.data)
+                setForm({
+                    item_name: res.data.data.item_name,
+                    barcode_text: res.data.data.barcode_text,
+                    quantity: res.data.data.quantity,
+                    cost: res.data.data.cost
+                })
                 Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                Swal.fire(err.message)
             })
         } catch (error) {
             console.log(error.message)
@@ -94,16 +105,32 @@ export default function Scan () {
                         className="w-full bg-black border-b"
                         placeholder="Item Name" 
                         name="item_name"
-                        value={itemName}
-                        onChange={(e)=>setItemName(e.target.value)}
+                        value={form.item_name}
+                        onChange={handleChange}
                     />
                     <input 
                         type="text"
                         className="w-full bg-black border-b"
                         placeholder="Item Code" 
-                        value={itemCode}
+                        value={form.barcode_text}
                         name="barcode_text"
-                        onChange={(e)=>setItemCode(e.target.value)}
+                        onChange={handleChange}
+                    />
+                    <input 
+                        type="text"
+                        className="w-full bg-black border-b"
+                        placeholder="Quantity" 
+                        value={form.quantity}
+                        name="quantity"
+                        onChange={handleChange}
+                    />
+                    <input 
+                        type="text"
+                        className="w-full bg-black border-b"
+                        placeholder="Cost" 
+                        value={form.cost}
+                        name="cost"
+                        onChange={handleChange}
                     />
                     <button 
                         className="border p-1 rounded w-1/6 hover:bg-cyan-900"

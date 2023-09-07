@@ -6,6 +6,7 @@ import DepartmentSelect from "@/app/components/departmentSelect"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
+import DateFrame from "@/app/components/dateFrame"
 
 export default function Department() {
     const [month, setMonth] = useState('')
@@ -14,12 +15,23 @@ export default function Department() {
     const [total, setTotal] = useState('')
     const [tableData, setTableData] = useState([])
 
+    const setTotalCost = (data) => {
+        let totalCost = 0;
+
+        data.forEach(item => {
+            totalCost += parseInt(item['cost']);
+        });
+
+        setTotal(totalCost)
+    }
+
     const getData = async () => {
         try {
             console.log(department)
             await axios.post('/api/department', {month: month, year: year, department: department})
             .then(res=>{
                 setTableData(res.data.data)
+                setTotalCost(res.data.data)
             })
             .catch(err=>{
                 setTableData([])
@@ -73,6 +85,7 @@ export default function Department() {
                         <input
                             type="text"
                             className="bg-black text-center text-xs border-b border-white"
+                            defaultValue={total}
                         />
                         <p className="text-center text-xs">TOTAL</p>
                     </div>
@@ -98,16 +111,18 @@ export default function Department() {
                                 tableData.map((item,id)=>{
                                     return(
                                         <tr key={id}>
-                                            <td className="block h-8">{item.department.department_name}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{item.first_name+' '+item.last_name}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
+                                            <td className="">{item.department?.department_name}</td>
+                                            <td className="">{item.quantity}</td>
+                                            <td className="">{item.item_name}</td>
+                                            <td className="">{item.barcode_text}</td>
+                                            <td className="">{item.employee?.first_name} {item.employee?.last_name}</td>
+                                            <td className="">
+                                                <DateFrame dateStr={item.createdAt} />
+                                            </td>
+                                            <td className="">{item.cost}</td>
+                                            <td className="">{item.returned}</td>
+                                            <td className="">{item.remarks}</td>
+                                            <td className="space-x-2 flex">
                                                 <button
                                                     className="w-1/2 hover:font-bold hover:bg-cyan-600"
                                                 >

@@ -28,7 +28,8 @@ const itemSchema = new Schema(
         department: {
             type: Schema.Types.ObjectId,
             ref: 'Department'
-        }
+        },
+        remarks: String
     },
     {
         timestamps: true

@@ -11,10 +11,8 @@ export async function POST (request) {
         await connectMongoDB();
         const item = await request.json();
         const userToken = await request.cookies.get('token')?.value || '';
-        const adminToken = await request.cookies.get('admin')?.value || '';
         const isItemAlreadyExist = await Item.findOne({barcode_text: item.item_code});
         const token = jwt.decode(userToken, {complete: true});
-        const admin = jwt.decode(adminToken, {complete: true});
         if(isItemAlreadyExist) {
             return NextResponse.json({message: 'Already exists', data: {
                 item_name: isItemAlreadyExist.item_name,
@@ -23,7 +21,7 @@ export async function POST (request) {
         }
         let employee = '';
         let insertItem = '';
-        if(admin) {
+        if(token.payload.role == 'admin') {
             insertItem = {
                 item_name: item.item_name,
                 barcode_text: item.item_code,
@@ -32,8 +30,7 @@ export async function POST (request) {
             }
         }
         else {
-            const user = await User.findById(token.payload.id);
-            employee = await Employee.findOne({username: user.username});
+            employee = await Employee.findOne({username: token.payload.username});
             insertItem = {
                 item_name: item.item_name,
                 barcode_text: item.item_code,

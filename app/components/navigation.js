@@ -6,7 +6,7 @@ import Logout from "./logout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Navigation() {
+export default function Navigation({ onSetUserRole }) {
     const currentPath = usePathname();
     const [userRole, setUserRole] = useState('')
 
@@ -14,6 +14,7 @@ export default function Navigation() {
         await axios.get('/api/user')
         .then(res=>{
             setUserRole(res.data.role)
+            onSetUserRole(res.data.role)
         })
         .catch(err=>{
             console.log(err)

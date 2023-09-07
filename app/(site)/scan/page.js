@@ -10,7 +10,7 @@ export default function Scan () {
     const [scanResult, setScanResult] = useState(null);
     const [form, setForm] = useState({
         item_name: '',
-        barcode_text: '',
+        item_code: '',
         quantity: '',
         cost: '',
     })
@@ -25,11 +25,11 @@ export default function Scan () {
 
     const saveItem = async () => {
         try {
-            await axios.post('/api/item/create', {item_name: itemName, barcode_text: itemCode})
+            await axios.post('/api/item/create', form)
             .then(res=>{
                 setForm({
                     item_name: '',
-                    barcode_text: '',
+                    item_code: '',
                     quantity: '',
                     cost: '',
                 })
@@ -53,7 +53,7 @@ export default function Scan () {
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
-                Swal.fire(err.message)
+                Swal.fire(err.response.data.message)
             })
         } catch (error) {
             console.log(error.message)
@@ -112,8 +112,8 @@ export default function Scan () {
                         type="text"
                         className="w-full bg-black border-b"
                         placeholder="Item Code" 
-                        value={form.barcode_text}
-                        name="barcode_text"
+                        value={form.item_code}
+                        name="item_code"
                         onChange={handleChange}
                     />
                     <input 

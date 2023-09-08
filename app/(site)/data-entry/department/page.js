@@ -31,7 +31,7 @@ export default function Department () {
                     {
                         department.map((item, id)=>{
                             return(
-                                <p key={id} className="block p-1 md:pl-10 w-full flex justify-between">{item.department_name}
+                                <div key={id} className="block p-1 md:pl-10 w-full flex justify-between">{item.department_name}
                                     <div className="flex space-x-1 w-2/5">
                                         <button
                                             className="w-1/2 hover:font-bold hover:bg-cyan-600"
@@ -44,7 +44,7 @@ export default function Department () {
                                             delete
                                         </button>
                                     </div>
-                                </p>
+                                </div>
                             )
                         })
                     }

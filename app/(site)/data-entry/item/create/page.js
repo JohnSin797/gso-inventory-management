@@ -11,9 +11,12 @@ export default function Item () {
         item_name: '',
         item_code: '',
         quantity: '',
-        cost: ''
+        cost: '',
+        remarks: ''
     })
     const [errors, setErrors] = useState([])
+    const [item, setItem] = useState([])
+    const [itemAlreadyExist, setItemAlreadyExist] = useState(false)
 
     const onFormChange = (e) => {
         const {name, value} = e.target
@@ -48,6 +51,8 @@ export default function Item () {
 
     const saveItem = async () => {
         try {
+            setItem([])
+            setItemAlreadyExist(false)
             const isFormValid = validateForm()
             if(isFormValid) {
                 await axios.post('/api/item/create', form)
@@ -57,12 +62,15 @@ export default function Item () {
                         item_name: '',
                         item_code: '',
                         quantity: '',
-                        cost: ''
+                        cost: '',
+                        remarks: ''
                     })
                     Swal.fire(res.data.message)
                 })
                 .catch(err=>{
-                    console.log(err)
+                    Swal.fire(err.response.data.message)
+                    setItem(err.response.data.data)
+                    setItemAlreadyExist(true)
                 })
             }
         } catch (error) {
@@ -71,7 +79,17 @@ export default function Item () {
     }
 
     return (
-        <div className="absolute top-60 p-6 flex justify-center items-center w-full">
+        <div className="absolute top-60 p-6 md:flex md:justify-center md:items-center md:space-x-2 w-full">
+            <div className={`${itemAlreadyExist ? 'w-full md:w-1/5 border rounded p-6 mb-2' : 'hidden'}`}>
+                <p className="text-center text-xl">Existing Item</p>
+                <p>Item Name: {item?.item_name}</p>
+                <p>Item Code: {item?.barcode_text}</p>
+                <p>Quantity: {item?.quantity}</p>
+                <p>Cost: {item?.cost}</p>
+                <p>Employee: {item?.employee?.first_name} {item?.employee?.last_name}</p>
+                <p>Department: {item?.department?.department_name}</p>
+                <p>Remarks:{item?.remarks}</p>
+            </div>
             <div className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-2">
                 <input 
                     type="text"
@@ -109,6 +127,14 @@ export default function Item () {
                     value={form.cost}
                 />
                 <p className="block h-3 text-red-600 text-center text-xs">{errors.cost}</p>
+                <textarea 
+                    type="text"
+                    className="w-full bg-black border rounded resize-none"
+                    placeholder="Remarks (optional)"
+                    name="remarks"
+                    onChange={onFormChange}
+                    value={form.remarks}
+                />
                 <div className="flex space-x-2">
                     <button
                         className="p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded"
@@ -117,6 +143,7 @@ export default function Item () {
                         save
                     </button>
                     <Link href={'/scan'} className="block p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded text-center">scan</Link>
+                    <Link href={'/data-entry/item'} className="block p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded text-center">back</Link>
                 </div>
             </div>
         </div>

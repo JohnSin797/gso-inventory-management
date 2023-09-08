@@ -11,13 +11,11 @@ export async function POST (request) {
         await connectMongoDB();
         const item = await request.json();
         const userToken = await request.cookies.get('token')?.value || '';
-        const isItemAlreadyExist = await Item.findOne({barcode_text: item.item_code});
+        const isItemAlreadyExist = await Item.findOne({barcode_text: item.item_code}).exec();
         const token = jwt.decode(userToken, {complete: true});
         if(isItemAlreadyExist) {
-            return NextResponse.json({message: 'Already exists', data: {
-                item_name: isItemAlreadyExist.item_name,
-                barcode_text: isItemAlreadyExist.item_code
-            }}, {status: 201});
+            console.log('asd')
+            return NextResponse.json({message: 'Already exists', data: isItemAlreadyExist}, {status: 401});
         }
         let employee = '';
         let insertItem = '';

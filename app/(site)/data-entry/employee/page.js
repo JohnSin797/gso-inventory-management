@@ -56,7 +56,7 @@ export default function Employee () {
 
     return (
         <div className="absolute top-60 p-6 flex justify-center items-center w-full">
-            <div className="w-3/5 border rounded p-6 space-y-2">
+            <div className="w-full md:w-3/5 border rounded p-6 space-y-2">
                 <div className="block border border-slate-600 h-72 scroll overflow-auto">
                     <table className="table-auto md:table-fixed border-separate w-full">
                         <thead>
@@ -80,7 +80,7 @@ export default function Employee () {
                                         <td className="border border-slate-600 text-xs">
                                             {item.password}
                                         </td>
-                                        <td className="border border-slate-600">
+                                        <td className="border border-slate-600 space-x-1">
                                             <button
                                                 className="w-1/2 hover:font-bold hover:bg-cyan-600"
                                             >

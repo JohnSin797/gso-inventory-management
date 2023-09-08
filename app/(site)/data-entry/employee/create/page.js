@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PasswordStrengthChecker from "@/app/components/PasswordStrengthChecker"
+import Link from "next/link";
 
 export default function Create () {
     const router = useRouter()
@@ -181,14 +182,6 @@ export default function Create () {
                     </div>
                     <PasswordStrengthChecker password={formData.password} onStrengthChange={setStrength} />
                     <p className="block h-2 text-red-600 text-xs text-center">{errors.password}</p>
-                    {/* <input 
-                        type="text"
-                        className="bg-black border-b w-full"
-                        placeholder="Department"
-                        name="department"
-                        value={formData.department}
-                        onChange={handleChange}
-                    /> */}
                     <select 
                         className="bg-black border-b w-full"
                         name="department"
@@ -205,12 +198,15 @@ export default function Create () {
                         }
                     </select>
                     <p className="block h-2 text-red-600 text-xs text-center">{errors.department}</p>
-                    <button
-                        className="p-1 w-1/3 border rounded hover:bg-cyan-900"
-                        onClick={createEmployee}
-                    >
-                        save
-                    </button>
+                    <div className="flex space-x-2">
+                        <button
+                            className="p-1 w-1/2 border rounded hover:bg-cyan-900"
+                            onClick={createEmployee}
+                        >
+                            save
+                        </button>
+                        <Link href={'/data-entry/employee'} className="block text-center p-1 w-1/2 border rounded hover:bg-cyan-900">back</Link>
+                    </div>
                 </div>
             </div>
         </div>

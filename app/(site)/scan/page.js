@@ -13,6 +13,7 @@ export default function Scan () {
         item_code: '',
         quantity: '',
         cost: '',
+        remarks: ''
     })
 
     const handleChange = (e) => {
@@ -32,8 +33,20 @@ export default function Scan () {
                     item_code: '',
                     quantity: '',
                     cost: '',
+                    remarks: ''
                 })
                 Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                console.log(err)
+                Swal.fire(err.response.data.message)
+                setForm({
+                    item_name: err.response.data.data.item_name,
+                    item_code: err.response.data.data.barcode_text,
+                    quantity: err.response.data.data.quantity,
+                    cost: err.response.data.data.cost,
+                    remarks: err.response.data.data?.remarks
+                })
             })
         } catch (error) {
             console.log(error.message)
@@ -91,8 +104,8 @@ export default function Scan () {
     return (
         <div>
             <Navigation />
-            <div className="pt-20 px-10 w-full md:flex">
-                <div className="h-76 sm:w-full md:w-96 p-6">
+            <div className="pt-20 px-10 w-full space-y-2 md:flex md:space-x-2 md:space-y-0">
+                <div className="h-76 sm:w-full border md:w-96 p-6">
                     {
                         scanResult ? <p>Scan success! {scanResult}</p>
                         :  
@@ -132,8 +145,16 @@ export default function Scan () {
                         name="cost"
                         onChange={handleChange}
                     />
+                    <textarea 
+                        type="text"
+                        className="w-full bg-black border rounded resize-none"
+                        placeholder="Remarks (optional)" 
+                        value={form.remarks}
+                        name="remarks"
+                        onChange={handleChange}
+                    />
                     <button 
-                        className="border p-1 rounded w-1/6 hover:bg-cyan-900"
+                        className="border p-1 rounded w-full md:w-1/6 hover:bg-cyan-900"
                         onClick={saveItem}
                     >
                         save

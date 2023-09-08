@@ -8,21 +8,7 @@ export async function POST(request) {
     try {
         const {username, password} = await request.json();
         await connectMongoDB();
-        const isAdminAlive = await User.findOne({role: 'admin'});
-        if(!isAdminAlive) {
-            const salt = await bcryptjs.genSalt(10);
-            const pword = await bcryptjs.hash('Admin1234', salt);
-            const adminSeeder = {
-                first_name: 'first name',
-                last_name: 'last name',
-                username: 'admin',
-                password: pword,
-                role: 'admin'
-            }
-            await User.create(adminSeeder);
-            return NextResponse.json({message: 'Please try again'}, {status: 400});
-        }
-        const user = await User.findOne({username});
+        const user = await User.findOneAndUpdate({username}, {last_active: new Date()});
         if(!user) {
             return NextResponse.json({message: "Invalid username"}, {status: 401});
         }

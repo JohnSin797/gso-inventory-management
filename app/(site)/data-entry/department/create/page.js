@@ -28,7 +28,7 @@ export default function Create () {
 
     return (
         <div className="absolute top-60 p-6 flex justify-center items-center w-full">
-            <div className="w-3/5 border rounded p-6 px-20 space-y-2">
+            <div className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-2">
                     <input 
                         type="text"
                         className="w-full bg-black border-b"
@@ -37,13 +37,13 @@ export default function Create () {
                         value={department}
                     />
                     <div className="flex space-x-2">
-                        <Link href={'/data-entry/department'} className="block text-center p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded">back</Link>
                         <button
-                            className="p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded"
+                            className="p-1 w-1/2 bg-slate-600 hover:bg-cyan-900 rounded"
                             onClick={save}
                         >
                             save
                         </button>
+                        <Link href={'/data-entry/department'} className="block text-center p-1 w-1/2 bg-slate-600 hover:bg-cyan-900 rounded">back</Link>
                     </div>
             </div>
         </div>

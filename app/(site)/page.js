@@ -5,15 +5,12 @@ import Navigation from "../components/navigation"
 
 export default function Home() {
 
-    const [userRole, setUserRole] = useState('')
     const [activeUsers, setActiveUsers] = useState([])
 
     return(
         <>
-            <Navigation onSetUserRole={setUserRole} />
+            <Navigation />
             <div className="pt-20 p-6 space-y-6">
-                {
-                    userRole == 'admin' ? 
                     <div className="border rounded">
                         <p className="block w-full border-b text-center">Statistics</p>
                         <div className="md:flex md:space-x-2 md:space-y-0 p-2 space-y-2">
@@ -35,9 +32,6 @@ export default function Home() {
                             </div>
                         </div>
                     </div> 
-                    : 
-                    ''
-                }
                 <div className="border rounded">
                     <p className="block w-full border-b text-center">Active Users</p>
                     <div className="p-6 overflow-scroll">

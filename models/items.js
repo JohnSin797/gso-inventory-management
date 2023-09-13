@@ -29,6 +29,22 @@ const itemSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Department'
         },
+        status: {
+            type: String,
+            default: 'working'
+        },
+        property_number: {
+            type: String,
+            required: [true, 'property number is required']
+        },
+        description: {
+            type: String,
+            required: [true, 'item description is required']
+        },
+        returned: {
+            type: Boolean,
+            default: false
+        },
         remarks: String
     },
     {

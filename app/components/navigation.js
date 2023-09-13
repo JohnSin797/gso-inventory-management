@@ -19,6 +19,8 @@ export default function Navigation() {
                 <Link href={"/"} className={`hover:font-bold ${currentPath == '/' ? 'border-b' : ''}`}>Home</Link>
                 <Link href={"/department"} className={`hover:font-bold ${currentPath == '/department' ? 'border-b' : ''}`}>Department</Link>
                 <Link href={"/employee"} className={`hover:font-bold ${currentPath == '/employee' ? 'border-b' : ''}`}>Employee</Link>
+                <Link href={"/item"} className={`hover:font-bold ${currentPath == '/item' ? 'border-b' : ''}`}>Item</Link>
+                <Link href={"/user"} className={`hover:font-bold ${currentPath == '/user' ? 'border-b' : ''}`}>User</Link>
                 <Link href={"/data-entry"} className={`hover:font-bold ${currentPath.startsWith('/data-entry') ? 'border-b' : ''}`}>Data Entry</Link>
                 <Link href={"/scan"} className={`hover:font-bold ${currentPath == '/scan' ? 'border-b' : ''}`}>Scan</Link>
                 <Logout className={'text-left md:text-center md:absolute md:right-5 hover:font-bold md:text-xs'} />

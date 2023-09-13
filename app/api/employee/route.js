@@ -1,6 +1,7 @@
 import connectMongoDB from "@/libs/mongodb";
 import Employee from "@/models/employees";
 import Department from "@/models/department";
+import Item from "@/models/items";
 import { NextResponse } from "next/server";
 
 export async function GET() {

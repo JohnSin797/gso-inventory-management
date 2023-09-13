@@ -10,6 +10,12 @@ import { useState } from "react";
 export default function Employee () {
 
     const [employees, setEmployees] = useState([])
+    const [employeeDetails, setEmployeeDetails] = useState({
+        department: '',
+        status: '',
+        cost: '',
+        position: ''
+    })
     const [selectedEmployee, setSelectedEmployee] = useState('')
 
     const getEmployees = async () => {
@@ -69,18 +75,54 @@ export default function Employee () {
                 >
                     export
                 </button>
-                <div className="flex w-full justify-center">
+                <div className="md:flex w-full justify-center">
                     <EmployeeName className={'bg-black border-b'} onChangeEmployee={setSelectedEmployee} />
+                </div>
+                <div className="md:flex justify-between p-6">
+                    <div className="flex flex-col w-full md:w-1/5">
+                        <input 
+                            className="bg-black w-full border-b"
+                            placeholder="Department"
+                            defaultValue={employeeDetails.department}
+                        />
+                        <label className="text-center text-xs">Department</label>
+                    </div>
+                    <div className="flex flex-col w-full md:w-1/5">
+                        <input 
+                            className="bg-black w-full border-b"
+                            placeholder="Position"
+                            defaultValue={employeeDetails.position}
+                        />
+                        <label className="text-center text-xs">Position</label>
+                    </div>
+                    <div className="flex flex-col w-full md:w-1/5">
+                        <input 
+                            className="bg-black w-full border-b"
+                            placeholder="Status of Employment"
+                            defaultValue={employeeDetails.status}
+                        />
+                        <label className="text-center text-xs">Status of Employment</label>
+                    </div>
+                    <div className="flex flex-col w-full md:w-1/5">
+                        <input 
+                            className="bg-black w-full border-b"
+                            placeholder="Total Cost"
+                            defaultValue={employeeDetails.cost}
+                        />
+                        <label className="text-center text-xs">Total Cost</label>
+                    </div>
                 </div>
                 <table className="table-auto md:table-fixed w-full">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Department</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th>Quantity</th>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Property Number</th>
+                            <th>Date Issued</th>
+                            <th>Cost</th>
+                            <th>Returned</th>
+                            <th>Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,7 +130,14 @@ export default function Employee () {
                             employees.map((item,id)=>{
                                 return(
                                     <tr key={id}>
-                                        <td>{item}</td>
+                                        <td>{item?.quantity}</td>
+                                        <td>{item?.item_name}</td>
+                                        <td>{item?.description}</td>
+                                        <td>{item?.property_number}</td>
+                                        <td>{item?.createdAt}</td>
+                                        <td>{item?.cost}</td>
+                                        <td>{item?.returned}</td>
+                                        <td>{item?.remarks}</td>
                                     </tr>
                                 )
                             })

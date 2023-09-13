@@ -3,7 +3,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-export default function EmployeeName ({ className, onChangeEmployee }) {
+export default function EmployeeName ({ className, onChangeEmployee, onChangeDetails, defaultEmployee }) {
     const [employees, setEmployees] = useState([])
 
     const getEmployees = async () => {
@@ -20,11 +20,18 @@ export default function EmployeeName ({ className, onChangeEmployee }) {
         }
     }
 
+    const handleEmployeeChange = (e) => {
+        onChangeEmployee(e.target.value)
+        onChangeDetails({
+            
+        })
+    }
+
     useEffect(()=>{
         getEmployees()
     }, [])
     
-    return <select className={className} onChange={(e)=>onChangeEmployee(e.target.value)}>
+    return <select className={className} onChange={(e)=>onChangeEmployee(e.target.value)} value={defaultEmployee}>
             <option>-- Select Employee --</option>
         {
             employees.map((item,id)=>{

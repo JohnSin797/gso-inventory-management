@@ -1,19 +1,24 @@
 'use client'
 
+import EmployeeName from "@/app/components/employeeName"
 import axios from "axios"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 
 export default function Item () {
 
     const [form, setForm] = useState({
         item_name: '',
-        item_code: '',
+        barcode_text: '',
+        property_number: '',
+        description: '',
         quantity: '',
-        cost: '',
-        remarks: ''
+        cost: (0).toFixed(2),
+        remarks: '',
+        employee: ''
     })
+    const [employeeId, setEmployeeId] = useState('')
     const [errors, setErrors] = useState([])
     const [item, setItem] = useState([])
     const [itemAlreadyExist, setItemAlreadyExist] = useState(false)
@@ -26,44 +31,33 @@ export default function Item () {
         })
     }
 
-    const validateForm = () => {
-        const errors = []
-
-        if(!form.item_name.trim()) {
-            errors.item_name = 'Item name is required'
-        }
-
-        if(!form.item_code.trim()) {
-            errors.item_code = 'Item code is required'
-        }
-
-        if(!form.quantity.trim()) {
-            errors.quantity = 'Quantity is required'
-        }
-
-        if(!form.cost.trim()) {
-            errors.cost = 'Cost is required'
-        }
-
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+    const getEmployeeId = () => {
+        setForm({
+            ...form,
+            employee: employeeId
+        })
     }
+
+    useEffect(()=>{
+        setTimeout(getEmployeeId, 1000)
+    }, [employeeId])
 
     const saveItem = async () => {
         try {
             setItem([])
             setItemAlreadyExist(false)
-            const isFormValid = validateForm()
-            if(isFormValid) {
-                await axios.post('/api/item/create', form)
+            await axios.post('/api/item/create', form)
                 .then(res=>{
                     console.log(res.data.message)
                     setForm({
                         item_name: '',
-                        item_code: '',
+                        barcode_text: '',
+                        property_number: '',
+                        description: '',
                         quantity: '',
-                        cost: '',
-                        remarks: ''
+                        cost: (0).toFixed(2),
+                        remarks: '',
+                        employee: ''
                     })
                     Swal.fire(res.data.message)
                 })
@@ -72,7 +66,6 @@ export default function Item () {
                     setItem(err.response.data.data)
                     setItemAlreadyExist(true)
                 })
-            }
         } catch (error) {
             console.log(error.message)
         }
@@ -90,43 +83,72 @@ export default function Item () {
                 <p>Department: {item?.department?.department_name}</p>
                 <p>Remarks:{item?.remarks}</p>
             </div>
-            <div className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-2">
-                <input 
-                    type="text"
-                    className="w-full bg-black border-b"
-                    placeholder="Item Name"
-                    name="item_name"
-                    onChange={onFormChange}
-                    value={form.item_name}
-                />
-                <p className="block h-3 text-red-600 text-center text-xs">{errors.item_name}</p>
+            <div className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-4">
+                <div className="md:flex md:space-x-2">
+                    <input 
+                        type="text"
+                        className="w-full bg-black border-b"
+                        placeholder="Item Name"
+                        name="item_name"
+                        onChange={onFormChange}
+                        value={form.item_name}
+                        required
+                    />
+                    <input 
+                        type="text"
+                        className="w-full bg-black border-b"
+                        placeholder="Property Number"
+                        name="property_number"
+                        onChange={onFormChange}
+                        value={form.property_number}
+                        required
+                    />
+                </div>
                 <input 
                     type="text"
                     className="w-full bg-black border-b"
                     placeholder="Item Code"
-                    name="item_code"
+                    name="barcode_text"
                     onChange={onFormChange}
-                    value={form.item_code}
+                    value={form.barcode_text}
+                    required
                 />
-                <p className="block h-3 text-red-600 text-center text-xs">{errors.item_code}</p>
                 <input 
                     type="text"
                     className="w-full bg-black border-b"
-                    placeholder="Quantity"
-                    name="quantity"
+                    placeholder="Item Description"
+                    name="description"
                     onChange={onFormChange}
-                    value={form.quantity}
+                    value={form.description}
+                    required
                 />
-                <p className="block h-3 text-red-600 text-center text-xs">{errors.quantity}</p>
-                <input 
-                    type="text"
-                    className="w-full bg-black border-b"
-                    placeholder="Cost"
-                    name="cost"
-                    onChange={onFormChange}
-                    value={form.cost}
+                <div className="md:flex md:space-x-2">
+                    <input 
+                        type="text"
+                        className="w-full bg-black border-b"
+                        placeholder="Quantity"
+                        name="quantity"
+                        onChange={onFormChange}
+                        value={form.quantity}
+                        required
+                    />
+                    <input 
+                        type="number"
+                        className="w-full bg-black border-b"
+                        placeholder="Cost"
+                        name="cost"
+                        onChange={(e)=>setForm({
+                            ...form,
+                            cost: e.target.value
+                        })}
+                        value={form.cost}
+                        required
+                    />
+                </div>
+                <EmployeeName 
+                    className={'w-full bg-black border-b'} 
+                    onChangeEmployee={setEmployeeId} 
                 />
-                <p className="block h-3 text-red-600 text-center text-xs">{errors.cost}</p>
                 <textarea 
                     type="text"
                     className="w-full bg-black border rounded resize-none"

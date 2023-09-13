@@ -24,6 +24,8 @@ const employeeSchema = new Schema(
             ref: 'Department',
             required: [true, "department is required"]
         },
+        position: String,
+        employment_status: String,
         forgotPasswordToken: String,
         forgotPasswordTokenExpiry: Date,
         verifyToken: String,

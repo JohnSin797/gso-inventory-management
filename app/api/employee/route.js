@@ -17,8 +17,10 @@ export async function GET() {
 export async function POST (request) {
     try {
         await connectMongoDB();
-        const {_id} = await request.json();
-        
+        const {first_name, last_name, position, employment_status, dep} = await request.json();
+        const department = await Department.findById(dep).exec();
+        await Employee.create({first_name, last_name, position, employment_status, department});
+        return NextResponse.json({message: 'Employee successfully created'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
     }

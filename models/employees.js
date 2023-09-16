@@ -10,15 +10,6 @@ const employeeSchema = new Schema(
             type: String,
             required: [true, "last name is required"]
         },
-        username: {
-            type: String,
-            required: [true, "username is required"],
-            unique: true
-        },
-        password: {
-            type: String,
-            required: [true, "password is required"]
-        },
         department: {
             type: Schema.Types.ObjectId,
             ref: 'Department',
@@ -26,10 +17,6 @@ const employeeSchema = new Schema(
         },
         position: String,
         employment_status: String,
-        forgotPasswordToken: String,
-        forgotPasswordTokenExpiry: Date,
-        verifyToken: String,
-        verifyTokenExpiry: Date,
     },
     {
         timestamps: true

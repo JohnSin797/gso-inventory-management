@@ -22,8 +22,11 @@ export default function EmployeeName ({ className, onChangeEmployee, onChangeDet
 
     const handleEmployeeChange = (e) => {
         onChangeEmployee(e.target.value)
+        let selectedEmployee = employees.find(emp => emp._id == e.target.value)
         onChangeDetails({
-            
+            department: selectedEmployee?.department?.department_name,
+            status: selectedEmployee?.employment_status,
+            position: selectedEmployee?.position
         })
     }
 
@@ -31,7 +34,7 @@ export default function EmployeeName ({ className, onChangeEmployee, onChangeDet
         getEmployees()
     }, [])
     
-    return <select className={className} onChange={(e)=>onChangeEmployee(e.target.value)} value={defaultEmployee}>
+    return <select className={className} onChange={handleEmployeeChange} value={defaultEmployee}>
             <option>-- Select Employee --</option>
         {
             employees.map((item,id)=>{

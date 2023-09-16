@@ -1,5 +1,6 @@
 'use client'
 
+import DeleteEmployee from "@/app/components/deleteButtons/deleteEmployee"
 import axios from "axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -22,38 +23,6 @@ export default function Employee () {
         getEmployees()
     },[])
 
-    const showPassword = async (hiddenPassword) => {
-        Swal.fire({
-            icon: 'info',
-            text: 'Enter your password to proceed.',
-            input: 'password',
-            showCancelButton: true,
-        })
-        .then(res=>{
-            matchPassword(res.value, hiddenPassword)
-        })
-    }
-
-    const matchPassword = async (pword, hiddenPassword) => {
-        if(pword == '') {
-            Swal.fire('Please enter your password.')
-        }
-        try {
-            await axios.post('/api/user/match-password', {password: pword})
-            .then(res=>{
-                Swal.fire('Password: '+hiddenPassword)
-            })
-            .catch(err=>{
-                Swal.fire({
-                    icon: 'error',
-                    text: err.response.data.message
-                })
-            })
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
     return (
         <div className="absolute top-60 p-6 flex justify-center items-center w-full">
             <div className="w-full md:w-3/5 border rounded p-6 space-y-2">
@@ -64,8 +33,9 @@ export default function Employee () {
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Department</th>
-                                <th>Username</th>
-                                <th>Password</th>
+                                <th>Office</th>
+                                <th>Position</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -73,24 +43,24 @@ export default function Employee () {
                             {employees.map((item, id)=>{
                                 return (
                                     <tr key={id}>
-                                        <td className="border border-slate-600">{item.first_name}</td>
-                                        <td className="border border-slate-600">{item.last_name}</td>
-                                        <td className="border border-slate-600">{item.department.department_name}</td>
-                                        <td className="border border-slate-600">{item.username}</td>
-                                        <td className="border border-slate-600 text-xs">
-                                            {item.password}
-                                        </td>
-                                        <td className="border border-slate-600 space-x-1">
+                                        <td className="border border-slate-600">{item?.first_name}</td>
+                                        <td className="border border-slate-600">{item?.last_name}</td>
+                                        <td className="border border-slate-600">{item?.department?.department_name}</td>
+                                        <td className="border border-slate-600">{item?.department?.office_name}</td>
+                                        <td className="border border-slate-600">{item?.position}</td>
+                                        <td className="border border-slate-600">{item?.employment_status}</td>
+                                        <td className="border border-slate-600 space-x-1 flex">
                                             <button
-                                                className="w-1/2 hover:font-bold hover:bg-cyan-600"
+                                                className="w-1/2 hover:font-bold hover:bg-green-900 bg-green-600"
                                             >
                                                 edit
                                             </button>
-                                            <button
-                                                className="w-1/2 hover:font-bold hover:bg-red-600"
+                                            {/* <button
+                                                className="w-1/2 hover:font-bold hover:bg-red-900 bg-red-600"
                                             >
                                                 delete
-                                            </button>
+                                            </button> */}
+                                            <DeleteEmployee onSetEmployees={setEmployees} employeeId={item._id} />
                                         </td>
                                     </tr>
                                 )

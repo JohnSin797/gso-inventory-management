@@ -8,13 +8,15 @@ import Swal from "sweetalert2";
 export default function Create () {
 
     const [department, setDepartment] = useState('')
+    const [office, setOffice] = useState('')
 
     const save = async () => {
         try {
-            await axios.post('/api/department/create', {department_name: department})
+            await axios.post('/api/department/create', {department_name: department, office_name: office})
             .then(res=>{
                 console.log(res)
                 setDepartment('')
+                setOffice('')
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
@@ -35,6 +37,15 @@ export default function Create () {
                         placeholder="Department Name"
                         onChange={(e)=>setDepartment(e.target.value)}
                         value={department}
+                        required
+                    />
+                    <input 
+                        type="text"
+                        className="w-full bg-black border-b"
+                        placeholder="Office Name"
+                        onChange={(e)=>setOffice(e.target.value)}
+                        value={office}
+                        required
                     />
                     <div className="flex space-x-2">
                         <button

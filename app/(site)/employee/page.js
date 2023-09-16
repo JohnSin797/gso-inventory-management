@@ -5,7 +5,7 @@ import Navigation from "@/app/components/navigation";
 import axios from "axios";
 import { Document, Packer, Paragraph } from "docx";
 import { saveAs } from "file-saver";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Employee () {
 
@@ -13,16 +13,18 @@ export default function Employee () {
     const [employeeDetails, setEmployeeDetails] = useState({
         department: '',
         status: '',
-        cost: '',
         position: ''
     })
     const [selectedEmployee, setSelectedEmployee] = useState('')
+    const [totalCost, setTotalCost] = useState('')
 
     const getEmployees = async () => {
         try {
-            await axios.post('/api/employee', {})
+            await axios.post('/api/employee/index', {id:selectedEmployee})
             .then(res=>{
                 console.log(res.data.data)
+                setEmployees(res.data.data)
+                calculateTotalCost(res.data.data)
             })
             .catch(err=>{
                 console.log(err)
@@ -31,6 +33,20 @@ export default function Employee () {
             console.log(error)
         }
     }
+
+    const calculateTotalCost = (data) => {
+        let totalCost = 0;
+
+        data.forEach(item => {
+            totalCost += parseInt(item['cost']);
+        });
+
+        setTotalCost(totalCost)
+    }
+
+    useEffect(()=>{
+        getEmployees()
+    }, [selectedEmployee])
 
     const generate = () => {
         const doc = new Document({
@@ -76,14 +92,14 @@ export default function Employee () {
                     export
                 </button>
                 <div className="md:flex w-full justify-center">
-                    <EmployeeName className={'bg-black border-b'} onChangeEmployee={setSelectedEmployee} />
+                    <EmployeeName className={'bg-black border-b'} onChangeDetails={setEmployeeDetails} onChangeEmployee={setSelectedEmployee} />
                 </div>
                 <div className="md:flex justify-between p-6">
                     <div className="flex flex-col w-full md:w-1/5">
                         <input 
                             className="bg-black w-full border-b"
                             placeholder="Department"
-                            defaultValue={employeeDetails.department}
+                            value={employeeDetails.department}
                         />
                         <label className="text-center text-xs">Department</label>
                     </div>
@@ -91,7 +107,7 @@ export default function Employee () {
                         <input 
                             className="bg-black w-full border-b"
                             placeholder="Position"
-                            defaultValue={employeeDetails.position}
+                            value={employeeDetails.position}
                         />
                         <label className="text-center text-xs">Position</label>
                     </div>
@@ -99,7 +115,7 @@ export default function Employee () {
                         <input 
                             className="bg-black w-full border-b"
                             placeholder="Status of Employment"
-                            defaultValue={employeeDetails.status}
+                            value={employeeDetails.status}
                         />
                         <label className="text-center text-xs">Status of Employment</label>
                     </div>
@@ -107,7 +123,7 @@ export default function Employee () {
                         <input 
                             className="bg-black w-full border-b"
                             placeholder="Total Cost"
-                            defaultValue={employeeDetails.cost}
+                            value={totalCost}
                         />
                         <label className="text-center text-xs">Total Cost</label>
                     </div>

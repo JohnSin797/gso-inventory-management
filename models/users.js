@@ -23,7 +23,10 @@ const userSchema = new Schema(
             type: Date,
             default: Date.now
         },
-        role: String,
+        role: {
+            type: String,
+            default: 'user'
+        },
         forgotPasswordToken: String,
         forgotPasswordTokenExpiry: Date,
         verifyToken: String,

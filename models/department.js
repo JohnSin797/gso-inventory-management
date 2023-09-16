@@ -4,7 +4,11 @@ const departmentSchema = new Schema(
     {
         department_name: {
             type: String,
-            required: [true, "name is required"],
+            required: [true, "name is required"]
+        },
+        office_name: {
+            type: String,
+            required: [true, 'office is required'],
             unique: true
         },
         employees: [

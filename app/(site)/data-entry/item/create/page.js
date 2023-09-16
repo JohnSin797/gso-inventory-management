@@ -20,6 +20,7 @@ export default function Item () {
     })
     const [employeeId, setEmployeeId] = useState('')
     const [errors, setErrors] = useState([])
+    const [employeeDetails, setEmployeeDetails] = useState({})
     const [item, setItem] = useState([])
     const [itemAlreadyExist, setItemAlreadyExist] = useState(false)
 
@@ -42,8 +43,9 @@ export default function Item () {
         setTimeout(getEmployeeId, 1000)
     }, [employeeId])
 
-    const saveItem = async () => {
+    const saveItem = async (e) => {
         try {
+            e.preventDefault()
             setItem([])
             setItemAlreadyExist(false)
             await axios.post('/api/item/create', form)
@@ -83,7 +85,7 @@ export default function Item () {
                 <p>Department: {item?.department?.department_name}</p>
                 <p>Remarks:{item?.remarks}</p>
             </div>
-            <div className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-4">
+            <form onSubmit={saveItem} className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-4">
                 <div className="md:flex md:space-x-2">
                     <input 
                         type="text"
@@ -148,6 +150,7 @@ export default function Item () {
                 <EmployeeName 
                     className={'w-full bg-black border-b'} 
                     onChangeEmployee={setEmployeeId} 
+                    onChangeDetails={setEmployeeDetails}
                 />
                 <textarea 
                     type="text"
@@ -160,14 +163,14 @@ export default function Item () {
                 <div className="flex space-x-2">
                     <button
                         className="p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded"
-                        onClick={saveItem}
+                        type="submit"
                     >
                         save
                     </button>
                     <Link href={'/scan'} className="block p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded text-center">scan</Link>
                     <Link href={'/data-entry/item'} className="block p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded text-center">back</Link>
                 </div>
-            </div>
+            </form>
         </div>
     )
 }

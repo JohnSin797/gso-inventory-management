@@ -4,10 +4,13 @@ import bcryptjs from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-    const {first_name, last_name, username, passWord} = await request.json();
-    await connectMongoDB();
-    const salt = await bcryptjs.genSalt(10);
-    const password = await bcryptjs.hash(passWord, salt);
-    await User.create({first_name, last_name, username, password});
-    return NextResponse.json({message: "User successfully created!"}, {status: 201});
+    try {
+        const {first_name, last_name, username, password} = await request.json();
+        await connectMongoDB();
+        await User.create({first_name, last_name, username, password});
+        const data = await User.find({role: 'user'});
+        return NextResponse.json({message: "User successfully created!", data: data}, {status: 201});
+    } catch (error) {
+        return NextResponse.json({message: error.message}, {status: 500});
+    }
 }

@@ -16,7 +16,7 @@ export default function Navigation() {
         <div className={`flex fixed justify-between p-6 w-full z-50 bg-black md:max-h-20 ${isNavHidden ? 'h-20 flex-row md:flex-col' : 'h-full flex-col md:flex-row'}`}>
             <p className="md:hidden">GSO Inventory Management</p>
             <div className={`flex flex-col md:flex-row md:space-x-5 ${isNavHidden ? 'hidden md:block' : 'space-y-5 md:space-y-0'}`}>
-                <Link href={"/"} className={`hover:font-bold ${currentPath == '/' ? 'border-b' : ''}`}>Home</Link>
+                <Link href={"/"} className={`hover:font-bold ${currentPath == '/' ? 'border-b' : ''}`}>Dashboard</Link>
                 <Link href={"/department"} className={`hover:font-bold ${currentPath == '/department' ? 'border-b' : ''}`}>Department</Link>
                 <Link href={"/employee"} className={`hover:font-bold ${currentPath == '/employee' ? 'border-b' : ''}`}>Employee</Link>
                 <Link href={"/item"} className={`hover:font-bold ${currentPath == '/item' ? 'border-b' : ''}`}>Item</Link>

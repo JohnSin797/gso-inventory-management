@@ -73,7 +73,7 @@ export default function Employee () {
                                         <td className="border border-slate-600">{item.cost}</td>
                                         <td className="border border-slate-600">{item?.returned}</td>
                                         <td className="border border-slate-600">{item?.remarks}</td>
-                                        <td className="border border-slate-600 w-40 flex">
+                                        <td className="border border-slate-600 w-40 h-auto flex">
                                             <Link
                                                 href={`/data-entry/item/edit/${item._id}`}
                                                 className="block w-full md:w-1/2 text-center hover:font-bold bg-green-600 hover:bg-green-900"

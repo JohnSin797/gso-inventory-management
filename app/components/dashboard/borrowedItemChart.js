@@ -1,7 +1,7 @@
 'use client'
 
 import { ApexOptions } from "apexcharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md"
 import dynamic from "next/dynamic";
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -73,6 +73,8 @@ const options = {
 
 export default function BorrowedItemChart () {
 
+  const [chartComponentVisible, setChartComponentVisible] = useState(false)
+
     const [state, setState] = useState({
         series: [
           {
@@ -85,6 +87,12 @@ export default function BorrowedItemChart () {
           },
         ],
       });
+
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          setChartComponentVisible(true);
+        }
+      }, [])
 
     return (
         <div className="col-span-12 rounded-sm border border-stroke bg-white p-7 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
@@ -113,12 +121,14 @@ export default function BorrowedItemChart () {
 
       <div>
         <div id="chartTwo" className="-ml-5 -mb-9">
-          <ApexCharts
-            options={options}
-            series={state.series}
-            type="bar"
-            height={350}
-          />
+          {chartComponentVisible && (
+            <ApexCharts
+              options={options}
+              series={state.series}
+              type="bar"
+              height={350}
+            />
+          )}
         </div>
       </div>
     </div>

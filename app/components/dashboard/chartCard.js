@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { Chart } from "react-apexcharts";
 import dynamic from "next/dynamic";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -127,6 +127,8 @@ export default function ChartCard () {
     },
   };
 
+  const [chartComponentVisible, setChartComponentVisible] = useState(false)
+
     const [state, setState] = useState({
       options: {
         chart: {
@@ -148,6 +150,12 @@ export default function ChartCard () {
           },
         ],
       });
+
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          setChartComponentVisible(true);
+        }
+      }, [])
 
     return (
         <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -176,13 +184,13 @@ export default function ChartCard () {
       </div>
           <div>
             <div id="chartOne" className="-ml-5 h-[355px] w-[105%]">
-              <ReactApexChart
+              {chartComponentVisible && (<ReactApexChart
                 options={options}
                 series={state.series}
                 type="line"
                 width="100%"
                 height="100%"
-              />
+              />)}
             </div>
           </div>
         </div>

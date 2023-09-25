@@ -1,98 +1,60 @@
 'use client'
 
-import { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md"
-import dynamic from "next/dynamic";
-const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 
-const options = {
-    colors: ["#3C50E0", "#80CAEE"],
-    chart: {
-      // events: {
-      //   beforeMount: (chart) => {
-      //     chart.windowResizeHandler();
-      //   },
-      // },
-      fontFamily: "Satoshi, sans-serif",
-      type: "bar",
-      height: 335,
-      stacked: true,
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
-    },
-  
-    responsive: [
-      {
-        breakpoint: 1536,
-        options: {
-          plotOptions: {
-            bar: {
-              borderRadius: 0,
-              columnWidth: "25%",
-            },
-          },
-        },
-      },
-    ],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        borderRadius: 0,
-        columnWidth: "25%",
-        borderRadiusApplication: "end",
-        borderRadiusWhenStacked: "last",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-  
-    xaxis: {
-      categories: ["M", "T", "W", "T", "F", "S", "S"],
-    },
-    legend: {
-      position: "top",
-      horizontalAlign: "left",
-      fontFamily: "Satoshi",
-      fontWeight: 500,
-      fontSize: "14px",
-  
-      markers: {
-        radius: 99,
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-  };
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 export default function BorrowedItemChart () {
 
-  const [chartComponentVisible, setChartComponentVisible] = useState(false)
+  const options = {
+    responsive: true,
+    aspectRatio: 1,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Weekly Stock and Releases Graph',
+      },
+    },
+  }
 
-    const [state, setState] = useState({
-        series: [
-          {
-            name: "New Item",
-            data: [44, 55, 41, 67, 22, 43, 65],
-          },
-          {
-            name: "Borrowed Item",
-            data: [13, 23, 20, 8, 13, 27, 15],
-          },
-        ],
-      });
+  const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-      useEffect(() => {
-        if (typeof window !== "undefined") {
-          setChartComponentVisible(true);
-        }
-      }, [])
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Stock',
+        data: [1,2,3,4,5,6,7,8,9,10,11],
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Released',
+        data: [1,2,3,4,5,6,7,8,9,10,11],
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  }
 
     return (
         <div className="col-span-12 rounded-sm border border-stroke bg-white p-7 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
@@ -121,14 +83,7 @@ export default function BorrowedItemChart () {
 
       <div>
         <div id="chartTwo" className="-ml-5 -mb-9">
-          {chartComponentVisible && (
-            <ApexCharts
-              options={options}
-              series={state.series}
-              type="bar"
-              height={350}
-            />
-          )}
+          <Bar options={options} data={data} />
         </div>
       </div>
     </div>

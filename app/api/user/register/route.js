@@ -5,9 +5,12 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
     try {
-        const {first_name, last_name, username, password} = await request.json();
+        const {first_name, last_name, username, pword} = await request.json();
+        const default_password = pword;
         await connectMongoDB();
-        await User.create({first_name, last_name, username, password});
+        const salt = await bcryptjs.genSalt(10);
+        const password = await bcryptjs.hash(pword, salt);
+        await User.create({first_name, last_name, username, password, default_password});
         const data = await User.find({role: 'user'});
         return NextResponse.json({message: "User successfully created!", data: data}, {status: 201});
     } catch (error) {

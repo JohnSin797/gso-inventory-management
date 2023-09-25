@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import DeleteEmployee from "@/app/components/deleteButtons/deleteEmployee"
-import axios from "axios"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import Swal from "sweetalert2"
+import SideNav from "@/app/components/navigation/sideNav";
+import TopNav from "@/app/components/navigation/topNav";
+import Link from "next/link";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function Employee () {
 
@@ -12,8 +12,13 @@ export default function Employee () {
 
     const getEmployees = async () => {
         try {
-            const response = axios.get('/api/employee')
-            setEmployees((await response).data.data)
+            await axios.get('/api/employee')
+            .then(res=>{
+                setEmployees(res.data.data)
+            })
+            .catch(err=>{
+                console.log(err.message)
+            })
         } catch (error) {
             console.log(error.message)
         }
@@ -24,14 +29,23 @@ export default function Employee () {
     },[])
 
     return (
-        <div className="absolute top-60 p-6 flex justify-center items-center w-full">
-            <div className="w-full md:w-3/5 border rounded p-6 space-y-2">
-                <div className="block border border-slate-600 h-72 scroll overflow-auto">
-                    <table className="table-auto md:table-fixed border-separate w-full">
-                        <thead>
+        <div>
+            <TopNav />
+            <SideNav />
+            <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
+                <div className="w-full bg-white p-6 rounded-lg shadow-md">
+                    <Link
+                        href={'/data-entry/employee/create'}
+                        className="block w-full md:w-1/3 p-2 rounded-lg bg-blue-600 text-center text-white hover:bg-blue-600/80"
+                    >
+                        new employee
+                    </Link>
+                </div>
+                <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md">
+                    <table className="w-full table-auto">
+                        <thead className="bg-slate-800 text-gray-400">
                             <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
+                                <th>Name</th>
                                 <th>Department</th>
                                 <th>Office</th>
                                 <th>Position</th>
@@ -40,40 +54,34 @@ export default function Employee () {
                             </tr>
                         </thead>
                         <tbody>
-                            {employees.map((item, id)=>{
-                                return (
-                                    <tr key={id}>
-                                        <td className="border border-slate-600">{item?.first_name}</td>
-                                        <td className="border border-slate-600">{item?.last_name}</td>
-                                        <td className="border border-slate-600">{item?.department?.department_name}</td>
-                                        <td className="border border-slate-600">{item?.department?.office_name}</td>
-                                        <td className="border border-slate-600">{item?.position}</td>
-                                        <td className="border border-slate-600">{item?.employment_status}</td>
-                                        <td className="border border-slate-600 space-x-1 flex">
-                                            <button
-                                                className="w-1/2 hover:font-bold hover:bg-green-900 bg-green-600"
-                                            >
-                                                edit
-                                            </button>
-                                            {/* <button
-                                                className="w-1/2 hover:font-bold hover:bg-red-900 bg-red-600"
-                                            >
-                                                delete
-                                            </button> */}
-                                            <DeleteEmployee onSetEmployees={setEmployees} employeeId={item._id} />
-                                        </td>
-                                    </tr>
-                                )
-                            })}
+                            {
+                                employees.map((item, id)=>{
+                                    return(
+                                        <tr key={id} className="hover:bg-gray-900/50 hover:text-white">
+                                            <td className="p-2 border border-slate-900">{item?.first_name} {item?.last_name}</td>
+                                            <td className="p-2 border border-slate-900">{item?.department?.department_name}</td>
+                                            <td className="p-2 border border-slate-900">{item?.department?.office_name}</td>
+                                            <td className="p-2 border border-slate-900">{item?.position}</td>
+                                            <td className="p-2 border border-slate-900">{item?.employment_status}</td>
+                                            <td className="flex gap-2 p-2 border border-slate-900 text-white">
+                                                <button
+                                                    className="w-1/2 p-1 bg-green-600 hover:bg-green-600/80"
+                                                >
+                                                    edit
+                                                </button>
+                                                <button
+                                                    className="w-1/2 p-1 bg-red-600 hover:bg-red-600/80"
+                                                >
+                                                    delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
                         </tbody>
                     </table>
                 </div>
-                <Link 
-                    href={'/data-entry/employee/create'} 
-                    className="block p-1 w-full text-center border rounded hover:font-bold hover:bg-cyan-900"
-                >
-                    new user
-                </Link>
             </div>
         </div>
     )

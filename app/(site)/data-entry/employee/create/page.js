@@ -1,30 +1,15 @@
-'use client'
+'use client';
 
+import SideNav from "@/app/components/navigation/sideNav";
+import TopNav from "@/app/components/navigation/topNav";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
 export default function Create () {
-    const router = useRouter()
+
     const [department, setDepartment] = useState([])
-
-    const getDepartmentArray = async () => {
-        try {
-            await axios.get('/api/department/data-entry')
-            .then(res=>{
-                setDepartment(res.data.data)
-            })
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
-    useEffect(()=>{
-        getDepartmentArray()
-    },[])
-
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -41,12 +26,26 @@ export default function Create () {
         })
     }
 
+    const getDepartmentArray = async () => {
+        try {
+            await axios.get('/api/department/data-entry')
+            .then(res=>{
+                setDepartment(res.data.data)
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    useEffect(()=>{
+        getDepartmentArray()
+    }, [department])
+
     const createEmployee = async (e) => {
         try {
             e.preventDefault()
             await axios.post('/api/employee', formData)
             .then(res=>{
-                // router.push('/data-entry/employee')
                 setFormData({
                     first_name: '',
                     last_name: '',
@@ -65,68 +64,90 @@ export default function Create () {
     }
 
     return (
-        <div className="absolute top-60 w-full">
-            <div className="flex justify-center items-center md:pt-10 px-5">
-                <form onSubmit={createEmployee} className="md:w-2/5 border rounded p-6 space-y-2">
-                    <input 
-                        type="text"
-                        className="bg-black border-b w-full"
-                        placeholder="First Name"
-                        name="first_name"
-                        value={formData.first_name}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input 
-                        type="text"
-                        className="bg-black border-b w-full"
-                        placeholder="Last Name"
-                        name="last_name"
-                        value={formData.last_name}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input 
-                        type="text"
-                        className="bg-black border-b w-full"
-                        placeholder="Position"
-                        name="position"
-                        value={formData.position}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input 
-                        type="text"
-                        className="bg-black border-b w-full"
-                        placeholder="Employment Status"
-                        name="employment_status"
-                        value={formData.employment_status}
-                        onChange={handleChange}
-                        required
-                    />
-                    <select 
-                        className="bg-black border-b w-full"
-                        name="dep"
-                        value={formData.dep}
-                        onChange={handleChange}
-                    >
-                        <option>-- Select Department --</option>
-                        {
-                            department.map((item,id)=>{
-                                return(
-                                    <option key={id} value={item._id}>{item.department_name} {item.office_name}</option>
-                                )
-                            })
-                        }
-                    </select>
-                    <div className="flex space-x-2">
+        <div>
+            <TopNav />
+            <SideNav />
+            <div className="absolute w-full md:w-4/5 top-20 h-full right-0 p-6 flex justify-center items-center">
+                <form onSubmit={createEmployee} className="w-full md:w-3/5 bg-white p-6 rounded-lg">
+                    <div className="w-full p-6">
+                        <p className="text-2xl text-center font-bold">Create New Employee</p>
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">First Name</label>
+                        <input 
+                            type="text"
+                            className="w-full p-1 rounded-lg border hover:border-black"
+                            name="first_name"
+                            onChange={handleChange}
+                            value={formData.first_name}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Last Name</label>
+                        <input 
+                            type="text"
+                            className="w-full p-1 rounded-lg border hover:border-black"
+                            name="last_name"
+                            onChange={handleChange}
+                            value={formData.last_name}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Position</label>
+                        <input 
+                            type="text"
+                            className="w-full p-1 rounded-lg border hover:border-black"
+                            name="position"
+                            onChange={handleChange}
+                            value={formData.position}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Employment Status</label>
+                        <input 
+                            type="text"
+                            className="w-full p-1 rounded-lg border hover:border-black"
+                            name="employment_status"
+                            onChange={handleChange}
+                            value={formData.employment_status}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Department - Office</label>
+                        <select 
+                            className="w-full p-1 rounded-lg border hover:border-black"
+                            name="dep"
+                            onChange={handleChange}
+                            value={formData.dep}
+                            required
+                        >
+                            <option>-- Select Department --</option>
+                            {
+                                department.map((item,id)=>{
+                                    return(
+                                        <option key={id} value={item._id}>{item.department_name} {item.office_name}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+                    <div className="w-full py-6 flex gap-2">
+                        <Link
+                            href={'/data-entry/employee'}
+                            className="block text-center w-full md:w-1/2 p-2 rounded-lg bg-slate-800 hover:bg-slate-800/80 text-white"
+                        >
+                            back
+                        </Link>
                         <button
                             type="submit"
-                            className="p-1 w-1/2 border rounded hover:bg-cyan-900"
+                            className="w-full md:w-1/2 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white"
                         >
                             save
                         </button>
-                        <Link href={'/data-entry/employee'} className="block text-center p-1 w-1/2 border rounded hover:bg-cyan-900">back</Link>
                     </div>
                 </form>
             </div>

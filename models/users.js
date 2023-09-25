@@ -19,6 +19,7 @@ const userSchema = new Schema(
             type: String,
             required: [true, "password is required"]
         },
+        default_password: String,
         last_active: {
             type: Date,
             default: Date.now

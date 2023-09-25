@@ -1,72 +1,91 @@
-'use client'
+'use client';
 
-import EmployeeName from "@/app/components/employeeName"
-import axios from "axios"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import Swal from "sweetalert2"
+import SideNav from "@/app/components/navigation/sideNav";
+import TopNav from "@/app/components/navigation/topNav";
+import { useEffect, useState } from "react";
+import { Html5QrcodeScanner } from "html5-qrcode"
+import Swal from "sweetalert2";
+import Link from "next/link";
+import axios from "axios";
+import QrCode from "@/app/components/qrCode";
 
-export default function Item () {
+export default function Create () {
 
-    const [form, setForm] = useState({
+    const [isScanModalOpen, setIsScanModalOpen] = useState(false)
+    const [isCodeGenerateModalOpen, setIsCodeGenerateModalOpen] = useState(true)
+    const [itemForm, setItemForm] = useState({
         item_name: '',
-        barcode_text: '',
         property_number: '',
         description: '',
-        quantity: '',
-        cost: (0).toFixed(2),
-        remarks: '',
-        employee: ''
+        barcode_text: ''
     })
-    const [employeeId, setEmployeeId] = useState('')
-    const [errors, setErrors] = useState([])
-    const [employeeDetails, setEmployeeDetails] = useState({})
-    const [item, setItem] = useState([])
-    const [itemAlreadyExist, setItemAlreadyExist] = useState(false)
 
-    const onFormChange = (e) => {
+    const handleFormChange = e => {
         const {name, value} = e.target
-        setForm({
-            ...form,
+        setItemForm({
+            ...itemForm,
             [name]: value
         })
     }
 
-    const getEmployeeId = () => {
-        setForm({
-            ...form,
-            employee: employeeId
+    const confirmClose = () => {
+        Swal.fire({
+            title: 'Close Scanner?',
+            icon: 'question',
+            showConfirmButton: true,
+            confirmButtonText: 'OK'
+        })
+        .then(res=>{
+            if(res.isConfirmed) {
+                setIsScanModalOpen(false)
+            }
         })
     }
 
-    useEffect(()=>{
-        setTimeout(getEmployeeId, 1000)
-    }, [employeeId])
+    useEffect(() => {
+
+        const scanner = new Html5QrcodeScanner('reader', {
+            qrbox: {
+              width: 250,
+              height: 250,
+            },
+            fps: 5,
+        });
+      
+        scanner.render(success, error);
+      
+        function success(result) 
+        {
+          scanner.clear();
+          setItemForm({
+            ...itemForm,
+            barcode_text: result
+          })
+          setIsScanModalOpen(false);
+        }
+      
+        function error(err)
+        {
+          console.log(err);
+        }
+    }, [])
 
     const saveItem = async (e) => {
         try {
             e.preventDefault()
-            setItem([])
-            setItemAlreadyExist(false)
-            await axios.post('/api/item/create', form)
+            await axios.post('/api/item/create', itemForm)
                 .then(res=>{
                     console.log(res.data.message)
-                    setForm({
+                    setItemForm({
                         item_name: '',
                         barcode_text: '',
                         property_number: '',
-                        description: '',
-                        quantity: '',
-                        cost: (0).toFixed(2),
-                        remarks: '',
-                        employee: ''
+                        description: ''
                     })
                     Swal.fire(res.data.message)
                 })
                 .catch(err=>{
                     Swal.fire(err.response.data.message)
-                    setItem(err.response.data.data)
-                    setItemAlreadyExist(true)
                 })
         } catch (error) {
             console.log(error.message)
@@ -74,103 +93,100 @@ export default function Item () {
     }
 
     return (
-        <div className="absolute top-60 p-6 md:flex md:justify-center md:items-center md:space-x-2 w-full">
-            <div className={`${itemAlreadyExist ? 'w-full md:w-1/5 border rounded p-6 mb-2' : 'hidden'}`}>
-                <p className="text-center text-xl">Existing Item</p>
-                <p>Item Name: {item?.item_name}</p>
-                <p>Item Code: {item?.barcode_text}</p>
-                <p>Quantity: {item?.quantity}</p>
-                <p>Cost: {item?.cost}</p>
-                <p>Employee: {item?.employee?.first_name} {item?.employee?.last_name}</p>
-                <p>Department: {item?.department?.department_name}</p>
-                <p>Remarks:{item?.remarks}</p>
-            </div>
-            <form onSubmit={saveItem} className="w-full md:w-3/5 border rounded p-6 md:px-20 space-y-4">
-                <div className="md:flex md:space-x-2">
-                    <input 
-                        type="text"
-                        className="w-full bg-black border-b"
-                        placeholder="Item Name"
-                        name="item_name"
-                        onChange={onFormChange}
-                        value={form.item_name}
-                        required
-                    />
-                    <input 
-                        type="text"
-                        className="w-full bg-black border-b"
-                        placeholder="Property Number"
-                        name="property_number"
-                        onChange={onFormChange}
-                        value={form.property_number}
-                        required
-                    />
-                </div>
-                <input 
-                    type="text"
-                    className="w-full bg-black border-b"
-                    placeholder="Item Code"
-                    name="barcode_text"
-                    onChange={onFormChange}
-                    value={form.barcode_text}
-                    required
-                />
-                <input 
-                    type="text"
-                    className="w-full bg-black border-b"
-                    placeholder="Item Description"
-                    name="description"
-                    onChange={onFormChange}
-                    value={form.description}
-                    required
-                />
-                <div className="md:flex md:space-x-2">
-                    <input 
-                        type="text"
-                        className="w-full bg-black border-b"
-                        placeholder="Quantity"
-                        name="quantity"
-                        onChange={onFormChange}
-                        value={form.quantity}
-                        required
-                    />
-                    <input 
-                        type="number"
-                        className="w-full bg-black border-b"
-                        placeholder="Cost"
-                        name="cost"
-                        onChange={(e)=>setForm({
-                            ...form,
-                            cost: e.target.value
-                        })}
-                        value={form.cost}
-                        required
-                    />
-                </div>
-                <EmployeeName 
-                    className={'w-full bg-black border-b'} 
-                    onChangeEmployee={setEmployeeId} 
-                    onChangeDetails={setEmployeeDetails}
-                />
-                <textarea 
-                    type="text"
-                    className="w-full bg-black border rounded resize-none"
-                    placeholder="Remarks (optional)"
-                    name="remarks"
-                    onChange={onFormChange}
-                    value={form.remarks}
-                />
-                <div className="flex space-x-2">
+        <div>
+            <TopNav />
+            <SideNav />
+            <QrCode isHidden={isCodeGenerateModalOpen} hiddenChange={setIsCodeGenerateModalOpen} code={itemForm.barcode_text} />
+            <div
+                className={`fixed w-full flex justify-center items-center h-full bg-slate-900/90 z-50 ${isScanModalOpen ? '' : 'hidden'}`}
+            >
+                <div className="border border-white rounded-lg p-6">
+                    <div id="reader"></div>
                     <button
-                        className="p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded"
-                        type="submit"
+                        onClick={confirmClose}
+                        className="w-full p-2 rounded-lg border-white border mt-2 text-white hover:font-bold"
                     >
-                        save
+                        close
                     </button>
-                    <Link href={'/scan'} className="block p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded text-center">scan</Link>
-                    <Link href={'/data-entry/item'} className="block p-1 w-1/3 bg-slate-600 hover:bg-cyan-900 rounded text-center">back</Link>
                 </div>
-            </form>
+            </div>
+            <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 flex justify-center items-center">
+                <form onSubmit={saveItem} className="bg-white rounded-lg shadow-md p-6 w-full md:w-3/5">
+                    <p className="text-center text-2xl font-bold">Create New Item</p>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Item Name</label>
+                        <input 
+                            type="text"
+                            className="w-full p-2 rounded-lg border hover:border-black"
+                            name="item_name"
+                            onChange={handleFormChange}
+                            value={itemForm.item_name}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Property Number</label>
+                        <input 
+                            type="text"
+                            className="w-full p-2 rounded-lg border hover:border-black"
+                            name="property_number"
+                            onChange={handleFormChange}
+                            value={itemForm.property_number}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Item Description</label>
+                        <input 
+                            type="text"
+                            className="w-full p-2 rounded-lg border hover:border-black"
+                            name="description"
+                            onChange={handleFormChange}
+                            value={itemForm.description}
+                            required
+                        />
+                    </div>
+                    <div className="w-full relative">
+                        <label className="text-xs font-bold">Barcode</label>
+                        <input 
+                            type="text"
+                            className="w-full p-2 rounded-lg border hover:border-black"
+                            name="barcode_text"
+                            onChange={handleFormChange}
+                            value={itemForm.barcode_text}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={()=>setIsCodeGenerateModalOpen(false)}
+                            className="absolute text-[10px] font-bold block h-8 w-8 hover:w-20 hover:text-base duration-500 right-10 top-7 rounded-full border bg-blue-400 text-white overflow-hidden"
+                        >
+                            generate
+                        </button>
+                        <button
+                            type="button"
+                            onClick={()=>setIsScanModalOpen(true)}
+                            className="absolute text-[10px] font-bold block h-8 w-8 hover:w-20 hover:text-base duration-500 right-1 top-7 rounded-full border bg-green-400 text-white"
+                        >
+                            scan
+                        </button>
+                    </div>
+                    <div className="flex gap-2 w-full py-6">
+                        <Link
+                            href={'/data-entry/item'}
+                            className="block p-2 rounded-lg bg-slate-800 hover:bg-slate-800/80 text-white text-center w-full md:w-1/2"
+                        >
+                            back
+                        </Link>
+                        <button
+                            type="submit"
+                            className="p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white w-full md:w-1/2"
+                        >
+                            save
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }

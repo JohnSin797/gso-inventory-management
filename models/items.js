@@ -13,39 +13,14 @@ const itemSchema = new Schema(
             required: [true, 'barcode is required'],
             unique: true
         },
-        quantity: {
+        description: {
             type: String,
-            required: [true, 'quantity is required']
-        },
-        cost: {
-            type: Number,
-            required: [true, 'cost is required']
-        },
-        employee: {
-            type: Schema.Types.ObjectId,
-            ref: 'Employee',
-        },
-        department: {
-            type: Schema.Types.ObjectId,
-            ref: 'Department'
-        },
-        status: {
-            type: String,
-            default: 'working'
+            require: [true, 'description is required']
         },
         property_number: {
             type: String,
             required: [true, 'property number is required']
-        },
-        description: {
-            type: String,
-            required: [true, 'item description is required']
-        },
-        returned: {
-            type: Boolean,
-            default: false
-        },
-        remarks: String
+        }
     },
     {
         timestamps: true

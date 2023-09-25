@@ -1,6 +1,7 @@
-'use client';
+'use client'
 
-import Navigation from "@/app/components/navigation";
+import SideNav from "@/app/components/navigation/sideNav";
+import TopNav from "@/app/components/navigation/topNav";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -12,10 +13,14 @@ export default function User () {
         first_name: '',
         last_name: '',
         username: '',
-        password: generatePassword()
+        pword: generatePassword()
     })
 
-    const getUserData = async () => {
+    useEffect(()=>{
+        getUserData()
+    }, [users])
+
+    const getUserData = async (e) => {
         try {
             await axios.get('/api/user/index')
             .then(res=>{
@@ -29,10 +34,6 @@ export default function User () {
             console.log(error.message)
         }
     }
-
-    useEffect(()=>{
-        getUserData()
-    }, [])
 
     const deleteUser = async (id) => {
         try {
@@ -58,7 +59,7 @@ export default function User () {
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
-                console.log(err.message)
+                Swal.fire(err.message)
             })
         } catch (error) {
             console.log(error.message)
@@ -114,24 +115,23 @@ export default function User () {
         const newPassword = generatePassword()
         setNewUser({
           ...newUser,
-          password: newPassword,
+          pword: newPassword,
         })
     }
 
     return (
         <div>
-            <Navigation />
-            <div className="p-6 pt-20">
-                User
-                <form onSubmit={addUser} className="w-full">
-                    <div className="md:flex md:space-x-2">
+            <TopNav />
+            <SideNav />
+            <div className="absolute right-0 top-20 p-6 w-full md:w-4/5 space-y-2">
+                <form className="w-full p-6 rounded-lg bg-white">
+                    <div className="md:flex gap-2">
                         <div className="w-full md:w-1/3">
                             <label className="text-xs font-bold">Username</label>
                             <input 
                                 type="text"
-                                className="w-full p-1"
-                                placeholder="Username"
                                 name="username"
+                                className="w-full p-1 border hover:border-black rounded-lg"
                                 onChange={handleChange}
                                 value={newUser.username}
                                 required
@@ -141,32 +141,31 @@ export default function User () {
                             <label className="text-xs font-bold">Password</label>
                             <input 
                                 type="text"
-                                className="w-full p-1"
-                                placeholder="Password"
-                                name="password"
+                                name="pword"
+                                className="w-full p-1 border hover:border-black rounded-lg"
                                 onChange={handleChange}
-                                value={newUser.password}
+                                value={newUser.pword}
                                 required
                             />
                         </div>
-                        <div className="w-full pt-4 md:w-1/3 md:p-6">
-                            <button 
+                        <div className="w-full md:w-1/3">
+                            <label className="block h-6"></label>
+                            <button
                                 type="button"
-                                className="p-1 w-full border"
-                                onClick={()=>{generateNewPassword()}}
+                                onClick={generateNewPassword}
+                                className="p-1 border rounded-lg w-full bg-blue-700 text-white hover:font-bold hover:bg-blue-700/80"
                             >
                                 new password
                             </button>
                         </div>
                     </div>
-                    <div className="md:flex md:space-x-2">
+                    <div className="md:flex gap-2">
                         <div className="w-full md:w-1/3">
                             <label className="text-xs font-bold">First Name</label>
                             <input 
                                 type="text"
-                                className="w-full p-1"
-                                placeholder="First Name"
                                 name="first_name"
+                                className="w-full p-1 border hover:border-black rounded-lg"
                                 onChange={handleChange}
                                 value={newUser.first_name}
                                 required
@@ -176,26 +175,28 @@ export default function User () {
                             <label className="text-xs font-bold">Last Name</label>
                             <input 
                                 type="text"
-                                className="w-full p-1"
-                                placeholder="Last Name"
                                 name="last_name"
+                                className="w-full p-1 border hover:border-black rounded-lg"
                                 onChange={handleChange}
                                 value={newUser.last_name}
                                 required
                             />
                         </div>
-                        <div className="w-full pt-4 md:w-1/3 md:p-6">
-                            <button 
-                                className="p-1 w-full border"
-                                type="submit"
+                        <div className="w-full md:w-1/3">
+                            <label className="block h-6"></label>
+                            <button
+                                type="button"
+                                onClick={addUser}
+                                className="p-1 border rounded-lg w-full bg-teal-500 text-white hover:font-bold hover:bg-teal-500/80"
                             >
                                 add user
                             </button>
                         </div>
                     </div>
                 </form>
-                <div className="w-full h-80 overflow-scroll">
-                    <table className="w-full table-auto  border">
+                
+                <div className="w-full p-6 rounded-lg bg-white h-80 overflow-scroll">
+                    <table className="table-auto w-full border">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -211,7 +212,7 @@ export default function User () {
                                         <tr key={id}>
                                             <td>{item?.first_name} {item?.last_name}</td>
                                             <td>{item?.username}</td>
-                                            <td>{item?.password}</td>
+                                            <td>{item?.default_password}</td>
                                             <td className="flex space-x-2">
                                                 <button
                                                     className="w-1/2 p-1 bg-green-400"

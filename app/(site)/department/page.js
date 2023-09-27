@@ -47,7 +47,7 @@ export default function Department () {
 
     useEffect(()=>{
         getData()
-    }, [month, year, department])
+    }, [month, year, department, getData])
 
     return (
         <div>

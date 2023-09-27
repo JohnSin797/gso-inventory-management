@@ -49,7 +49,7 @@ export default function Employee () {
 
     useEffect(()=>{
         getEmployees()
-    }, [selectedEmployee])
+    }, [selectedEmployee, getEmployees])
 
     return (
         <div>

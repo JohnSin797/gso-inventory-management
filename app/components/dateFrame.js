@@ -21,7 +21,7 @@ export default function DateFrame ({ dateStr }) {
 
     useEffect(()=>{
         setDate()
-    }, [dateStr])
+    }, [dateStr, setDate])
 
     return (
         <>

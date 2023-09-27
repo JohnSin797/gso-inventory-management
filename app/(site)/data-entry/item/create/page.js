@@ -13,6 +13,7 @@ export default function Create () {
 
     const [isScanModalOpen, setIsScanModalOpen] = useState(false)
     const [isCodeGenerateModalOpen, setIsCodeGenerateModalOpen] = useState(true)
+    const [scanResult, setScanResult] = useState(null);
     const [itemForm, setItemForm] = useState({
         item_name: '',
         property_number: '',
@@ -42,33 +43,28 @@ export default function Create () {
         })
     }
 
-    useEffect(() => {
-
-        const scanner = new Html5QrcodeScanner('reader', {
-            qrbox: {
-              width: 250,
-              height: 250,
-            },
-            fps: 5,
-        });
-      
-        scanner.render(success, error);
-      
-        function success(result) 
-        {
-          scanner.clear();
-          setItemForm({
-            ...itemForm,
-            barcode_text: result
-          })
-          setIsScanModalOpen(false);
-        }
-      
-        function error(err)
-        {
-          console.log(err);
-        }
-    }, [])
+  useEffect(() => {
+    const scanner = new Html5QrcodeScanner('reader', {
+      qrbox: {
+        width: 250,
+        height: 250,
+      },
+      fps: 5,
+    });
+  
+    scanner.render(success, error);
+  
+    function success(result) 
+    {
+      scanner.clear();
+      setScanResult(result);
+    }
+  
+    function error(err)
+    {
+      console.log(err);
+    }
+  }, [])
 
     const saveItem = async (e) => {
         try {
@@ -113,7 +109,11 @@ export default function Create () {
                 className={`fixed w-full flex justify-center items-center h-full bg-slate-900/90 z-50 ${isScanModalOpen ? '' : 'hidden'}`}
             >
                 <div className="border border-white rounded-lg p-6">
-                    <div id="reader"></div>
+                    {scanResult?
+                        <h1>Success! {scanResult}</h1>
+                        :
+                        <div id='reader'></div>
+                    }
                     <button
                         onClick={confirmClose}
                         className="w-full p-2 rounded-lg border-white border mt-2 text-white hover:font-bold"

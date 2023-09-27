@@ -8,6 +8,7 @@ import SelectYear from "@/app/components/select/selectYear";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
+import DateFrame from "@/app/components/dateFrame";
 
 export default function Department () {
 
@@ -29,7 +30,7 @@ export default function Department () {
     
             setTotal(totalCost)
         }
-        
+
         const getData = async () => {
             try {
                 await axios.post('/api/department', {month: month, year: year, department: department})

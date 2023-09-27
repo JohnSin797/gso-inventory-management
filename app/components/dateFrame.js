@@ -1,33 +1,11 @@
 'use client'
 
-import { useEffect, useState } from "react"
-
 export default function DateFrame ({ dateStr }) {
-    const [newDate, setNewDate] = useState(new Date(dateStr))
-    const [newMonth, setNewMonth] = useState('')
+    const date = new Date(dateStr);
 
-    const setMonth = (mon) => {
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        setNewMonth(monthNames[mon])
-    }
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-    const setDate = () => {
-        const d = new Date(dateStr)
-        setNewDate(d)
-        setMonth(d.getMonth())
-    }
+  const formattedDate = date.toLocaleDateString(undefined, options);
 
-    useEffect(()=>{
-        setDate()
-    }, [dateStr, setDate])
-
-    return (
-        <>
-            {
-                newMonth + ' ' + newDate.getDate() + ', ' + newDate.getFullYear()
-            }
-        </>
-    )
+  return <span>{formattedDate}</span>;
 }

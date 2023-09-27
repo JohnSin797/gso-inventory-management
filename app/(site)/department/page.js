@@ -17,37 +17,38 @@ export default function Department () {
     const [total, setTotal] = useState('')
     const [tableData, setTableData] = useState([])
 
-    const setTotalCost = (data) => {
-        let totalCost = 0;
-
-        data.forEach(item => {
-            totalCost += parseInt(item['cost']);
-        });
-
-        setTotal(totalCost)
-    }
-
-    const getData = async () => {
-        try {
-            await axios.post('/api/department', {month: month, year: year, department: department})
-            .then(res=>{
-                console.log(res)
-                setTableData(res.data.data)
-                setTotalCost(res.data.data)
-            })
-            .catch(err=>{
-                setTableData([])
-                Swal.fire(err.response.data.message)
-            })
-        } catch (error) {
-            console.log(error.message)
-            setTableData([])
-        }
-    }
+    
 
     useEffect(()=>{
+        const setTotalCost = (data) => {
+            let totalCost = 0;
+    
+            data.forEach(item => {
+                totalCost += parseInt(item['cost']);
+            });
+    
+            setTotal(totalCost)
+        }
+        
+        const getData = async () => {
+            try {
+                await axios.post('/api/department', {month: month, year: year, department: department})
+                .then(res=>{
+                    console.log(res)
+                    setTableData(res.data.data)
+                    setTotalCost(res.data.data)
+                })
+                .catch(err=>{
+                    setTableData([])
+                    Swal.fire(err.response.data.message)
+                })
+            } catch (error) {
+                console.log(error.message)
+                setTableData([])
+            }
+        }
         getData()
-    }, [month, year, department, getData])
+    }, [month, year, department])
 
     return (
         <div>

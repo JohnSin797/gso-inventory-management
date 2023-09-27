@@ -21,35 +21,34 @@ export default function Employee () {
         position: ''
     })
 
-    const getEmployees = async () => {
-        try {
-            await axios.post('/api/employee/index', {id:selectedEmployee})
-            .then(res=>{
-                console.log(res.data.data)
-                setEmployees(res.data.data)
-                calculateTotalCost(res.data.data)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const calculateTotalCost = (data) => {
-        let totalCost = 0;
-
-        data.forEach(item => {
-            totalCost += parseInt(item['cost']);
-        });
-
-        setTotalCost(totalCost)
-    }
-
     useEffect(()=>{
+        const calculateTotalCost = (data) => {
+            let totalCost = 0;
+    
+            data.forEach(item => {
+                totalCost += parseInt(item['cost']);
+            });
+    
+            setTotalCost(totalCost)
+        }
+
+        const getEmployees = async () => {
+            try {
+                await axios.post('/api/employee/index', {id:selectedEmployee})
+                .then(res=>{
+                    console.log(res.data.data)
+                    setEmployees(res.data.data)
+                    calculateTotalCost(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
         getEmployees()
-    }, [selectedEmployee, getEmployees])
+    }, [selectedEmployee])
 
     return (
         <div>

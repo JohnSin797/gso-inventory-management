@@ -1,8 +1,12 @@
 'use client'
 
 import { QRCodeCanvas } from "qrcode.react"
+import { useState } from "react"
+import Barcode from "react-barcode"
 
 export default function QrCode ({ isHidden, hiddenChange, code }) {
+
+    const [useBarCode, setUseBarCode] = useState(false)
 
     const downloadQRCode = (e) => {
         e.preventDefault()
@@ -22,13 +26,27 @@ export default function QrCode ({ isHidden, hiddenChange, code }) {
         <div className={`fixed z-50 w-full h-full bg-slate-900/50 flex justify-center items-center ${isHidden ? 'hidden' : ''}`}>
             <div className="border border-white rounded-lg p-6">
                 <form onSubmit={downloadQRCode} className="space-y-2">
-                    <QRCodeCanvas 
-                        id="qrCode"
-                        value={code}
-                        size={300}
-                        bgColor={"#00ff00"}
-                        level={"H"}
-                    />
+                    <button
+                        onClick={()=>setUseBarCode(!useBarCode)}
+                        className="p-1 bg-white rounded-lg text-slate-900 w-full"
+                    >
+                        switch to {useBarCode ? <span>QR Code</span> : <span>Barcode</span>}
+                    </button>
+                    {
+                        useBarCode ?
+                        <Barcode 
+                            id="qrCode"
+                            value={code}
+                            size={300}
+                        />
+                        :
+                        <QRCodeCanvas 
+                            id="qrCode"
+                            value={code}
+                            size={300}
+                            level={"H"}
+                        />
+                    }
                     <button
                         type="submit"
                         className="w-full p-2 rounded-lg border border-white text-white"

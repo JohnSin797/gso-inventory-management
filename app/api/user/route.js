@@ -15,9 +15,11 @@ export async function POST(request) {
 
 export async function GET(request) {
     try {
-        const token = await request.cookies.get('token')?.value || request.cookies.get('admin')?.value;
+        const token = await request.cookies.get('token')?.value || '';
         const decoded = jwt.decode(token, {complete: true});
-        return NextResponse.json({message: 'OK', role: decoded.payload.role}, {status: 200});
+        const data = await User.findById(decoded.payload.id).exec();
+        console.log(data);
+        return NextResponse.json({message: 'OK', data: data}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
     }

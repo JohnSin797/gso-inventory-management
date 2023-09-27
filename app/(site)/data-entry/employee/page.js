@@ -42,7 +42,7 @@ export default function Employee () {
                     </Link>
                 </div>
                 <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md">
-                    <table className="w-full table-auto">
+                    <table className="w-full table-auto border border-slate-900">
                         <thead className="bg-slate-800 text-gray-400">
                             <tr>
                                 <th>Name</th>

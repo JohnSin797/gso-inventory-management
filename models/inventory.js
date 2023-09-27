@@ -42,6 +42,10 @@ const inventorySchema = new Schema(
             type: Number,
             default: 0
         },
+        source_fund: {
+            type: String,
+            required: [true, 'source of funds is required']
+        },
         remarks: String
     },
     {

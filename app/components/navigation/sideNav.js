@@ -12,6 +12,8 @@ import { MdOutlineInventory } from "react-icons/md"
 import { LuFileInput } from "react-icons/lu"
 import { AiOutlineScan } from "react-icons/ai"
 import { ImMenu } from "react-icons/im"
+import { BsPersonVcard } from "react-icons/bs"
+import LogoutButton from "../logoutButton"
 
 export default function SideNav () {
 
@@ -202,6 +204,20 @@ export default function SideNav () {
                                     </div>
                                 )}
                                 </SidebarLinkGroup>
+                                <li>
+                                    <Link 
+                                        href={'/profile'}
+                                        className={`md:hidden group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out text-slate-200 hover:bg-gray-700 ${
+                                            pathname == '/profile' ? 'bg-gray-700' : ''
+                                        }`}
+                                    >
+                                        <BsPersonVcard />
+                                        Profile
+                                    </Link>
+                                </li>
+                                <li>
+                                    <LogoutButton className={'w-full p-2 border border-white rounded-lg text-white md:hidden'} />
+                                </li>
                             </ul>
                         </div>
                         <button

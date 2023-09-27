@@ -1,6 +1,7 @@
 'use client'
 
 import { HiMagnifyingGlass } from "react-icons/hi2"
+import ProfileDropDown from "./profileDropDown"
 
 export default function TopNav () {
     return (
@@ -16,6 +17,7 @@ export default function TopNav () {
                     className="border-none outline-none p-2 md:w-1/2"
                     placeholder="Type to search..."
                 />
+                <ProfileDropDown />
             </form>
         </div>
     )

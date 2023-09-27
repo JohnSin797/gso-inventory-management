@@ -92,6 +92,18 @@ export default function Create () {
         }
     }
 
+    const showGenerateCodeModal = () => {
+        if(itemForm.barcode_text == '') {
+            Swal.fire({
+                title: 'Barcode is null',
+                icon: 'error',
+                text: 'Enter the barcode text to generate the barcode image'
+            })
+        } else {
+            setIsCodeGenerateModalOpen(false)
+        }
+    }
+
     return (
         <div>
             <TopNav />
@@ -158,7 +170,7 @@ export default function Create () {
                         />
                         <button
                             type="button"
-                            onClick={()=>setIsCodeGenerateModalOpen(false)}
+                            onClick={showGenerateCodeModal}
                             className="absolute text-[10px] font-bold block h-8 w-8 hover:w-20 hover:text-base duration-500 right-10 top-7 rounded-full border bg-blue-400 text-white overflow-hidden"
                         >
                             generate

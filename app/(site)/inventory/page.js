@@ -6,29 +6,43 @@ import TopNav from "@/app/components/navigation/topNav";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { HiPencilSquare, HiTrash } from "react-icons/hi2";
 
-export default function Department () {
+export default function Inventory () {
 
     const [stocks, setStocks] = useState([])
-    const [borrowedItems, setBorrowedItems] = useState([])
 
-    const getData = async () => {
+    const archiveStock = async (id) => {
         try {
-            await axios.get('/api/inventory/index')
+            await axios.post('/api/inventory/delete', {id:id})
             .then(res=>{
-                setStocks(res.data.data)
+
             })
             .catch(err=>{
                 console.log(err.message)
             })
         } catch (error) {
-            console.log(error.message)
+            console.log(error)
         }
     }
 
     useEffect(()=>{
+        const getData = async () => {
+            try {
+                await axios.get('/api/inventory/index')
+                .then(res=>{
+                    console.log(res.data)
+                    setStocks(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err.message)
+                })
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
         getData()
-    }, [])
+    }, [stocks])
 
     return (
         <div>
@@ -46,11 +60,11 @@ export default function Department () {
                         href={'/inventory/release'}
                         className="block w-1/3 p-2 rounded-lg bg-indigo-600 hover:bg-indigo-600/80 text-center text-white"
                     >
-                        borrow item
+                        release item
                     </Link>
                 </div>
-                <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
-                    <p className="text-2xl font-bold">Borrowed Items</p>
+                {/* <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
+                    <p className="text-2xl font-bold">Released Items</p>
                     <table className="w-full table-auto">
                         <thead className="bg-slate-800 text-gray-400">
                             <tr>
@@ -71,18 +85,21 @@ export default function Department () {
 
                         </tbody>
                     </table>
-                </div>
+                </div> */}
                 <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
                     <p className="text-2xl font-bold">Stocks</p>
                     <table className="w-full table-auto border border-slate-600">
                         <thead className="bg-slate-800 text-gray-400">
                             <tr>
                                 <th>Item Name</th>
-                                <th>Item Description</th>
+                                <th>Unit Cost</th>
                                 <th>Property Number</th>
-                                <th>Date Issued</th>
-                                <th>Amount</th>
-                                <th>Quantity</th>
+                                <th>Date</th>
+                                <th>Stocks</th>
+                                <th>Released</th>
+                                <th>Condemned</th>
+                                <th>Inventory Tag</th>
+                                <th>Source of Funds</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -90,23 +107,27 @@ export default function Department () {
                             {
                                 stocks.map((item,id)=>{
                                     return(
-                                        <tr key={id} className="hover:bg-gray-900/50 hover:text-white">
+                                        <tr key={id} className="hover:bg-gray-900/50 hover:text-white border border-slate-600">
                                             <td className="p-2 border border-slate-600">{item?.item?.item_name}</td>
-                                            <td className="p-2 border border-slate-600">{item?.item?.description}</td>
+                                            <td className="p-2 border border-slate-600">{item?.unit_cost}</td>
                                             <td className="p-2 border border-slate-600">{item?.item?.property_number}</td>
                                             <td className="p-2 border border-slate-600"> <DateFrame dateStr={item?.date_acquired} /> </td>
-                                            <td className="p-2 border border-slate-600">{item?.cost}</td>
-                                            <td className="p-2 border border-slate-600">{item?.current_quantity}</td>
-                                            <td className="p-2 border border-slate-600 flex space-x-2 text-white">
+                                            <td className="p-2 border border-slate-600">{item?.stock}</td>
+                                            <td className="p-2 border border-slate-600">{item?.released}</td>
+                                            <td className="p-2 border border-slate-600">{item?.condemned}</td>
+                                            <td className="p-2 border border-slate-600">{item?.inventory_tag}</td>
+                                            <td className="p-2 border border-slate-600">{item?.source_fund}</td>
+                                            <td className="p-2 flex space-x-2 text-white">
                                                 <button
-                                                    className="w-1/2 p-1 bg-green-600 hover:bg-green-600/80"
+                                                    className="w-1/2 p-2 rounded bg-green-600 hover:bg-green-600/80"
                                                 >
-                                                    edit
+                                                    <HiPencilSquare className="w-6 h-6" />
                                                 </button>
                                                 <button
-                                                    className="w-1/2 p-1 bg-red-600 hover:bg-red-600/80"
+                                                    onClick={()=>archiveStock(item?._id)}
+                                                    className="w-1/2 p-2 rounded-lg bg-red-600 hover:bg-red-600/80"
                                                 >
-                                                    delete
+                                                    <HiTrash className="w-6 h-6" />
                                                 </button>
                                             </td>
                                         </tr>

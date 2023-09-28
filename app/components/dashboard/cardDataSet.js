@@ -11,25 +11,25 @@ export default function CardDataSet ({ title, total, rate, levelUp, levelDown, c
 
             <div className="mt-4 flex items-end justify-between">
                 <div>
-                <h4 className="text-2xl font-bold text-black">
-                    {total}
-                </h4>
-                <span className="text-sm font-medium text-gray-400">{title}</span>
+                    <h4 className="text-2xl font-bold text-black">
+                        {total}
+                    </h4>
+                    <span className="text-sm font-medium text-gray-400">{title}</span>
                 </div>
 
                 <span
-                className={`flex items-center gap-1 text-sm font-medium ${
-                    levelUp && 'text-green-500'
-                } ${levelDown && 'text-red-500'} `}
-                >
-                {rate}
+                    className={`flex items-center gap-1 text-sm font-medium ${
+                        levelUp && 'text-green-500'
+                    } ${levelDown && 'text-red-500'} `}
+                    >
+                    {rate}
 
-                {levelUp && (
-                    <AiOutlineArrowUp className="text-green-500" />
-                )}
-                {levelDown && (
-                    <AiOutlineArrowDown className="text-red-500" />
-                )}
+                    {levelUp && (
+                        <AiOutlineArrowUp className="text-green-500" />
+                    )}
+                    {levelDown && (
+                        <AiOutlineArrowDown className="text-red-500" />
+                    )}
                 </span>
             </div>
         </div>

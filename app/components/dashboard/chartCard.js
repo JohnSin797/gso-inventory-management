@@ -103,7 +103,7 @@ export default function ChartCard () {
       // }, [])
 
     return (
-        <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+        <div className="col-span-12 rounded-sm border border-stroke bg-white shadow-md p-10 md:col-span-8">
           <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full gap-3 sm:gap-5">
           <div className="flex w-full md:w-46">
@@ -128,14 +128,7 @@ export default function ChartCard () {
         
       </div>
           <div>
-            <div id="chartOne" className="-ml-5 h-[355px] w-[105%]">
-              {/* {chartComponentVisible && (<ReactApexChart
-                options={options}
-                series={state.series}
-                type="line"
-                width="100%"
-                height="100%"
-              />)} */}
+            <div id="chartOne" className="h-[300px] w-full">
               <Line options={options} data={data} />
             </div>
           </div>

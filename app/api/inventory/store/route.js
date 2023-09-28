@@ -1,20 +1,22 @@
 import connectMongoDB from "@/libs/mongodb";
 import Item from "@/models/items";
-import Department from "@/models/department";
-import Employee from "@/models/employees";
+import User from "@/models/users";
 import Inventory from "@/models/inventory";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function POST (request) {
     try {
-        const {inventory_tag, quantity, cost, item_id, employee_id, remarks} = await request.json();
+        const {
+            inventory_tag, quantity, unit_cost, total_cost, item_id, source_fund, remarks, date_acquired
+        } = await request.json();
         await connectMongoDB();
-        const item = await Item.findById(item_id).exec();
-        const employee = await Employee.findById(employee_id).populate('department').exec();
-        const department = await Department.findById(employee?.department?._id).exec();
-        const initial_quantity = quantity;
-        const current_quantity = quantity;
-        await Inventory.create({item, employee, department, inventory_tag, initial_quantity, current_quantity, cost, remarks});
+        const item = await Item.findOne({_id: item_id}).exec();
+        const token = await request.cookies.get('token')?.value || '';
+        const decoded = jwt.decode(token, {complete: true});
+        const user = await User.findById(decoded.payload.id).exec();
+        const stock = quantity;
+        await Inventory.create({item, unit_cost, total_cost, quantity, stock, inventory_tag, user, date_acquired, source_fund, remarks});
         return NextResponse.json({message: 'inventory stock successfully added'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

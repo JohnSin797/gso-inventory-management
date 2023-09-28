@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import Item from "./items";
-import Employee from "./employees";
-import Department from "./department";
+import User from "./users";
 
 const inventorySchema = new Schema(
     {
@@ -9,6 +8,11 @@ const inventorySchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Item',
             required: [true, 'item is required']
+        },
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: [true, 'user is ']
         },
         employee: {
             type: Schema.Types.ObjectId,
@@ -22,29 +26,41 @@ const inventorySchema = new Schema(
             type: String,
             required: [true, 'inventory tag is required']
         },
-        initial_quantity: {
+        quantity: {
             type: Number,
             required: [true, 'quantity is required']
         },
-        current_quantity: {
+        released: {
             type: Number,
-            required: [true, 'quantity is required']
-        },
-        cost: {
-            type: Number,
-            required: [true, 'cost is required']
-        },
-        date_acquired: {
-            type: Date,
-            default: Date.now()
+            default: 0
         },
         condemned: {
             type: Number,
             default: 0
         },
+        stock: {
+            type: Number,
+            required: [true, 'stock is required']
+        },
+        unit_cost: {
+            type: Number,
+            required: [true, 'unit cost is required']
+        },
+        total_cost: {
+            type: Number,
+            required: [true, 'total cost is required']
+        },
+        date_acquired: {
+            type: Date,
+            default: Date.now()
+        },
         source_fund: {
             type: String,
             required: [true, 'source of funds is required']
+        },
+        deletedAt: {
+            type: Date,
+            default: null
         },
         remarks: String
     },

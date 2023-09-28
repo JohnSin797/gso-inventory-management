@@ -8,13 +8,17 @@ const itemSchema = new Schema(
             type: String,
             required: [true, 'item name is required']
         },
+        unit: {
+            type: String,
+            required: [true, 'item unit is required']
+        },
         barcode_text: {
             type: String,
             required: [true, 'barcode is required'],
             unique: true
         },
         description: {
-            type: String,
+            type: [String],
             require: [true, 'description is required']
         },
         property_number: {

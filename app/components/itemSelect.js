@@ -13,7 +13,7 @@ export default function ItemSelect ({ items, className, onItemChange }) {
             {
                 items.map((item,id)=>{
                     return (
-                        <option key={id} value={item?._id}>{item?.item_name}</option>
+                        <option key={id} value={item?._id}>{item?.item?.item_name ?? item?.item_name}</option>
                     )
                 })
             }

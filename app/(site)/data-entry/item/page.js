@@ -61,11 +61,11 @@ export default function Item () {
                     <table className="w-full table-auto">
                         <thead className="bg-slate-800 text-gray-400 border border-slate-600">
                             <tr>
-                                <th>Quantity</th>
+                                <th>Added By</th>
                                 <th>Item Name</th>
                                 <th>Property Number</th>
                                 <th>Date Acquired</th>
-                                <th>Cost</th>
+                                <th>Unit</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -73,21 +73,21 @@ export default function Item () {
                             {items.map((item, id)=>{
                                 return (
                                     <tr key={id} className="hover:bg-gray-900/50 hover:text-white">
-                                        <td className="p-2 border border-slate-600">{item.quantity}</td>
-                                        <td className="p-2 border border-slate-600">{item.item_name}</td>
-                                        <td className="p-2 border border-slate-600">{item.property_number}</td>
-                                        <td className="p-2 border border-slate-600"><DateFrame dateStr={item.createdAt} /></td>
-                                        <td className="p-2 border border-slate-600">{item.cost}</td>
+                                        <td className="p-2 border border-slate-600">{item?.user?.first_name} {item?.user?.last_name}</td>
+                                        <td className="p-2 border border-slate-600">{item?.item_name}</td>
+                                        <td className="p-2 border border-slate-600">{item?.property_number}</td>
+                                        <td className="p-2 border border-slate-600"><DateFrame dateStr={item?.createdAt} /></td>
+                                        <td className="p-2 border border-slate-600">{item?.unit}</td>
                                         <td className="p-2 border border-slate-600 h-auto flex text-white gap-2">
                                             <Link
-                                                href={`/data-entry/item/edit/${item._id}`}
+                                                href={`/data-entry/item/edit/${item?._id}`}
                                                 className="block w-full md:w-1/2 text-center bg-green-600 hover:bg-green-900"
                                             >
                                                 edit
                                             </Link>
                                             <button
                                                 className="w-full md:w-1/2 bg-red-600 hover:bg-red-900"
-                                                onClick={()=>deleteItem(item._id)}
+                                                onClick={()=>deleteItem(item?._id)}
                                             >
                                                 delete
                                             </button>

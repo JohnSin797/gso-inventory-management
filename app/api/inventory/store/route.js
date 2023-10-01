@@ -16,7 +16,9 @@ export async function POST (request) {
         const decoded = jwt.decode(token, {complete: true});
         const user = await User.findById(decoded.payload.id).exec();
         const stock = quantity;
-        await Inventory.create({item, unit_cost, total_cost, quantity, stock, inventory_tag, user, date_acquired, source_fund, remarks});
+        const total_amount = total_cost;
+        const ics_are = total_cost > 50000 ? 'are' : 'ics';
+        await Inventory.create({item, unit_cost, total_cost, quantity, stock, inventory_tag, user, date_acquired, source_fund, total_amount, ics_are, remarks});
         return NextResponse.json({message: 'inventory stock successfully added'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

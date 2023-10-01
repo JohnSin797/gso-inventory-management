@@ -15,10 +15,10 @@ export async function POST(request) {
 
 export async function GET(request) {
     try {
-        const token = await request.cookies.get('token')?.value || '';
+        await connectMongoDB();
+        const token = await request.cookies.get('token')?.value || ''
         const decoded = jwt.decode(token, {complete: true});
         const data = await User.findById(decoded.payload.id).exec();
-        console.log(data);
         return NextResponse.json({message: 'OK', data: data}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

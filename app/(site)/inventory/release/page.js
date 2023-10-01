@@ -4,14 +4,17 @@ import EmployeeSelect from "@/app/components/employeeSelect";
 import ItemSelect from "@/app/components/itemSelect";
 import SideNav from "@/app/components/navigation/sideNav";
 import TopNav from "@/app/components/navigation/topNav";
+import InventorySelect from "@/app/components/select/inventorySelect";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function Release () {
 
     const [selectedEmployee, setSelectedEmployee] = useState('')
+    const router = useRouter()
     const [selectedItem, setSelectedItem] = useState('')
     const [releaseDate, setReleaseDate] = useState('')
     const [quantity, setQuantity] = useState('')
@@ -21,17 +24,29 @@ export default function Release () {
         employees: []
     })
 
-    const releaseItem = async () => {
+    const releaseItem = async (e) => {
         try {
-            await axios.post('/api/inventory/release', {})
+            e.preventDefault()
+            await axios.post('/api/inventory/release', {
+                employee: selectedEmployee,
+                item: selectedItem,
+                quantity: quantity,
+                release_date: releaseDate,
+                remarks: remarks
+            })
             .then(res=>{
+                setSelectedEmployee('')
+                setSelectedItem('')
+                setReleaseDate('')
+                setQuantity('')
+                setRemarks('')
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
-                console.log(err.message)
+                console.log(err)
             })
         } catch (error) {
-            console.log(error.message)
+            console.log(error)
         }
     }
 
@@ -40,7 +55,6 @@ export default function Release () {
             try {
                 await axios.get('/api/inventory/index')
                 .then(res=>{
-                    console.log(res)
                     setData({
                         items: res.data.data,
                         employees: res.data.employees
@@ -63,14 +77,14 @@ export default function Release () {
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 flex justify-center items-center">
                 <div className="w-full md:w-3/5 p-6 bg-white rounded-lg shadow-md">
                     <form onSubmit={releaseItem} className="w-full">
-                        <p className="text-2xl text-center font-bold">Borrow Item</p>
+                        <p className="text-2xl text-center font-bold">Release Item</p>
                         <div className="w-full">
                             <label className="text-xs font-bold">Employee</label>
                             <EmployeeSelect className={'w-full p-2 border hover:border-black rounded-lg'} employees={data.employees} onEmployeeChange={setSelectedEmployee} />
                         </div>
                         <div className="w-full">
                             <label className="text-xs font-bold">Item</label>
-                            <ItemSelect className={'w-full p-2 border hover:border-black rounded-lg'} items={data.items} onItemChange={setSelectedItem} />
+                            <InventorySelect className={'w-full p-2 border hover:border-black rounded-lg'} items={data.items} onItemChange={setSelectedItem} />
                         </div>
                         <div className="flex gap-2">
                             <div className="w-1/2">

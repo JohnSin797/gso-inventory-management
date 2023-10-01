@@ -19,7 +19,8 @@ export default function Create () {
         item_name: '',
         property_number: '',
         description: [''],
-        barcode_text: ''
+        barcode_text: '',
+        unit: ''
     })
 
     const handleFormChange = e => {
@@ -77,6 +78,7 @@ export default function Create () {
                         item_name: '',
                         barcode_text: '',
                         property_number: '',
+                        unit: '',
                         description: ['']
                     })
                     Swal.fire(res.data.message)
@@ -172,6 +174,17 @@ export default function Create () {
                             name="property_number"
                             onChange={handleFormChange}
                             value={itemForm.property_number}
+                            required
+                        />
+                    </div>
+                    <div className="w-full">
+                        <label className="text-xs font-bold">Unit</label>
+                        <input 
+                            type="text"
+                            className="w-full p-2 rounded-lg border hover:border-black"
+                            name="unit"
+                            onChange={handleFormChange}
+                            value={itemForm.unit}
                             required
                         />
                     </div>

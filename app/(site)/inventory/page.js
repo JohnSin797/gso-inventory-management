@@ -7,6 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiPencilSquare, HiTrash } from "react-icons/hi2";
+import Swal from "sweetalert2";
 
 export default function Inventory () {
 
@@ -16,7 +17,7 @@ export default function Inventory () {
         try {
             await axios.post('/api/inventory/delete', {id:id})
             .then(res=>{
-
+                Swal.fire(res.data.message)
             })
             .catch(err=>{
                 console.log(err.message)
@@ -63,29 +64,6 @@ export default function Inventory () {
                         release item
                     </Link>
                 </div>
-                {/* <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
-                    <p className="text-2xl font-bold">Released Items</p>
-                    <table className="w-full table-auto">
-                        <thead className="bg-slate-800 text-gray-400">
-                            <tr>
-                                <th>Office</th>
-                                <th>Employee</th>
-                                <th>Item Description</th>
-                                <th>Property Number</th>
-                                <th>Date Issued</th>
-                                <th>Amount</th>
-                                <th>Quantity</th>
-                                <th>Employee</th>
-                                <th>Returned</th>
-                                <th>Position</th>
-                                <th>Employment Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div> */}
                 <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
                     <p className="text-2xl font-bold">Stocks</p>
                     <table className="w-full table-auto border border-slate-600">
@@ -93,6 +71,7 @@ export default function Inventory () {
                             <tr>
                                 <th>Item Name</th>
                                 <th>Unit Cost</th>
+                                <th>Total Cost</th>
                                 <th>Property Number</th>
                                 <th>Date</th>
                                 <th>Stocks</th>
@@ -110,6 +89,7 @@ export default function Inventory () {
                                         <tr key={id} className="hover:bg-gray-900/50 hover:text-white border border-slate-600">
                                             <td className="p-2 border border-slate-600">{item?.item?.item_name}</td>
                                             <td className="p-2 border border-slate-600">{item?.unit_cost}</td>
+                                            <td className="p-2 border border-slate-600">{item?.total_cost}</td>
                                             <td className="p-2 border border-slate-600">{item?.item?.property_number}</td>
                                             <td className="p-2 border border-slate-600"> <DateFrame dateStr={item?.date_acquired} /> </td>
                                             <td className="p-2 border border-slate-600">{item?.stock}</td>

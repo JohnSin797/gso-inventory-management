@@ -9,42 +9,15 @@ import { NextResponse } from "next/server";
 export async function POST (request) {
     try {
         await connectMongoDB();
-        const item = await request.json();
-        // const userToken = await request.cookies.get('token')?.value || '';
-        const isItemAlreadyExist = await Item.findOne({barcode_text: item.barcode_text}).exec();
-        // const token = jwt.decode(userToken, {complete: true});
+        const {item_name, barcode_text, property_number, unit, description} = await request.json();
+        const userToken = await request.cookies.get('token')?.value || '';
+        const isItemAlreadyExist = await Item.findOne({barcode_text: barcode_text}).exec();
+        const token = await jwt.decode(userToken, {complete: true});
+        const user = await User.findOne({_id: token.payload.id}).exec();
         if(isItemAlreadyExist) {
-            console.log('asd')
             return NextResponse.json({message: 'Already exists', data: isItemAlreadyExist}, {status: 401});
         }
-        // let employee = '';
-        // let insertItem = '';
-        // if(token.payload.role == 'admin') {
-        //     insertItem = {
-        //         item_name: item.item_name,
-        //         barcode_text: item.item_code,
-        //         quantity: item.quantity,
-        //         cost: item.cost,
-        //         property_number: item.property_number,
-        //         description: item.description,
-        //         remarks: item?.remarks
-        //     }
-        // }
-        // else {
-        //     employee = await Employee.findOne({username: token.payload.username});
-        //     insertItem = {
-        //         item_name: item.item_name,
-        //         barcode_text: item.item_code,
-        //         quantity: item.quantity,
-        //         cost: item.cost,
-        //         employee: employee._id,
-        //         department: employee.department,
-        //         property_number: item.property_number,
-        //         description: item.description,
-        //         remarks: item?.remarks
-        //     }
-        // }
-        await Item.create(item);
+        await Item.create({user, item_name, barcode_text, property_number, unit, description});
         return NextResponse.json({message: 'Item successfully created'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

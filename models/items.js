@@ -1,9 +1,13 @@
 import mongoose, { Schema } from "mongoose";
-import Employee from "./employees";
-import Department from "./department";
+import User from "./users";
 
 const itemSchema = new Schema(
     {
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: [true, 'user is required']
+        },
         item_name: {
             type: String,
             required: [true, 'item name is required']

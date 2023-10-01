@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 export async function GET () {
     try {
         await connectMongoDB();
-        const data = await Inventory.find({}).populate('item').populate('user').exec();
+        const data = await Inventory.find({deletedAt: null}).populate('item').populate('user').exec();
         const employees = await Employee.find({}).exec();
         return NextResponse.json({message: 'OK', data: data, employees: employees}, {status: 200});
     } catch (error) {

@@ -12,22 +12,21 @@ export default function ProfileDropDown () {
     const [openProfile, setOpenProfile] = useState(false)
     const [userData, setUserData] = useState([])
 
-    const getUserData = async () => {
-        try {
-            await axios.get('/api/user')
-            .then(res=>{
-                console.log(res)
-                setUserData(res.data.data)
-            })
-            .catch(err=>{
-                console.log(err.message)
-            })
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
     useEffect(()=>{
+        const getUserData = async () => {
+            try {
+                await axios.get('/api/user')
+                .then(res=>{
+                    console.log(res)
+                    setUserData(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
         getUserData()
     }, [])
 

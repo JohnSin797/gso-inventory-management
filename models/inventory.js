@@ -62,6 +62,14 @@ const inventorySchema = new Schema(
             type: Date,
             default: null
         },
+        total_amount: {
+            type: Number,
+            required: [true, 'total amount is required']
+        },
+        ics_are: {
+            type: String,
+            required: [true, 'ics / are is required']
+        },
         remarks: String
     },
     {

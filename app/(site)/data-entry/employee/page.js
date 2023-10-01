@@ -5,26 +5,55 @@ import TopNav from "@/app/components/navigation/topNav";
 import Link from "next/link";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function Employee () {
 
     const [employees, setEmployees] = useState([])
 
-    const getEmployees = async () => {
+    const confirmDelete = (id, index) => {
+        Swal.fire({
+            title: 'Confirm Delete',
+            icon: 'warning',
+            text: `Are you sure you want to delete this employee: ${employees[index]['first_name']} ${employees[index]['last_name']}?`,
+            showConfirmButton: true,
+            showCancelButton: true,
+        })
+        .then(res=>{
+            if(res.isConfirmed) {
+                deleteEmployee(id)
+            }
+        })
+    }
+
+    const deleteEmployee = async (id) => {
         try {
-            await axios.get('/api/employee')
+            await axios.post('/api/employee/delete')
             .then(res=>{
-                setEmployees(res.data.data)
+
             })
             .catch(err=>{
-                console.log(err.message)
+                console.log(err)
             })
         } catch (error) {
-            console.log(error.message)
+            console.log(error)
         }
     }
 
     useEffect(()=>{
+        const getEmployees = async () => {
+            try {
+                await axios.get('/api/employee')
+                .then(res=>{
+                    setEmployees(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err.message)
+                })
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
         getEmployees()
     },[])
 
@@ -64,12 +93,14 @@ export default function Employee () {
                                             <td className="p-2 border border-slate-900">{item?.position}</td>
                                             <td className="p-2 border border-slate-900">{item?.employment_status}</td>
                                             <td className="flex gap-2 p-2 border border-slate-900 text-white">
-                                                <button
-                                                    className="w-1/2 p-1 bg-green-600 hover:bg-green-600/80"
+                                                <Link
+                                                    href={'/data-entry/employee/edit/'+item?._id}
+                                                    className="w-1/2 text-center p-1 bg-green-600 hover:bg-green-600/80"
                                                 >
                                                     edit
-                                                </button>
+                                                </Link>
                                                 <button
+                                                    onClick={()=>confirmDelete(item?._id, id)}
                                                     className="w-1/2 p-1 bg-red-600 hover:bg-red-600/80"
                                                 >
                                                     delete

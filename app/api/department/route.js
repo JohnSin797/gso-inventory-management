@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import Employee from "@/models/employees";
 import Department from "@/models/department";
 import Item from "@/models/items";
+import Inventory from "@/models/inventory";
+import Release from "@/models/release";
 
 export async function GET () {
     try {
@@ -23,44 +25,44 @@ export async function POST (request) {
         let endDate = new Date(year+'-12-31');
         let total = 0;
         if(!month && !department) {
-            data = await Item.find({
+            data = await Release.find({
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
                 }
-            }).populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!month) {
             const departmentObj = await Department.findOne({department_name: department});
-            data = await Item.find({
+            data = await Release.find({
                 department: departmentObj,
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
                 }
-            }).populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!department) {
             startDate = new Date(year+'-'+month+'-01');           
             endDate = new Date(year, month, 0, 23, 59, 59, 999);
-            data = await Item.find({
+            data = await Release.find({
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
                 }
-            }).populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else {
             startDate = new Date(year+'-'+month+'-01');           
             endDate = new Date(year, month, 0, 23, 59, 59, 999);
             const departmentObj = await Department.findOne({department_name: department});
-            data = await Item.find({
+            data = await Release.find({
                 department: departmentObj,
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
                 }
-            }).populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         return NextResponse.json({message: 'OK', data: data}, {status: 200});
     } catch (error) {

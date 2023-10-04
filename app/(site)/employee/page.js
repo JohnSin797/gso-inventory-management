@@ -1,5 +1,6 @@
 'use client'
 
+import DateFrame from "@/app/components/dateFrame";
 import SideNav from "@/app/components/navigation/sideNav";
 import TopNav from "@/app/components/navigation/topNav";
 import EmployeeName from "@/app/components/select/employeeName";
@@ -12,9 +13,9 @@ export default function Employee () {
 
     const [employees, setEmployees] = useState([])
     const [month, setMonth] = useState('')
-    const [year, setYear] = useState('')
+    const [year, setYear] = useState(new Date().getFullYear())
     const [selectedEmployee, setSelectedEmployee] = useState('')
-    const [totalCost, setTotalCost] = useState('')
+    const [totalCost, setTotalCost] = useState(0)
     const [employeeDetails, setEmployeeDetails] = useState({
         department: '',
         status: '',
@@ -26,7 +27,8 @@ export default function Employee () {
             let totalCost = 0;
     
             data.forEach(item => {
-                totalCost += parseInt(item['cost']);
+                var itemCost = item['quantity'] * item['inventory'].unit_cost;
+                totalCost += itemCost;
             });
     
             setTotalCost(totalCost)
@@ -34,7 +36,7 @@ export default function Employee () {
 
         const getEmployees = async () => {
             try {
-                await axios.post('/api/employee/index', {id:selectedEmployee})
+                await axios.post('/api/employee/index', {id:selectedEmployee, month: month, year: year})
                 .then(res=>{
                     console.log(res.data.data)
                     setEmployees(res.data.data)
@@ -48,7 +50,7 @@ export default function Employee () {
             }
         }
         getEmployees()
-    }, [selectedEmployee])
+    }, [selectedEmployee, month, year])
 
     return (
         <div>
@@ -93,7 +95,7 @@ export default function Employee () {
                             <input 
                                 className="border-black w-full border-b"
                                 placeholder="Total Cost"
-                                defaultValue={totalCost}
+                                defaultValue={totalCost.toLocaleString('en-US')}
                             />
                             <label className="text-center text-xs">Total Cost</label>
                         </div>
@@ -118,11 +120,15 @@ export default function Employee () {
                                         return(
                                             <tr key={id}>
                                                 <td className="border border-slate-900">{item?.quantity}</td>
-                                                <td className="border border-slate-900">{item?.item_name}</td>
-                                                <td className="border border-slate-900">{item?.description}</td>
-                                                <td className="border border-slate-900">{item?.property_number}</td>
-                                                <td className="border border-slate-900">{item?.createdAt}</td>
-                                                <td className="border border-slate-900">{item?.cost}</td>
+                                                <td className="border border-slate-900">{item?.item?.item_name}</td>
+                                                <td className="border border-slate-900">{item?.item?.description?.map((desc,idx)=>{
+                                                    return(
+                                                        <p key={idx}>{desc}</p>
+                                                    )
+                                                })}</td>
+                                                <td className="border border-slate-900">{item?.item?.property_number}</td>
+                                                <td className="border border-slate-900"><DateFrame dateStr={item?.createdAt} /></td>
+                                                <td className="border border-slate-900">{(item?.inventory.unit_cost * item?.quantity).toLocaleString('en-US')}</td>
                                                 <td className="border border-slate-900">{item?.returned}</td>
                                                 <td className="border border-slate-900">{item?.remarks}</td>
                                             </tr>

@@ -14,8 +14,8 @@ export default function Department () {
 
     const [department, setDepartment] = useState('')
     const [month, setMonth] = useState('')
-    const [year, setYear] = useState('')
-    const [total, setTotal] = useState('')
+    const [year, setYear] = useState(new Date().getFullYear())
+    const [total, setTotal] = useState(0)
     const [tableData, setTableData] = useState([])
 
     
@@ -25,7 +25,8 @@ export default function Department () {
             let totalCost = 0;
     
             data.forEach(item => {
-                totalCost += parseInt(item['cost']);
+                var itemCost = item['quantity'] * item['inventory'].unit_cost;
+                totalCost += itemCost;
             });
     
             setTotal(totalCost)
@@ -75,7 +76,7 @@ export default function Department () {
                             <input
                                 type="text"
                                 className="text-center text-xs border-b border-black"
-                                defaultValue={total}
+                                defaultValue={total.toLocaleString('en-US')}
                             />
                             <p className="text-center text-xs">TOTAL</p>
                         </div>

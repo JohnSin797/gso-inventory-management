@@ -29,7 +29,7 @@ export default function Release () {
             e.preventDefault()
             await axios.post('/api/inventory/release', {
                 employee: selectedEmployee,
-                item: selectedItem,
+                item_id: selectedItem,
                 quantity: quantity,
                 release_date: releaseDate,
                 remarks: remarks
@@ -53,7 +53,7 @@ export default function Release () {
     useEffect(()=>{
         const getData = async () => {
             try {
-                await axios.get('/api/inventory/index')
+                await axios.get('/api/inventory/select')
                 .then(res=>{
                     setData({
                         items: res.data.data,

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import Inventory from "./inventory";
+import Item from "./items";
 import Department from "./department";
 import Employee from "./employees";
 import User from "./users";
@@ -10,6 +11,11 @@ const releaseSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Inventory',
             required: [true, 'inventory is required']
+        },
+        item: {
+            type: Schema.Types.ObjectId,
+            ref: 'Item',
+            required: [true, 'item is required']
         },
         employee: {
             type: Schema.Types.ObjectId,

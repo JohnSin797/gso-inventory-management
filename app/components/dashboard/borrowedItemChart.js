@@ -12,6 +12,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import axios from "axios";
+import { getWeeklyRelease, getWeeklyStocks } from "@/app/hooks/todayDate";
 
 ChartJS.register(
   CategoryScale,
@@ -23,6 +25,27 @@ ChartJS.register(
 )
 
 export default function BorrowedItemChart () {
+
+  const [stocks, setStocks] = useState([])
+  const [releases, setReleases] = useState([])
+
+  useEffect(()=>{
+    const getData = async () => {
+      try {
+        await axios.get('/api/dashboard')
+        .then(res=>{
+          setStocks(getWeeklyStocks(res.data.stock))
+          setReleases(getWeeklyRelease(res.data.release))
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getData()
+  }, [stocks, releases])
 
   const options = {
     responsive: true,
@@ -38,19 +61,19 @@ export default function BorrowedItemChart () {
     },
   }
 
-  const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+  const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
   const data = {
     labels,
     datasets: [
       {
         label: 'Stock',
-        data: [1,2,3,4,5,6,7,8,9,10,11],
+        data: stocks,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
         label: 'Released',
-        data: [1,2,3,4,5,6,7,8,9,10,11],
+        data: releases,
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
     ],

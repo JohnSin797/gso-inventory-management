@@ -6,19 +6,22 @@ import Department from "@/models/department";
 import User from "@/models/users";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import Item from "@/models/items";
 
 export async function POST (request) {
     try {
         await connectMongoDB();
-        const {employee, item, quantity, release_date, remarks} = await request.json();
+        const {employee, item_id, quantity, release_date, remarks} = await request.json();
         const employeeObj = await Employee.findOne({_id:employee}).exec();
-        const inventoryObj = await Inventory.findOne({_id:item}).exec();
+        const inventoryObj = await Inventory.findOne({_id:item_id}).exec();
+        const itemObj = await Item.findOne({_id:inventoryObj?.item}).exec();
         const department = await Department.findOne({_id:employeeObj.department}).exec();
         const token = await request.cookies.get('token')?.value || '';
         const userData = await jwt.decode(token, {complete: true});
         const userObj = await User.findOne({_id:userData.payload.id}).exec();
         const release = {
             inventory: inventoryObj,
+            item: itemObj,
             employee: employeeObj,
             department: department,
             user: userObj,

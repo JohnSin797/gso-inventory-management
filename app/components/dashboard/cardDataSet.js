@@ -1,6 +1,7 @@
 'use client'
 
 import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai"
+import { TbCurrencyPeso } from "react-icons/tb"
 
 export default function CardDataSet ({ title, total, rate, levelUp, levelDown, children }) {
     return (
@@ -9,27 +10,20 @@ export default function CardDataSet ({ title, total, rate, levelUp, levelDown, c
                 {children}
             </div>
 
-            <div className="mt-4 flex items-end justify-between">
+            <div className="mt-4 items-end justify-start">
                 <div>
-                    <h4 className="text-2xl font-bold text-black">
-                        {total}
+                    <h4 className="text-2xl font-bold text-black flex">
+                        <TbCurrencyPeso className="w-8 h-8" />{total}
                     </h4>
-                    <span className="text-sm font-medium text-gray-400">{title}</span>
                 </div>
-
                 <span
-                    className={`flex items-center gap-1 text-sm font-medium ${
-                        levelUp && 'text-green-500'
-                    } ${levelDown && 'text-red-500'} `}
+                    className={`flex justify-between items-center gap-1 text-xs font-medium text-green-500`}
                     >
-                    {rate}
-
-                    {levelUp && (
-                        <AiOutlineArrowUp className="text-green-500" />
-                    )}
-                    {levelDown && (
-                        <AiOutlineArrowDown className="text-red-500" />
-                    )}
+                    <span className="text-sm font-medium text-gray-400">{title}</span>
+                    <div className="flex gap-1">
+                        {rate}%
+                        <AiOutlineArrowUp className="w-4 h-4 text-green-500" />
+                    </div>
                 </span>
             </div>
         </div>

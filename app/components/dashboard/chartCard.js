@@ -13,6 +13,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import axios from "axios";
+import { getMonthlyRelease, getMonthlyStock } from "@/app/hooks/todayDate";
 
 ChartJS.register(
   CategoryScale,
@@ -54,25 +56,10 @@ const labels = [
 
 export default function ChartCard () {
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Stock',
-        data: [1,2,3,4,5,6,7,8,9,10, 11, 12],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Released',
-        data: [1,2,3,4,5,6,7,8,9,10, 11, 12],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-  }
+  
 
-  const [chartComponentVisible, setChartComponentVisible] = useState(false)
+  const [stocks, setStocks] = useState([])
+  const [releases, setReleases] = useState([])
 
     const [state, setState] = useState({
       options: {
@@ -96,11 +83,41 @@ export default function ChartCard () {
         ],
       });
 
-      // useEffect(() => {
-      //   if (typeof window !== "undefined") {
-      //     setChartComponentVisible(true);
-      //   }
-      // }, [])
+      useEffect(() => {
+        const getData = async () => {
+          try {
+            await axios.get('/api/dashboard')
+            .then(res=>{
+              setStocks(getMonthlyStock(res.data.stock))
+              setReleases(getMonthlyRelease(res.data.release))
+            })
+            .catch(err=>{
+              console.log(err)
+            })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        getData()
+      }, [stocks, releases])
+
+      const data = {
+        labels,
+        datasets: [
+          {
+            label: 'Stock',
+            data: stocks,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+          {
+            label: 'Released',
+            data: releases,
+            borderColor: 'rgb(53, 162, 235)',
+            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          },
+        ],
+      }
 
     return (
         <div className="col-span-12 rounded-sm border border-stroke bg-white shadow-md p-10 md:col-span-8">
@@ -112,7 +129,7 @@ export default function ChartCard () {
             </span>
             <div className="w-full">
               <p className="font-bold text-cyan-400">Total New Item</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="text-sm font-medium">01.01.{new Date().getFullYear()} - 12.31.{new Date().getFullYear()}</p>
             </div>
           </div>
           <div className="flex w-full md:w-46">
@@ -120,8 +137,8 @@ export default function ChartCard () {
               <span className="block h-2 w-2 bg-indigo-600 rounded-full"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-indigo-600">Total Borrowed Item</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-indigo-600">Total Released Item</p>
+              <p className="text-sm font-medium">01.01.{new Date().getFullYear()} - 12.31.{new Date().getFullYear()}</p>
             </div>
           </div>
         </div>

@@ -6,13 +6,13 @@ import Link from "next/link"
 import Image from 'next/image'
 import SidebarLinkGroup from "./sidebarLinkGroup"
 import { RxDashboard } from "react-icons/rx"
-import { BsPerson, BsPersonWorkspace } from "react-icons/bs"
+import { BsPerson, BsPersonWorkspace, BsPersonVcard } from "react-icons/bs"
 import { HiOutlineBuildingOffice } from "react-icons/hi2"
 import { MdOutlineInventory } from "react-icons/md"
 import { LuFileInput } from "react-icons/lu"
 import { AiOutlineScan } from "react-icons/ai"
 import { ImMenu } from "react-icons/im"
-import { BsPersonVcard } from "react-icons/bs"
+import { BiScan } from "react-icons/bi"
 import LogoutButton from "../logoutButton"
 
 export default function SideNav () {
@@ -143,6 +143,17 @@ export default function SideNav () {
                                     >
                                         <MdOutlineInventory />
                                         Inventory
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link 
+                                        href={'/scan'}
+                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out text-slate-200 hover:bg-gray-700 ${
+                                            pathname == '/scan' ? 'bg-gray-700' : ''
+                                        }`}
+                                    >
+                                        <BiScan />
+                                        Scan
                                     </Link>
                                 </li>
                                 <SidebarLinkGroup

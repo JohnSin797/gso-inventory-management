@@ -1,8 +1,45 @@
+'use client'
+
 import SideNav from "@/app/components/navigation/sideNav";
 import TopNav from "@/app/components/navigation/topNav";
+import axios from "axios";
 import Link from "next/link";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Create () {
+
+    const [officeForm, setOfficeForm] = useState({
+        department_name: '',
+        office_name: ''
+    })
+
+    const handleOfficeChange = e => {
+        const {name, value} = e.target
+        setOfficeForm({
+            ...officeForm,
+            [name]: value
+        })
+    }
+
+    const submitOffice = async () => {
+        try {
+            await axios.post('/api/department/create', officeForm)
+            .then(res=>{
+                setOfficeForm({
+                    department_name: '',
+                    office_name: ''
+                })
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div>
             <TopNav />
@@ -17,6 +54,9 @@ export default function Create () {
                         <input 
                             type="text"
                             className="w-full p-2 border hover:border-black rounded-lg"
+                            name="department_name"
+                            onChange={handleOfficeChange}
+                            value={officeForm.department_name}
                         />
                     </div>
                     <div className="w-full">
@@ -24,6 +64,9 @@ export default function Create () {
                         <input 
                             type="text"
                             className="w-full p-2 border hover:border-black rounded-lg"
+                            name="office_name"
+                            onChange={handleOfficeChange}
+                            value={officeForm.office_name}
                         />
                     </div>
                     <div className="w-full py-6 flex gap-2">
@@ -34,6 +77,7 @@ export default function Create () {
                             back
                         </Link>
                         <button
+                            onClick={submitOffice}
                             className="w-full md:w-1/2 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white"
                         >
                             save

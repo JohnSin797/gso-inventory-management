@@ -89,6 +89,7 @@ export default function Department () {
                                     <th>Quantity</th>
                                     <th>Item</th>
                                     <th>Property No.</th>
+                                    <th>ICS / ARE</th>
                                     <th>Name of EMPLOYEE</th>
                                     <th>Date Issued</th>
                                     <th>Cost</th>
@@ -106,6 +107,7 @@ export default function Department () {
                                                 <td className=" border border-slate-900">{item.quantity}</td>
                                                 <td className=" border border-slate-900">{item.item_name}</td>
                                                 <td className=" border border-slate-900">{item.barcode_text}</td>
+                                                <td className=" border border-slate-900">{item.inventory?.ics_are}</td>
                                                 <td className=" border border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
                                                 <td className=" border border-slate-900">
                                                     <DateFrame dateStr={item.createdAt} />

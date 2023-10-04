@@ -8,11 +8,13 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Select from "react-select";
 
 export default function Stock () {
 
     const [items, setItems] = useState([])
-    const [selectedItem, setSelectedItem] = useState('')
+    const [itemSelectOption, setItemSelectOption] = useState([])
+    const [selectedItem, setSelectedItem] = useState(null)
     const [sourceFund, setSourceFund] = useState('')
     const [tag, setTag] = useState('')
     const [qty, setQty] = useState(0)
@@ -28,7 +30,7 @@ export default function Stock () {
                 quantity: qty,
                 unit_cost: unitCost,
                 total_cost: totalCost,
-                item_id: selectedItem,
+                item_id: selectedItem?.value,
                 date_acquired: dateAcquired,
                 source_fund: sourceFund,
                 remarks: remark
@@ -49,7 +51,7 @@ export default function Stock () {
             try {
                 await axios.get('/api/inventory')
                 .then(res=>{
-                    setItems(res.data.items)
+                    setItemOption(res.data.items)
                 })
                 .catch(err=>{
                     console.log(err.message)
@@ -57,6 +59,17 @@ export default function Stock () {
             } catch (error) {
                 console.log(error.message)
             }
+        }
+        function setItemOption(items) {
+            let arr = []
+            items.forEach(element => {
+                const optionObj = {
+                    value: element?._id,
+                    label: element?.item_name
+                }
+                arr.push(optionObj)
+            });
+            setItemSelectOption(arr)
         }
         getDatas()
         setTotalCost(qty * unitCost)
@@ -94,7 +107,11 @@ export default function Stock () {
                     <div className="w-full md:flex gap-2">
                         <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold">Item</label>
-                            <ItemSelect className={`w-full p-2 border hover:border-black rounded-lg`} items={items} onItemChange={setSelectedItem} required/>
+                            {/* <ItemSelect className={`w-full p-2 border hover:border-black rounded-lg`} items={items} onItemChange={setSelectedItem} required/> */}
+                            <Select 
+                                options={itemSelectOption}
+                                onChange={setSelectedItem}
+                            />
                         </div>
                         <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold">Date Added</label>

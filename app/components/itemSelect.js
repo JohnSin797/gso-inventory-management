@@ -1,22 +1,49 @@
-export default function ItemSelect ({ items, className, onItemChange }) {
+'use client'
+
+import { useEffect, useState } from "react"
+import Select from "react-select"
+import axios from "axios"
+
+export default function ItemSelect ({ className, onItemChange }) {
+
+    const [option, setOption] = useState([])
 
     const handleSelectItem = e => {
-        onItemChange(e.target.value)
+        console.log(e)
+        onItemChange(e)
     }
 
-    return (
-        <select 
-            className={className}
-            onChange={handleSelectItem}
-        >
-            <option>-- Select Item --</option>
-            {
-                items.map((item,id)=>{
-                    return (
-                        <option key={id} value={item?._id}>{item?.item?.item_name ?? item?.item_name}</option>
-                    )
+    useEffect(()=>{
+        const getDatas = async () => {
+            try {
+                await axios.get('/api/inventory')
+                .then(res=>{
+                    console.log(res)
+                    setOptionSelect(res.data.items)
                 })
+                .catch(err=>{
+                    console.log(err.message)
+                })
+            } catch (error) {
+                console.log(error.message)
             }
-        </select>
+        }
+        getDatas()
+        function setOptionSelect(items) {
+            let optionArr = []
+            items.map(item=>{
+                optionArr.push({value: item?._id, label: item?.item?.item_name ?? item?.item_name})
+            })
+            console.log(items)
+            setOption(optionArr)
+        }
+    }, [])
+
+    return (
+        <Select 
+            className={className}
+            getOptionValue={handleSelectItem}
+            options={option}
+        />
     )
 }

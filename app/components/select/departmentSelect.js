@@ -28,7 +28,7 @@ export default function DepartmentSelect ({className, onHandleChange}) {
             {
                 department.map((item,id)=>{
                     return(
-                        <option key={id} value={item.department_name}>{item.department_name}</option>
+                        <option key={id} value={item.department_name}>{item.department_name} || {item.office_name}</option>
                     )
                 })
             }

@@ -27,7 +27,7 @@ export default function Employee () {
             let totalCost = 0;
     
             data.forEach(item => {
-                var itemCost = item['quantity'] * item['inventory'].unit_cost;
+                var itemCost = item?.quantity * item?.inventory?.unit_cost;
                 totalCost += itemCost;
             });
     
@@ -72,6 +72,7 @@ export default function Employee () {
                                 className="border-black w-full border-b"
                                 placeholder="Department"
                                 defaultValue={employeeDetails.department}
+                                readOnly
                             />
                             <label className="text-center text-xs">Department</label>
                         </div>
@@ -80,6 +81,7 @@ export default function Employee () {
                                 className="border-black w-full border-b"
                                 placeholder="Position"
                                 defaultValue={employeeDetails.position}
+                                readOnly
                             />
                             <label className="text-center text-xs">Position</label>
                         </div>
@@ -88,6 +90,7 @@ export default function Employee () {
                                 className="border-black w-full border-b"
                                 placeholder="Status of Employment"
                                 defaultValue={employeeDetails.status}
+                                readOnly
                             />
                             <label className="text-center text-xs">Status of Employment</label>
                         </div>
@@ -96,6 +99,7 @@ export default function Employee () {
                                 className="border-black w-full border-b"
                                 placeholder="Total Cost"
                                 defaultValue={totalCost.toLocaleString('en-US')}
+                                readOnly
                             />
                             <label className="text-center text-xs">Total Cost</label>
                         </div>
@@ -110,6 +114,7 @@ export default function Employee () {
                                     <th>Property Number</th>
                                     <th>Date Issued</th>
                                     <th>Cost</th>
+                                    <th>ICS / ARE</th>
                                     <th>Returned</th>
                                     <th>Remarks</th>
                                 </tr>
@@ -129,6 +134,7 @@ export default function Employee () {
                                                 <td className="border border-slate-900">{item?.item?.property_number}</td>
                                                 <td className="border border-slate-900"><DateFrame dateStr={item?.createdAt} /></td>
                                                 <td className="border border-slate-900">{(item?.inventory.unit_cost * item?.quantity).toLocaleString('en-US')}</td>
+                                                <td className="border border-slate-900">{item?.inventory?.ics_are}</td>
                                                 <td className="border border-slate-900">{item?.returned}</td>
                                                 <td className="border border-slate-900">{item?.remarks}</td>
                                             </tr>

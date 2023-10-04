@@ -92,7 +92,7 @@ export default function Page () {
             <TopNav />
             <SideNav />
             <div className="absolute top-20 right-0 w-full md:w-4/5 p-6">
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
+                {/* <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
                     <CardDataSet 
                         title="Today Cost" 
                         total={inventoryDetails.today.toLocaleString('en-US')} 
@@ -125,7 +125,7 @@ export default function Page () {
                     >
                         <IoTodayOutline />
                     </CardDataSet>
-                </div>
+                </div> */}
                 <div className="mt-2 grid grid-cols-12 gap-2">
                     <ChartCard />
                     <BorrowedItemChart stock={inventoryDetails.weekly_cost} release={inventoryDetails.weekly_release} />

@@ -70,6 +70,7 @@ export default function Inventory () {
                         <thead className="bg-slate-800 text-gray-400">
                             <tr>
                                 <th>Item Name</th>
+                                <th>ICS / ARE</th>
                                 <th>Unit Cost</th>
                                 <th>Total Cost</th>
                                 <th>Property Number</th>
@@ -88,6 +89,7 @@ export default function Inventory () {
                                     return(
                                         <tr key={id} className="hover:bg-gray-900/50 hover:text-white border border-slate-600">
                                             <td className="p-2 border border-slate-600">{item?.item?.item_name}</td>
+                                            <td className="p-2 border border-slate-600">{item?.ics_are}</td>
                                             <td className="p-2 border border-slate-600">{item?.unit_cost}</td>
                                             <td className="p-2 border border-slate-600">{item?.total_cost}</td>
                                             <td className="p-2 border border-slate-600">{item?.item?.property_number}</td>

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Select from "react-select";
 
 export default function Release () {
 
@@ -55,10 +56,8 @@ export default function Release () {
             try {
                 await axios.get('/api/inventory/select')
                 .then(res=>{
-                    setData({
-                        items: res.data.data,
-                        employees: res.data.employees
-                    })
+                    console.log(res)
+                    setOptions(res.data.data, res.data.employees)
                 })
                 .catch(err=>{
                     console.log(err.message)
@@ -66,6 +65,30 @@ export default function Release () {
             } catch (error) {
                 console.log(error.message)
             }
+        }
+        function setOptions(items, employees) {
+            let itemArr = []
+            let ampArr = []
+            items.forEach(element => {
+                if(element?.item) {
+                    const itemObj = {
+                        value: element?._id,
+                        label: element?.item?.item_name
+                    }
+                    itemArr.push(itemObj)
+                }
+            });
+            employees.forEach(element => {
+                const empObj = {
+                    value: element?._id,
+                    label: element?.first_name+' '+element?.last_name
+                }
+                ampArr.push(empObj)
+            })
+            setData({
+                items: itemArr,
+                employees: ampArr
+            })
         }
         getData()
     }, [])
@@ -80,11 +103,19 @@ export default function Release () {
                         <p className="text-2xl text-center font-bold">Release Item</p>
                         <div className="w-full">
                             <label className="text-xs font-bold">Employee</label>
-                            <EmployeeSelect className={'w-full p-2 border hover:border-black rounded-lg'} employees={data.employees} onEmployeeChange={setSelectedEmployee} />
+                            {/* <EmployeeSelect className={'w-full p-2 border hover:border-black rounded-lg'} employees={data.employees} onEmployeeChange={setSelectedEmployee} /> */}
+                            <Select 
+                                options={data.employees}
+                                onChange={setSelectedEmployee}
+                            />
                         </div>
                         <div className="w-full">
                             <label className="text-xs font-bold">Item</label>
-                            <InventorySelect className={'w-full p-2 border hover:border-black rounded-lg'} items={data.items} onItemChange={setSelectedItem} />
+                            {/* <InventorySelect className={'w-full p-2 border hover:border-black rounded-lg'} items={data.items} onItemChange={setSelectedItem} /> */}
+                            <Select 
+                                options={data.items}
+                                onChange={setSelectedItem}
+                            />
                         </div>
                         <div className="flex gap-2">
                             <div className="w-1/2">
@@ -113,6 +144,7 @@ export default function Release () {
                                 className="w-full p-2 rounded-lg border hover:border-black resize-none"
                                 onChange={(e)=>setRemarks(e.target.value)}
                                 value={remarks}
+                                placeholder="Type here..."
                             />
                         </div>
                         <div className="w-full py-6 flex gap-2">

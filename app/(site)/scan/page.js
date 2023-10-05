@@ -58,11 +58,11 @@ export default function Scan () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full bg-white rounded-lg p-6 shadow-md flex gap-2">
-                    <div className="w-full h-64 md:w-1/4 border border-slate-900 rounded-lg">
+                <div className="w-full bg-white rounded-lg p-6 shadow-md md:flex gap-2">
+                    <div className="w-full md:w-1/2 border border-slate-900 rounded-lg">
                         <div id="reader" className="w-full h-full"></div>
                     </div>
-                    <div className="w-full h-64 p-6 overflow-y-scroll md:w-3/4 border border-slate-900 rounded-lg">
+                    <div className="w-full h-64 md:h-96 p-6 overflow-y-scroll md:w-1/2 border border-slate-900 rounded-lg">
                         <p>Item Name: {searchItemResult?.item_name}</p>
                         <p>Property Number: {searchItemResult?.item_name}</p>
                         <p>Barcode: {searchItemResult?.barcode_text}</p>
@@ -76,7 +76,7 @@ export default function Scan () {
                     </div>
                 </div>
                 <div className="w-full bg-white rounded-lg p-6 shadow-md">
-                    <div className="w-full h-40 overflow-scroll">
+                    <div className="w-full h-96 overflow-scroll">
                     <table className="w-full table-auto">
                         <thead>
                             <tr>

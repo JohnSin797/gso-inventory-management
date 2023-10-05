@@ -3,7 +3,7 @@
 import SideNav from "@/app/components/navigation/sideNav";
 import TopNav from "@/app/components/navigation/topNav";
 import { useEffect, useState } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode"
+import { Html5QrcodeScanner } from "html5-qrcode";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import axios from "axios";

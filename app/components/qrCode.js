@@ -35,9 +35,9 @@ export default function QrCode ({ isHidden, hiddenChange, code }) {
                     {
                         useBarCode ?
                         <Barcode 
-                            id="qrCode"
                             value={code}
                             size={300}
+                            rendered="img"
                         />
                         :
                         <QRCodeCanvas 

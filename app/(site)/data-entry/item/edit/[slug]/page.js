@@ -5,11 +5,16 @@ import TopNav from "@/app/components/navigation/topNav"
 import axios from "axios"
 import Link from "next/link"
 import Swal from "sweetalert2"
+import QrCode from "@/app/components/qrCode";
 import { useEffect, useState } from "react"
 import { BsTrash } from "react-icons/bs"
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 export default function Edit ({ params }) {
-
+    
+    const [isScanModalOpen, setIsScanModalOpen] = useState(false)
+    const [isCodeGenerateModalOpen, setIsCodeGenerateModalOpen] = useState(true)
+    const [scanResult, setScanResult] = useState(null);
     const [itemForm, setItemForm] = useState({
         item_name: '',
         property_number: '',
@@ -43,6 +48,26 @@ export default function Edit ({ params }) {
     }
 
     useEffect(()=>{
+        const scanner = new Html5QrcodeScanner('reader', {
+            qrbox: {
+              width: 250,
+              height: 250,
+            },
+            fps: 5,
+          });
+        
+          scanner.render(success, error);
+        
+          function success(result) 
+          {
+            scanner.clear();
+            setScanResult(result);
+          }
+        
+          function error(err)
+          {
+            console.log(err);
+          }
         const getItem = async () => {
             try {
                 await axios.post('/api/item/edit', {id: params.slug})
@@ -86,10 +111,54 @@ export default function Edit ({ params }) {
         })
     }
 
+    const showGenerateCodeModal = () => {
+        if(itemForm.barcode_text == '') {
+            Swal.fire({
+                title: 'Barcode is null',
+                icon: 'error',
+                text: 'Enter the barcode text to generate the barcode image'
+            })
+        } else {
+            setIsCodeGenerateModalOpen(false)
+        }
+    }
+
+    const confirmClose = () => {
+        Swal.fire({
+            title: 'Close Scanner?',
+            icon: 'question',
+            showConfirmButton: true,
+            confirmButtonText: 'OK'
+        })
+        .then(res=>{
+            if(res.isConfirmed) {
+                setIsScanModalOpen(false)
+            }
+        })
+    }
+
     return (
         <div>
             <TopNav />
             <SideNav />
+            <QrCode isHidden={isCodeGenerateModalOpen} hiddenChange={setIsCodeGenerateModalOpen} code={itemForm.barcode_text} />
+            <div
+                className={`fixed w-full flex justify-center items-center h-full bg-slate-900/90 z-50 ${isScanModalOpen ? '' : 'hidden'}`}
+            >
+                <div className="border border-white rounded-lg p-6">
+                    {scanResult?
+                        <h1>Success! {scanResult}</h1>
+                        :
+                        <div id='reader'></div>
+                    }
+                    <button
+                        onClick={confirmClose}
+                        className="w-full p-2 rounded-lg border-white border mt-2 text-white hover:font-bold"
+                    >
+                        close
+                    </button>
+                </div>
+            </div>
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 flex justify-center items-center">
                 <form onSubmit={updateItem} className="bg-white rounded-lg shadow-md p-6 w-full md:w-3/5">
                             <p className="text-center text-2xl font-bold">Edit Item</p>
@@ -136,7 +205,7 @@ export default function Edit ({ params }) {
                                     value={itemForm.barcode_text}
                                     required
                                 />
-                                {/* <button
+                                <button
                                     type="button"
                                     onClick={showGenerateCodeModal}
                                     className="absolute text-[10px] font-bold block h-8 w-8 hover:w-20 hover:text-base duration-500 right-10 top-7 rounded-full border bg-blue-400 text-white overflow-hidden"
@@ -149,7 +218,7 @@ export default function Edit ({ params }) {
                                     className="absolute text-[10px] font-bold block h-8 w-8 hover:w-20 hover:text-base duration-500 right-1 top-7 rounded-full border bg-green-400 text-white"
                                 >
                                     scan
-                                </button> */}
+                                </button>
                             </div>
                             <div className="w-full">
                                 <label className="text-xs font-bold">Item Description</label>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import DateFrame from "@/app/components/dateFrame";
 import { useEffect, useState } from "react";
+import BarcodeImage from "@/app/components/barcodeImage";
 
 export default function Item () {
 
@@ -63,6 +64,7 @@ export default function Item () {
                             <tr>
                                 <th>Added By</th>
                                 <th>Item Name</th>
+                                <th>Barcode</th>
                                 <th>Property Number</th>
                                 <th>Date Acquired</th>
                                 <th>Unit</th>
@@ -75,18 +77,19 @@ export default function Item () {
                                     <tr key={id} className="hover:bg-gray-900/50 hover:text-white">
                                         <td className="p-2 border border-slate-600">{item?.user?.first_name} {item?.user?.last_name}</td>
                                         <td className="p-2 border border-slate-600">{item?.item_name}</td>
+                                        <td className="p-2 border border-slate-600"><BarcodeImage code={item?.barcode_text} /></td>
                                         <td className="p-2 border border-slate-600">{item?.property_number}</td>
                                         <td className="p-2 border border-slate-600"><DateFrame dateStr={item?.createdAt} /></td>
                                         <td className="p-2 border border-slate-600">{item?.unit}</td>
-                                        <td className="p-2 border border-slate-600 h-auto flex text-white gap-2">
+                                        <td className="p-2 border border-slate-600 h-auto text-white space-y-2">
                                             <Link
                                                 href={`/data-entry/item/edit/${item?._id}`}
-                                                className="block w-full md:w-1/2 text-center bg-green-600 hover:bg-green-900"
+                                                className="block p-2 rounded-lg w-full text-center bg-green-600 hover:bg-green-900"
                                             >
                                                 edit
                                             </Link>
                                             <button
-                                                className="w-full md:w-1/2 bg-red-600 hover:bg-red-900"
+                                                className="w-full p-2 rounded-lg bg-red-600 hover:bg-red-900"
                                                 onClick={()=>deleteItem(item?._id)}
                                             >
                                                 delete

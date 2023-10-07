@@ -44,6 +44,10 @@ const releaseSchema = new Schema(
             type: Boolean,
             default: false
         },
+        deletedAt: {
+            type: Date,
+            default: null
+        },
         remarks: String
     },
     {

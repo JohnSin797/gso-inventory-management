@@ -36,9 +36,9 @@ export default function Scan () {
             console.log(err);
         }
 
-        const searchForItem = async () => {
+        const searchForItem = async (code) => {
             try {
-                await axios.post()
+                await axios.post('/api/scan', {barcode: code})
                 .then(res=>{
                     setSearchItemResult(res.data.item)
                     setSearchStockResult(res.data.stock)

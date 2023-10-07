@@ -55,7 +55,13 @@ export default function User () {
             e.preventDefault()
             await axios.post('/api/user/register', newUser)
             .then(res=>{
-                setNewUser(res.data.data)
+                setNewUser({
+                    first_name: '',
+                    last_name: '',
+                    username: '',
+                    pword: generatePassword()
+                })
+                setUsers(res.data.data)
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
@@ -213,14 +219,14 @@ export default function User () {
                                             <td>{item?.first_name} {item?.last_name}</td>
                                             <td>{item?.username}</td>
                                             <td>{item?.default_password}</td>
-                                            <td className="flex space-x-2">
-                                                <button
-                                                    className="w-1/2 p-1 bg-green-400"
+                                            <td className="p-2 text-white">
+                                                {/* <button
+                                                    className="w-1/2 p-1 rounded-lg bg-green-600 hover:bg-green-600/80"
                                                 >
                                                     edit
-                                                </button>
+                                                </button> */}
                                                 <button
-                                                    className="w-1/2 p-1 bg-red-400 hover:bg-red-900"
+                                                    className="w-full p-1 rounded-lg bg-red-600 hover:bg-red-600/80"
                                                     onClick={()=>deleteUser(item._id)}
                                                 >
                                                     delete

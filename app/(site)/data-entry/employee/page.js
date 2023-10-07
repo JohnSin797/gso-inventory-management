@@ -92,16 +92,16 @@ export default function Employee () {
                                             <td className="p-2 border border-slate-900">{item?.department?.office_name}</td>
                                             <td className="p-2 border border-slate-900">{item?.position}</td>
                                             <td className="p-2 border border-slate-900">{item?.employment_status}</td>
-                                            <td className="flex gap-2 p-2 border border-slate-900 text-white">
+                                            <td className="space-y-2 p-2 border border-slate-900 text-white">
                                                 <Link
                                                     href={'/data-entry/employee/edit/'+item?._id}
-                                                    className="w-1/2 text-center p-1 bg-green-600 hover:bg-green-600/80"
+                                                    className="block w-full rounded-lg text-center p-1 bg-green-600 hover:bg-green-600/80"
                                                 >
                                                     edit
                                                 </Link>
                                                 <button
                                                     onClick={()=>confirmDelete(item?._id, id)}
-                                                    className="w-1/2 p-1 bg-red-600 hover:bg-red-600/80"
+                                                    className="w-full rounded-lg p-1 bg-red-600 hover:bg-red-600/80"
                                                 >
                                                     delete
                                                 </button>

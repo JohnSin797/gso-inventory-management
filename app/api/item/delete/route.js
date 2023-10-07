@@ -9,8 +9,8 @@ export async function POST (request) {
     try {
         const {id} = await request.json();
         await connectMongoDB();
-        await Item.findByIdAndDelete(id);
-        const newItems = await Item.find({}).populate('employee').populate('department').exec();
+        await Item.findByIdAndUpdate(id, {deletedAt: new Date()});
+        const newItems = await Item.find({}).populate('user').exec();
         return NextResponse.json({message: 'Item deleted successfully', data: newItems}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

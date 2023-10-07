@@ -12,21 +12,6 @@ export default function Item () {
 
     const [items, setItems] = useState([])
 
-    const getItems = async () => {
-        try {
-            await axios.get('/api/item')
-            .then(res=>{
-                console.log(res)
-                setItems(res.data.data)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
     const deleteItem = async (id) => {
         try {
             await axios.post('/api/item/delete', {id:id})
@@ -42,6 +27,19 @@ export default function Item () {
     }
 
     useEffect(()=>{
+        const getItems = async () => {
+            try {
+                await axios.get('/api/item')
+                .then(res=>{
+                    setItems(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
         getItems()
     },[])
 
@@ -50,12 +48,18 @@ export default function Item () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full bg-white p-6 rounded-lg shadow-md">
+                <div className="w-full flex gap-2 bg-white p-6 rounded-lg shadow-md">
                     <Link
                         href={'/data-entry/item/create'}
                         className="block w-full md:w-1/3 p-2 rounded-lg bg-blue-600 text-center text-white hover:bg-blue-600/80"
                     >
                         new item
+                    </Link>
+                    <Link
+                        href={'/data-entry/item/archive'}
+                        className="block w-full md:w-1/3 p-2 rounded-lg bg-red-600 text-center text-white hover:bg-red-600/80"
+                    >
+                        archive
                     </Link>
                 </div>
                 <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md">

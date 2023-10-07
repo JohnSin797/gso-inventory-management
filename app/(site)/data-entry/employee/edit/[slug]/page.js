@@ -29,7 +29,14 @@ export default function Edit ({ params }) {
     const updateEmployee = async (e) => {
         e.preventDefault()
         try {
-            await axios.post('/api/employee/update')
+            await axios.post('/api/employee/update', {
+                _id: params.slug,
+                first_name: formData.first_name,
+                last_name: formData.last_name,
+                position: formData.position,
+                employment_status: formData.employment_status,
+                department: department
+            })
             .then(res=>{
                 Swal.fire(res.data.message)
             })

@@ -8,7 +8,7 @@ export async function POST (request) {
     try {
         await connectMongoDB();
         const {id} = await request.json();
-        const result = await Employee.findByIdAndDelete(id).exec();
+        const result = await Employee.findByIdAndUpdate(id, {deletedAt: new Date()}).exec();
         if(!result) {
             return NextResponse.json({message: 'Failed to delete employee'}, {status: 401});
         }

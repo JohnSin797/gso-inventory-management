@@ -15,6 +15,10 @@ const employeeSchema = new Schema(
             ref: 'Department',
             required: [true, "department is required"]
         },
+        deletedAt: {
+            type: Date,
+            default: null
+        },
         position: String,
         employment_status: String,
     },

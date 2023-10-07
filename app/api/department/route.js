@@ -21,15 +21,17 @@ export async function POST (request) {
         await connectMongoDB();
         const {month, year, department} = await request.json();
         let data = '';
+        const item = await Item.find({deletedAt:null}).exec();
         let startDate = new Date(year+'-01-01');
         let endDate = new Date(year+'-12-31');
-        let total = 0;
         if(!month && !department) {
             data = await Release.find({
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
-                }
+                },
+                deletedAt: null,
+                item: {$in: item}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!month) {
@@ -39,7 +41,9 @@ export async function POST (request) {
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
-                }
+                },
+                deletedAt: null,
+                item: {$in: item}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!department) {
@@ -49,7 +53,9 @@ export async function POST (request) {
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
-                }
+                },
+                deletedAt: null,
+                item: {$in: item}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else {
@@ -61,7 +67,9 @@ export async function POST (request) {
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
-                }
+                },
+                deletedAt: null,
+                item: {$in: item}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         return NextResponse.json({message: 'OK', data: data}, {status: 200});

@@ -25,7 +25,7 @@ export default function Department () {
             let totalCost = 0;
     
             data.forEach(item => {
-                var itemCost = item['quantity'] * item['inventory'].unit_cost;
+                var itemCost = item?.quantity * item?.inventory?.unit_cost;
                 totalCost += itemCost;
             });
     
@@ -103,26 +103,26 @@ export default function Department () {
                                     tableData.map((item,id)=>{
                                         return(
                                             <tr key={id}>
-                                                <td className=" border border-slate-900">{item.department?.department_name}</td>
-                                                <td className=" border border-slate-900">{item.quantity}</td>
-                                                <td className=" border border-slate-900">{item.item_name}</td>
-                                                <td className=" border border-slate-900">{item.barcode_text}</td>
-                                                <td className=" border border-slate-900">{item.inventory?.ics_are}</td>
-                                                <td className=" border border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
-                                                <td className=" border border-slate-900">
+                                                <td className=" border p-2 border-slate-900">{item.department?.department_name}</td>
+                                                <td className=" border p-2 border-slate-900">{item.quantity}</td>
+                                                <td className=" border p-2 border-slate-900">{item.item.item_name}</td>
+                                                <td className=" border p-2 border-slate-900">{item.item.property_number}</td>
+                                                <td className=" border p-2 border-slate-900">{item.inventory?.ics_are}</td>
+                                                <td className=" border p-2 border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
+                                                <td className=" border p-2 border-slate-900">
                                                     <DateFrame dateStr={item.createdAt} />
                                                 </td>
-                                                <td className=" border border-slate-900">{item.cost}</td>
-                                                <td className=" border border-slate-900">{item.returned}</td>
-                                                <td className=" border border-slate-900">{item.remarks}</td>
-                                                <td className="space-x-2 flex border border-slate-900">
+                                                <td className=" border p-2 border-slate-900">{item.inventory.unit_cost * item.quantity}</td>
+                                                <td className=" border p-2 border-slate-900">{item.returned}</td>
+                                                <td className=" border p-2 border-slate-900">{item.remarks}</td>
+                                                <td className="space-y-2 p-2 border border-slate-900 text-white">
                                                     <button
-                                                        className="w-1/2 hover:font-bold hover:bg-cyan-600"
+                                                        className="w-full p-2 rounded-lg hover:font-bold bg-green-600 hover:bg-green-600/80"
                                                     >
                                                         edit
                                                     </button>
                                                     <button
-                                                        className="w-1/2 hover:font-bold hover:bg-red-600"
+                                                        className="w-full p-2 rounded-lg hover:font-bold bg-red-600 hover:bg-red-600/80"
                                                     >
                                                         delete
                                                     </button>

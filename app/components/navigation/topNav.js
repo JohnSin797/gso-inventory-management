@@ -11,7 +11,7 @@ export default function TopNav () {
     useEffect(()=>{
         const getData = async () => {
             try {
-                await axios.get('/api/navigaiton/search')
+                await axios.get('/api/navigation/search')
                 .then(res=> {
                     
                 })

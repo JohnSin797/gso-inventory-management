@@ -5,6 +5,7 @@ import TopNav from "@/app/components/navigation/topNav";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Department () {
 
@@ -28,6 +29,17 @@ export default function Department () {
     useEffect(()=>{
         getDepartment()
     }, [offices])
+
+    const deleteDepartment = async (id) => {
+        try {
+            await axios.post('/api/department/delete', {_id: id})
+            .then(res=>{
+                Swal.fire(res.data.message)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
@@ -59,12 +71,14 @@ export default function Department () {
                                             <td className="p-2 border border-slate-900">{item?.department_name}</td>
                                             <td className="p-2 border border-slate-900">{item?.office_name}</td>
                                             <td className="flex gap-2 p-2 border border-slate-900 text-white">
-                                                <button
-                                                    className="w-1/2 p-1 bg-green-600 hover:bg-green-600/80"
+                                                <Link
+                                                    href={'/data-entry/office/edit/'+item?._id}
+                                                    className="block text-center w-1/2 p-1 bg-green-600 hover:bg-green-600/80"
                                                 >
                                                     edit
-                                                </button>
+                                                </Link>
                                                 <button
+                                                    onClick={()=>deleteDepartment(item?._id)}
                                                     className="w-1/2 p-1 bg-red-600 hover:bg-red-600/80"
                                                 >
                                                     delete

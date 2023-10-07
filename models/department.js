@@ -6,10 +6,10 @@ const departmentSchema = new Schema(
             type: String,
             required: [true, "name is required"]
         },
-        office_name: {
-            type: String,
-            required: [true, 'office is required'],
-            unique: true
+        office_name: String,
+        deletedAt: {
+            type: Date,
+            default: null
         },
         employees: [
             {

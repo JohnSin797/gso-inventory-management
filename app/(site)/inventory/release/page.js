@@ -28,6 +28,7 @@ export default function Release () {
     const releaseItem = async (e) => {
         try {
             e.preventDefault()
+            console.log(selectedItem)
             await axios.post('/api/inventory/release', {
                 employee: selectedEmployee,
                 item_id: selectedItem,
@@ -49,6 +50,15 @@ export default function Release () {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const onEmployeeChange = (e) => {
+        setSelectedEmployee(e.value)
+    }
+
+    const onItemChange = e => {
+        console.log(e)
+        setSelectedItem(e.value)
     }
 
     useEffect(()=>{
@@ -106,7 +116,7 @@ export default function Release () {
                             {/* <EmployeeSelect className={'w-full p-2 border hover:border-black rounded-lg'} employees={data.employees} onEmployeeChange={setSelectedEmployee} /> */}
                             <Select 
                                 options={data.employees}
-                                onChange={setSelectedEmployee}
+                                onChange={onEmployeeChange}
                             />
                         </div>
                         <div className="w-full">
@@ -114,7 +124,7 @@ export default function Release () {
                             {/* <InventorySelect className={'w-full p-2 border hover:border-black rounded-lg'} items={data.items} onItemChange={setSelectedItem} /> */}
                             <Select 
                                 options={data.items}
-                                onChange={setSelectedItem}
+                                onChange={onItemChange}
                             />
                         </div>
                         <div className="flex gap-2">

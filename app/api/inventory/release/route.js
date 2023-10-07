@@ -13,12 +13,13 @@ export async function POST (request) {
         await connectMongoDB();
         const {employee, item_id, quantity, release_date, remarks} = await request.json();
         const employeeObj = await Employee.findOne({_id:employee}).exec();
-        const inventoryObj = await Inventory.findOne({_id:item_id}).exec();
-        const itemObj = await Item.findOne({_id:inventoryObj?.item}).exec();
+        const inventoryObj = await Inventory.findOne({_id:item_id}).populate('item').exec();
+        const itemObj = await Item.findOne({_id:inventoryObj.item._id}).exec();
         const department = await Department.findOne({_id:employeeObj.department}).exec();
         const token = await request.cookies.get('token')?.value || '';
         const userData = await jwt.decode(token, {complete: true});
         const userObj = await User.findOne({_id:userData.payload.id}).exec();
+        console.log(itemObj, item_id)
         const release = {
             inventory: inventoryObj,
             item: itemObj,

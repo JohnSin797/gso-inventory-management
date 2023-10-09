@@ -6,7 +6,7 @@ export async function POST (request) {
     try {
         await connectMongoDB();
         const {id} = await request.json();
-        await User.findByIdAndDelete(id).exec();
+        await User.findByIdAndUpdate(id, {deletedAt: new Date()}).exec();
         const data = await User.find({role: 'user'});
         return NextResponse.json({message: 'successfully deleted', data: data}, {status: 200});
     } catch (error) {

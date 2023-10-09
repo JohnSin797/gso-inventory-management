@@ -5,8 +5,11 @@ import Department from "@/models/department";
 export async function POST (request) {
     try {
         await connectMongoDB();
-        const {department_name, office_name} = await request.json();
-        await Department.create({department_name, office_name});
+        const office = await request.json();
+        const result = await Department.create(office);
+        if(!result) {
+            return NextResponse.json({message: 'Failed'}, {status: 401});
+        }
         return NextResponse.json({message: 'Department successfully added'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

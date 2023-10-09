@@ -11,9 +11,9 @@ export default function Archive () {
 
     const [archive, setArchive] = useState([])
 
-    const restore = async (id) => {
+    const restoreUser = async (id) => {
         try {
-            await axios.post('/api/item/archive', {id:id})
+            await axios.post('/api/user/archive', {id:id})
             .then(res=>{
                 Swal.fire(res.data.message)
             })
@@ -28,7 +28,7 @@ export default function Archive () {
     useEffect(()=>{
         const getData = async () => {
             try {
-                await axios.get('/api/item/archive')
+                await axios.get('/api/user/archive')
                 .then(res=>{
                     setArchive(res.data.data)
                 })
@@ -47,24 +47,22 @@ export default function Archive () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full bg-white rounded-lg shadow-md p-6 flex gap-2">
+                <div className="w-full flex bg-white shadow-md rounded-lg p-6">
                     <Link
-                        href={'/data-entry/item'}
-                        className="block p-2 w-1/2 md:w-1/3 rounded-lg bg-slate-900 hover:bg-slate-900/80 text-white text-center"
+                        href={'/user'}
+                        className="p-2 rounded-lg bg-slate-900 hover:bg-slate-900/80 text-center text-white w-full md:w-1/3"
                     >
                         back
                     </Link>
                 </div>
-                <div className="w-full rounded-lg bg-white shadow-md p-6">
-                    <p className="text-center text-2xl font-bold">Items</p>
-                    <div className="w-full h-96">
+                <div className="w-full bg-white shadow-md rounded-lg p-6">
+                    <div className="w-full h-96 overflow-y-scroll">
                         <table className="w-full table-auto">
                             <thead>
                                 <tr>
-                                    <th>Item Name</th>
-                                    <th>Property Number</th>
-                                    <th>Barcode</th>
-                                    <th>Unit</th>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -72,15 +70,14 @@ export default function Archive () {
                                 {
                                     archive.map((item, index)=>{
                                         return(
-                                            <tr key={index} className="border border-slate-900">
-                                                <td className="p-2 border border-slate-900">{item.item_name}</td>
-                                                <td className="p-2 border border-slate-900">{item.property_number}</td>
-                                                <td className="p-2 border border-slate-900">{item.barcode_text}</td>
-                                                <td className="p-2 border border-slate-900">{item.unit}</td>
-                                                <td className="text-white space-y-2 border border-slate-900">
+                                            <tr key={index}>
+                                                <td>{item.first_name} {item.last_name}</td>
+                                                <td>{item.username}</td>
+                                                <td>{item.password}</td>
+                                                <td>
                                                     <button
-                                                        onClick={()=>restore(item._id)}
-                                                        className="p-2 rounded-lg bg-cyan-500 hover:bg-cyan-500/80"
+                                                        onClick={()=>restoreUser(item._id)}
+                                                        className="p-2 rounded-lg bg-teal-600 hover:bg-teal-600/80 text-white"
                                                     >
                                                         restore
                                                     </button>

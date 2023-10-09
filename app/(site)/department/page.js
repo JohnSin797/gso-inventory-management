@@ -18,7 +18,34 @@ export default function Department () {
     const [total, setTotal] = useState(0)
     const [tableData, setTableData] = useState([])
 
-    
+    const confirmDelete = id => {
+        Swal.fire({
+            title: 'Confirm delete',
+            text: 'Are you sure you want to delete this release?',
+            icon: 'warning',
+            showConfirmButton: true,
+            showCancelButton: true
+        })
+        .then(res=>{
+            if (res.isConfirmed) {
+                archiveRelease(id)
+            }
+        })
+    }
+
+    const archiveRelease = async (id) => {
+        try {
+            await axios.post('/api/release/archive', {id:id})
+            .then(res=>{
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(()=>{
         const setTotalCost = (data) => {
@@ -122,6 +149,7 @@ export default function Department () {
                                                         edit
                                                     </button>
                                                     <button
+                                                        onClick={()=>confirmDelete(item._id)}
                                                         className="w-full p-2 rounded-lg hover:font-bold bg-red-600 hover:bg-red-600/80"
                                                     >
                                                         delete

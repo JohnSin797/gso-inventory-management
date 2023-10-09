@@ -8,6 +8,7 @@ import SelectMonth from "@/app/components/select/selectMonth";
 import SelectYear from "@/app/components/select/selectYear";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Employee () {
 
@@ -21,6 +22,35 @@ export default function Employee () {
         status: '',
         position: ''
     })
+
+    const archiveRelease = async (id) => {
+        try {
+            await axios.post('/api/release/archive', {id:id})
+            .then(res=>{
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const confirmDelete = id => {
+        Swal.fire({
+            title: 'Confirm delete',
+            text: 'Are you sure you want to delete this released item?',
+            icon: 'warning',
+            showConfirmButton: true,
+            showCancelButton: true
+        })
+        .then(res=>{
+            if (res.isConfirmed) {
+                archiveRelease(id)
+            }
+        })
+    }
 
     useEffect(()=>{
         const calculateTotalCost = (data) => {
@@ -117,6 +147,7 @@ export default function Employee () {
                                     <th>ICS / ARE</th>
                                     <th>Returned</th>
                                     <th>Remarks</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,6 +168,14 @@ export default function Employee () {
                                                 <td className="border border-slate-900">{item?.inventory?.ics_are}</td>
                                                 <td className="border border-slate-900">{item?.returned}</td>
                                                 <td className="border border-slate-900">{item?.remarks}</td>
+                                                <td className="border border-slate-900">
+                                                    <button
+                                                        onClick={()=>confirmDelete(item._id)}
+                                                        className="bg-red-600 hover:bg-red-600/80 p-2 w-full rounded-lg text-white"
+                                                    >
+                                                        archive
+                                                    </button>
+                                                </td>
                                             </tr>
                                         )
                                     })

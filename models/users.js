@@ -28,6 +28,10 @@ const userSchema = new Schema(
             type: String,
             default: 'user'
         },
+        deletedAt: {
+            type: Date,
+            default: null
+        },
         forgotPasswordToken: String,
         forgotPasswordTokenExpiry: Date,
         verifyToken: String,

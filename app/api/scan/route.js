@@ -12,8 +12,8 @@ export async function POST (request) {
         await connectMongoDB();
         const {barcode_text} = await request.json();
         const item = await Item.findOne({barcode_text}).exec();
-        const inventory = await Inventory.find({item}).populate('user').exec();
-        const released = await Release.find({inventory}).populate('inventory').populate('employee').populate('department').populate('user').exec();
+        const inventory = await Inventory.find({item: item, deletedAt: null}).populate('user').exec();
+        const released = await Release.find({inventory: {$in: inventory}, deletedAt: null}).populate('inventory').populate('employee').populate('department').populate('user').exec();
         return NextResponse.json({message: 'OK', item: item, stock: inventory, releases: released});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

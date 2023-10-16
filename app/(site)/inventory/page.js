@@ -53,15 +53,21 @@ export default function Inventory () {
                 <div className="w-full bg-white rounded-lg p-6 shadow-md flex gap-2">
                     <Link
                         href={'/inventory/stock'}
-                        className="block w-1/3 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-center text-white"
+                        className="block w-full md:w-1/3 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-center text-white"
                     >
                         add stock
                     </Link>
                     <Link
                         href={'/inventory/release'}
-                        className="block w-1/3 p-2 rounded-lg bg-indigo-600 hover:bg-indigo-600/80 text-center text-white"
+                        className="block w-full md:w-1/3 p-2 rounded-lg bg-indigo-600 hover:bg-indigo-600/80 text-center text-white"
                     >
                         release item
+                    </Link>
+                    <Link
+                        href={'/inventory/archive'}
+                        className="block w-full md:w-1/3 p-2 rounded-lg bg-red-600 hover:bg-red-600/80 text-center text-white"
+                    >
+                        archive
                     </Link>
                 </div>
                 <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">

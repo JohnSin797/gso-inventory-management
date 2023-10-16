@@ -1,7 +1,4 @@
 import connectMongoDB from "@/libs/mongodb";
-import Item from "@/models/items";
-import Employee from "@/models/employees";
-import Department from "@/models/department";
 import User from "@/models/users";
 import Notification from "@/models/notification";
 import jwt from "jsonwebtoken";
@@ -9,19 +6,20 @@ import { NextResponse } from "next/server";
 
 export async function POST (request) {
     try {
-        const {id} = await request.json();
+        await connectMongoDB();
         const token = await request.cookies.get('token')?.value || '';
+        const {message} = await request.json();
         const decoded = await jwt.decode(token, {complete: true});
         const user = await User.findOne({_id: decoded.payload.id}).exec();
         const notif = {
             user: user,
-            message: 'You have deleted an Item. You may view the deleted Item in the archive.'
+            message: message
         }
-        await connectMongoDB();
-        await Item.findByIdAndUpdate(id, {deletedAt: new Date()});
-        const newItems = await Item.find({}).populate('user').exec();
-        await Notification.create(notif);
-        return NextResponse.json({message: 'Item deleted successfully', data: newItems}, {status: 200});
+        const result = await Notification.create(notif);
+        if (!result) {
+            return NextResponse.json({message: 'Failed to create notification'}, {status: 401});
+        }
+        return NextResponse.json({message: 'Notification succcessfully created'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
     }

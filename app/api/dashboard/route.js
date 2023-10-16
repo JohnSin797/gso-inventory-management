@@ -24,6 +24,7 @@ export async function GET () {
         totalCostArr.map(item=>{
             totalStockCost += item?.total_cost
         })
+        const items = await Item.find({deletedAt: null}).exec();
         return NextResponse.json({
             message: 'OK', 
             // today: todayStock, 
@@ -31,7 +32,8 @@ export async function GET () {
             // weekRelease: weekRelease,
             stock: totalCostArr,
             release: totalReleaseArr,
-            total: totalStockCost
+            total: totalStockCost,
+            items: items
         }, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

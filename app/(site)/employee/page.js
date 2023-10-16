@@ -68,7 +68,7 @@ export default function Employee () {
             try {
                 await axios.post('/api/employee/index', {id:selectedEmployee, month: month, year: year})
                 .then(res=>{
-                    console.log(res.data.data)
+                    console.log(res)
                     setEmployees(res.data.data)
                     calculateTotalCost(res.data.data)
                 })

@@ -22,6 +22,9 @@ export async function POST (request) {
         const {month, year, department} = await request.json();
         let data = '';
         const item = await Item.find({deletedAt:null}).exec();
+        const employee = await Employee.find({deletedAt:null}).exec();
+        const dep = await Department.find({deletedAt:null}).exec();
+        const inv = await Inventory.find({deletedAt:null}).exec();
         let startDate = new Date(year+'-01-01');
         let endDate = new Date(year+'-12-31');
         if(!month && !department) {
@@ -31,7 +34,10 @@ export async function POST (request) {
                     $lte: endDate
                 },
                 deletedAt: null,
-                item: {$in: item}
+                item: {$in: item},
+                employee: {$in: employee},
+                department: {$in: dep},
+                inventory: {$in: inv}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!month) {
@@ -43,7 +49,9 @@ export async function POST (request) {
                     $lte: endDate
                 },
                 deletedAt: null,
-                item: {$in: item}
+                item: {$in: item},
+                employee: {$in: employee},
+                inventory: {$in: inv}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!department) {
@@ -55,7 +63,9 @@ export async function POST (request) {
                     $lte: endDate
                 },
                 deletedAt: null,
-                item: {$in: item}
+                item: {$in: item},
+                employee: {$in: employee},
+                inventory: {$in: inv}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else {
@@ -69,7 +79,9 @@ export async function POST (request) {
                     $lte: endDate
                 },
                 deletedAt: null,
-                item: {$in: item}
+                item: {$in: item},
+                employee: {$in: employee},
+                inventory: {$in: inv}
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         return NextResponse.json({message: 'OK', data: data}, {status: 200});

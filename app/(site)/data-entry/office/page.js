@@ -11,22 +11,21 @@ export default function Department () {
 
     const [offices, setOffices] = useState([])
 
-    const getDepartment = async () => {
-        try {
-            await axios.get('/api/department/data-entry')
-            .then(res=>{
-                console.log(res)
-                setOffices(res.data.data)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
     useEffect(()=>{
+        const getDepartment = async () => {
+            try {
+                await axios.get('/api/department/data-entry')
+                .then(res=>{
+                    console.log(res)
+                    setOffices(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
         getDepartment()
     }, [offices])
 

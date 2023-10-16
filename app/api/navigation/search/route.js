@@ -7,12 +7,13 @@ import Employee from "@/models/employees";
 import User from "@/models/users";
 import { NextResponse } from "next/server";
 
-export async function GET () {
+export async function POST (request) {
     try {
         await connectMongoDB();
-        const stocks = await Inventory.find({}).exec();
-        const releases = await Release.find({}).populate('employee').exec();
-        return NextResponse.json({message: 'OK', releases: releases, stocks: stocks}, {status: 200});
+        const {search} = await request.json();
+        const employee = await Employee.find({first_name: {$regex: search, $options: 'i'}, last_name: {$regex: search, $options: 'i'}}).exec();
+        const releases = await Release.find({employee: {$in: employee}}).populate('item').populate('employee').populate('department').exec();
+        return NextResponse.json({message: 'OK', data: releases}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
     }

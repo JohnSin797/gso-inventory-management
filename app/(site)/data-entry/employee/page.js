@@ -28,9 +28,9 @@ export default function Employee () {
 
     const deleteEmployee = async (id) => {
         try {
-            await axios.post('/api/employee/delete')
+            await axios.post('/api/employee/delete', {id: id})
             .then(res=>{
-
+                Swal.fire(res.data.message)
             })
             .catch(err=>{
                 console.log(err)

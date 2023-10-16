@@ -130,6 +130,16 @@ export default function Page () {
                     <ChartCard />
                     <BorrowedItemChart stock={inventoryDetails.weekly_cost} release={inventoryDetails.weekly_release} />
                 </div>
+                <div className="mt-2 grid grid-cols-12 gap-2">
+                    <div className="w-full col-span-6 bg-white rounded-lg shadow-md p-6">
+                        <p className="text-center text-xl font-bold">Item Dictionary</p>
+                        <div className="w-full h-96 overflow-y-scroll">
+                            <select>
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )

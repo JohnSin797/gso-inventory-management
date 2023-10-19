@@ -7,6 +7,7 @@ import EmployeeName from "@/app/components/select/employeeName";
 import SelectMonth from "@/app/components/select/selectMonth";
 import SelectYear from "@/app/components/select/selectYear";
 import axios from "axios";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -169,6 +170,12 @@ export default function Employee () {
                                                 <td className="border border-slate-900">{item?.returned}</td>
                                                 <td className="border border-slate-900">{item?.remarks}</td>
                                                 <td className="border border-slate-900">
+                                                    <Link
+                                                        href={'/employee/edit/'+item._id}
+                                                        className="block bg-green-600 hover:bg-green-600/80 p-2 rounded-lg text-center text-white"
+                                                    >
+                                                        edit
+                                                    </Link>
                                                     <button
                                                         onClick={()=>confirmDelete(item._id)}
                                                         className="bg-red-600 hover:bg-red-600/80 p-2 w-full rounded-lg text-white"

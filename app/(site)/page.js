@@ -9,6 +9,7 @@ import BorrowedItemChart from "../components/dashboard/borrowedItemChart"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { TodayDate, getWeeklyRelease, getWeeklyStocks, isDateThisMonth } from "../hooks/todayDate"
+import BarcodeImage from "../components/barcodeImage"
 
 export default function Page () {
 
@@ -24,6 +25,28 @@ export default function Page () {
         weekly_cost: [],
         weekly_release: []
     })
+    const [itemSummarySelect, setItemSummarySelect] = useState([])
+    const [selectedItemSummary, setSelectedItemSummary] = useState({
+        property_number: '',
+        description: [''],
+        barcode_text: 'sample'
+    })
+    const [availableStocks, setAvailableStocks] = useState([])
+
+    const onSelectedItemSummaryChange = e => {
+        e.preventDefault()
+        const index = e.target.value
+        if (index == '' || index == null) {
+            setSelectedItemSummary({
+                property_number: '',
+                description: [''],
+                barcode_text: 'sample'
+            })
+        } else {
+            const items = [...itemSummarySelect]
+            setSelectedItemSummary(items[index])
+        }
+    }
 
     const processWeek = (arr, totalStock) => {
         const week_cost = getWeeklyStocks(arr)
@@ -76,6 +99,7 @@ export default function Page () {
                 .then(res=>{
                     console.log(res)
                     processWeek(res.data.stock, res.data.total)
+                    setItemSummarySelect(res.data.items)
                 })
                 .catch(err=>{
                     console.log(err)
@@ -131,12 +155,40 @@ export default function Page () {
                     <BorrowedItemChart stock={inventoryDetails.weekly_cost} release={inventoryDetails.weekly_release} />
                 </div>
                 <div className="mt-2 grid grid-cols-12 gap-2">
-                    <div className="w-full col-span-6 bg-white rounded-lg shadow-md p-6">
-                        <p className="text-center text-xl font-bold">Item Dictionary</p>
-                        <div className="w-full h-96 overflow-y-scroll">
-                            <select>
-                                
+                    <div className="w-full col-span-12 md:col-span-6 bg-white rounded-lg shadow-md p-6">
+                        <p className="text-center text-xl font-bold">Item Summary</p>
+                        <div className="w-full">
+                            <select
+                                className="w-full rounded-lg p-2 border hover:border-black"
+                                onChange={onSelectedItemSummaryChange}
+                            >
+                                <option></option>
+                                {
+                                    itemSummarySelect.map((item,index)=>{
+                                        return (
+                                            <option key={index} value={index}>{item.item_name}</option>
+                                        )
+                                    })
+                                }
                             </select>
+                            <div className="w-full p-6 h-96 overflow-y-scroll space-y-4">
+                                <p><span className="font-bold">Property Number:</span> {selectedItemSummary.property_number}</p>
+                                <p><span className="font-bold">Unit:</span> {selectedItemSummary.unit}</p>
+                                <p className="font-bold">Barcode:</p>
+                                <BarcodeImage code={selectedItemSummary.barcode_text} />
+                                <p className="font-bold">Description:</p>
+                                {
+                                    selectedItemSummary.description.map((item,index)=>{
+                                        return <p className="border-b border-slate-900" key={index}>*{item}</p>
+                                    })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full col-span-12 md:col-span-6 bg-white rounded-lg shadow-md p-6">
+                        <p className="text-center text-xl font-bold">Available Stocks</p>
+                        <div className="w-full h-96 overflow-y-scroll">
+                            
                         </div>
                     </div>
                 </div>

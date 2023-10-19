@@ -1,5 +1,6 @@
 'use client';
 
+import BarcodeImage from "@/app/components/barcodeImage";
 import DateFrame from "@/app/components/dateFrame";
 import SideNav from "@/app/components/navigation/sideNav";
 import TopNav from "@/app/components/navigation/topNav";
@@ -76,6 +77,7 @@ export default function Inventory () {
                         <thead className="bg-slate-800 text-gray-400">
                             <tr>
                                 <th>Item Name</th>
+                                <th>Barcode</th>
                                 <th>ICS / ARE</th>
                                 <th>Unit Cost</th>
                                 <th>Total Cost</th>
@@ -95,6 +97,7 @@ export default function Inventory () {
                                     return(
                                         <tr key={id} className="hover:bg-gray-900/50 hover:text-white border border-slate-600">
                                             <td className="p-2 border border-slate-600">{item?.item?.item_name}</td>
+                                            <td className="p-2 border border-slate-600 min-w-[230px]"><BarcodeImage code={item?.item?.barcode_text} /></td>
                                             <td className="p-2 border border-slate-600">{item?.ics_are}</td>
                                             <td className="p-2 border border-slate-600">{item?.unit_cost}</td>
                                             <td className="p-2 border border-slate-600">{item?.total_cost}</td>
@@ -106,11 +109,12 @@ export default function Inventory () {
                                             <td className="p-2 border border-slate-600">{item?.inventory_tag}</td>
                                             <td className="p-2 border border-slate-600">{item?.source_fund}</td>
                                             <td className="p-2 flex space-x-2 text-white">
-                                                <button
-                                                    className="w-1/2 p-2 rounded bg-green-600 hover:bg-green-600/80"
+                                                <Link
+                                                    href={'/inventory/edit/'+item?._id}
+                                                    className="block text-center w-1/2 p-2 rounded bg-green-600 hover:bg-green-600/80"
                                                 >
                                                     <HiPencilSquare className="w-6 h-6" />
-                                                </button>
+                                                </Link>
                                                 <button
                                                     onClick={()=>archiveStock(item?._id)}
                                                     className="w-1/2 p-2 rounded-lg bg-red-600 hover:bg-red-600/80"

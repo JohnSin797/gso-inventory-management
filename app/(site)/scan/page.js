@@ -11,7 +11,7 @@ export default function Scan () {
     const [searchItemResult, setSearchItemResult] = useState({
         description: ['']
     })
-    const [searchStockResult, setSearchStockResult] = useState({})
+    const [searchStockResult, setSearchStockResult] = useState([])
     const [searchReleaseResult, setSearchReleaseResult] = useState([])
 
     useEffect(() => {
@@ -27,7 +27,6 @@ export default function Scan () {
       
         function success(result) 
         {
-            scanner.clear();
             searchForItem(result);
         }
       
@@ -63,77 +62,111 @@ export default function Scan () {
                         <div id="reader" className="w-full h-full"></div>
                     </div>
                     <div className="w-full h-64 md:h-96 p-6 overflow-y-scroll md:w-1/2 border border-slate-900 rounded-lg">
-                        <p>Item Name: {searchItemResult?.item_name}</p>
-                        <p>Property Number: {searchItemResult?.item_name}</p>
-                        <p>Barcode: {searchItemResult?.barcode_text}</p>
-                        <p>Unit: {searchItemResult?.unit}</p>
-                        <p>Description:</p>
+                        <p><span className="font-bold">Item Name: </span>{searchItemResult?.item_name}</p>
+                        <p><span className="font-bold">Property Number:</span> {searchItemResult?.item_name}</p>
+                        <p><span className="font-bold">Barcode:</span> {searchItemResult?.barcode_text}</p>
+                        <p><span className="font-bold">Unit:</span> {searchItemResult?.unit}</p>
+                        <p className="font-bold">Description:</p>
                         {
                             searchItemResult?.description.map((item,id)=>{
-                                return(<p key={id}>{item}</p>)
+                                return(<p className="border-b border-slate-800" key={id}>-{item}</p>)
                             })
                         }
                     </div>
                 </div>
                 <div className="w-full bg-white rounded-lg p-6 shadow-md">
                     <div className="w-full h-96 overflow-scroll">
-                    <table className="w-full table-auto">
-                        <thead>
-                            <tr>
-                                <th>Inventory Tag</th>
-                                <th>Stock</th>
-                                <th>Source of Funds</th>
-                                <th>Unit Cost</th>
-                                <th>Total Cost</th>
-                                <th>Released</th>
-                                <th>Date Released</th>
-                                <th>Condemned</th>
-                                <th>Employee Name</th>
-                                <th>Returned</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                searchReleaseResult.length != 0 ?
+                        <table className="w-full table-auto">
+                            <thead>
+                                <tr>
+                                    <th className="border border-gray-800">Inventory Tag</th>
+                                    <th className="border border-gray-800">Stock</th>
+                                    <th className="border border-gray-800">Source of Funds</th>
+                                    <th className="border border-gray-800">Unit Cost</th>
+                                    <th className="border border-gray-800">Total Cost</th>
+                                    <th className="border border-gray-800">Released</th>
+                                    <th className="border border-gray-800">Date Released</th>
+                                    <th className="border border-gray-800">Condemned</th>
+                                    <th className="border border-gray-800">Employee Name</th>
+                                    <th className="border border-gray-800">Returned</th>
+                                    <th className="border border-gray-800">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className="bg-gray-800 text-white border border-gray-800">
+                                    <th>Release</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                {
+                                    searchReleaseResult.length > 0 ?
                                     searchReleaseResult.map((item,id)=>{
                                         return (
                                             <tr key={id}>
-                                                <td>{item?.inventory?.inventory_tag}</td>
-                                                <td>{item?.inventory?.stock}</td>
-                                                <td>{item?.inventory?.source_fund}</td>
-                                                <td>{item?.inventory?.unit_cost}</td>
-                                                <td>{item?.inventory?.total_cost}</td>
-                                                <td>{item?.quantity}</td>
-                                                <td>{item?.release_date}</td>
-                                                <td>{item?.inventory?.condemned}</td>
-                                                <td>{item?.employee?.first_name}</td>
-                                                <td>{item?.employee?.last_name}</td>
-                                                <td>{item?.returned}</td>
-                                                <td>{item?.remarks}</td>
+                                                <td className="border border-gray-800">{item?.inventory?.inventory_tag}</td>
+                                                <td className="border border-gray-800">{item?.inventory?.stock}</td>
+                                                <td className="border border-gray-800">{item?.inventory?.source_fund}</td>
+                                                <td className="border border-gray-800">{item?.inventory?.unit_cost}</td>
+                                                <td className="border border-gray-800">{item?.inventory?.total_cost}</td>
+                                                <td className="border border-gray-800">{item?.released}</td>
+                                                <td className="border border-gray-800">{item?.release_date}</td>
+                                                <td className="border border-gray-800">{item?.inventory?.condemned}</td>
+                                                <td className="border border-gray-800">{item?.employee?.first_name} {item?.employee?.last_name}</td>
+                                                <td className="border border-gray-800">{item?.returned}</td>
+                                                <td className="border border-gray-800">{item?.remarks}</td>
                                             </tr>
                                         )
-                                    })
-                                :
-                                (
-                                    <tr>
-                                        <td>{searchStockResult?.inventory_tag}</td>
-                                        <td>{searchStockResult?.stock}</td>
-                                        <td>{searchStockResult?.source_fund}</td>
-                                        <td>{searchStockResult?.unit_cost}</td>
-                                        <td>{searchStockResult?.total_cost}</td>
-                                        <td>{searchStockResult?.released}</td>
-                                        <td>#</td>
-                                        <td>{searchStockResult?.condemned}</td>
-                                        <td>#</td>
-                                        <td>#</td>
-                                        <td>#</td>
-                                        <td>{searchStockResult?.remarks}</td>
+                                    }) :
+                                    <tr className="border border-gray-800">
+                                        <td colSpan={11} className="text-center">no data</td>
                                     </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
+                                }
+                                <tr className="bg-gray-800 text-white border border-gray-800">
+                                    <th>Stocks</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                {
+                                    searchStockResult.length > 0 ?
+                                    searchStockResult.map((item,index)=>{
+                                        return (
+                                            <tr key={index}>
+                                                <td className="border border-gray-800">{item?.inventory_tag}</td>
+                                                <td className="border border-gray-800">{item?.stock}</td>
+                                                <td className="border border-gray-800">{item?.source_fund}</td>
+                                                <td className="border border-gray-800">{item?.unit_cost}</td>
+                                                <td className="border border-gray-800">{item?.total_cost}</td>
+                                                <td className="border border-gray-800">#</td>
+                                                <td className="border border-gray-800">#</td>
+                                                <td className="border border-gray-800">{item?.condemned}</td>
+                                                <td className="border border-gray-800">#</td>
+                                                <td className="border border-gray-800">#</td>
+                                                <td className="border border-gray-800">{item?.remarks}</td>
+                                            </tr>
+                                        )
+                                    }) :
+                                    <tr className="border border-gray-800">
+                                        <td colSpan={11} className="text-center">no data</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

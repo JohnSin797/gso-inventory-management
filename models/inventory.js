@@ -40,14 +40,17 @@ const inventorySchema = new Schema(
         },
         stock: {
             type: Number,
+            min: 0,
             required: [true, 'stock is required']
         },
         unit_cost: {
             type: Number,
+            min: 0,
             required: [true, 'unit cost is required']
         },
         total_cost: {
             type: Number,
+            min: 0,
             required: [true, 'total cost is required']
         },
         date_acquired: {

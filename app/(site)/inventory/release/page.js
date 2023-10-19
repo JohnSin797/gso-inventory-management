@@ -16,6 +16,7 @@ export default function Release () {
 
     const [selectedEmployee, setSelectedEmployee] = useState('')
     const router = useRouter()
+    const [itemStocks, setItemStocks] = useState(0)
     const [selectedItem, setSelectedItem] = useState('')
     const [releaseDate, setReleaseDate] = useState('')
     const [quantity, setQuantity] = useState('')
@@ -57,8 +58,8 @@ export default function Release () {
     }
 
     const onItemChange = e => {
-        console.log(e)
         setSelectedItem(e.value)
+        setItemStocks(e.stocks)
     }
 
     useEffect(()=>{
@@ -83,7 +84,8 @@ export default function Release () {
                 if(element?.item) {
                     const itemObj = {
                         value: element?._id,
-                        label: element?.item?.item_name
+                        label: element?.item?.item_name,
+                        stocks: element?.stock
                     }
                     itemArr.push(itemObj)
                 }
@@ -117,6 +119,7 @@ export default function Release () {
                             <Select 
                                 options={data.employees}
                                 onChange={onEmployeeChange}
+                                required
                             />
                         </div>
                         <div className="w-full">
@@ -125,6 +128,7 @@ export default function Release () {
                             <Select 
                                 options={data.items}
                                 onChange={onItemChange}
+                                required
                             />
                         </div>
                         <div className="flex gap-2">
@@ -135,15 +139,26 @@ export default function Release () {
                                     className="w-full p-2 rounded-lg border hover:border-black"
                                     onChange={(e)=>setReleaseDate(e.target.value)}
                                     value={releaseDate}
+                                    required
                                 />
                             </div>
-                            <div className="w-1/2">
-                                <label className="text-xs font-bold">Quantity</label>
+                            <div className="w-1/4">
+                                <label className="text-xs font-bold text-indigo-600">Stocks</label>
                                 <input 
                                     type="text"
-                                    className="w-full p-2 rounded-lg border hover:border-black"
+                                    className="w-full p-2 rounded-lg border hover:border-indigo-900 bg-indigo-600 text-white"
+                                    defaultValue={itemStocks}
+                                    readOnly
+                                />
+                            </div>
+                            <div className="w-1/4">
+                                <label className={`text-xs font-bold ${itemStocks<quantity ? 'text-red-600' : ''}`}>Quantity</label>
+                                <input 
+                                    type="number"
+                                    className={`w-full p-2 rounded-lg border ${itemStocks<quantity ? 'border-red-600 text-red-600' : 'hover:border-black'}`}
                                     onChange={(e)=>setQuantity(e.target.value)}
                                     value={quantity}
+                                    required
                                 />
                             </div>
                         </div>
@@ -166,6 +181,7 @@ export default function Release () {
                             </Link>
                             <button
                                 type="submit"
+                                disabled={itemStocks<quantity}
                                 className="w-full md:w-1/2 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white"
                             >
                                 save

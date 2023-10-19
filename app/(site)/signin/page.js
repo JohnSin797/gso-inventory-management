@@ -5,10 +5,13 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import Swal from "sweetalert2"
+import { ImSpinner10 } from "react-icons/im"
 
 export default function SignIn () {
 
   const router = useRouter()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const [signInForm, setSignInForm] = useState({
     username: '',
@@ -25,12 +28,14 @@ export default function SignIn () {
 
   const submitForm = async (e) => {
     try {
+      setIsLoading(true)
       e.preventDefault()
       await axios.post('/api/user/login', signInForm)
       .then(res=>{
         router.push('/')
       })
       .catch(err=>{
+        setIsLoading(false)
         Swal.fire(err.response.data.message)
       })
     } catch (error) {
@@ -40,6 +45,13 @@ export default function SignIn () {
 
   return (
     <div className="absolute h-full w-full bg-gray-200 flex justify-center items-center p-6">
+      {
+        isLoading && (
+          <div className="fixed w-full h-full z-50 bg-slate-800/90 flex justify-center items-center text-white">
+            <ImSpinner10 className="w-5 h-5 animate-spin" />
+          </div>
+        )
+      }
       <div className="w-full md:w-1/3 bg-white shadow-md rounded-lg p-6">
         <p className="mb-10">
           <Image 

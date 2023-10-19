@@ -19,11 +19,14 @@ export function middleware(request) {
 export const config = {
     matcher: [
         '/',
-        '/user',
+        '/user/:path*',
         '/signin',
-        '/department',
-        '/employee',
+        '/department/:path*',
+        '/employee/:path*',
         '/data-entry/:path*',
-        '/inventory'
+        '/inventory/:path*',
+        '/search/:path*',
+        '/scan',
+        '/profile'
     ],
 }

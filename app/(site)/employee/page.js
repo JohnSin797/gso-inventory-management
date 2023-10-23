@@ -8,6 +8,7 @@ import SelectMonth from "@/app/components/select/selectMonth";
 import SelectYear from "@/app/components/select/selectYear";
 import axios from "axios";
 import Link from "next/link";
+import Exports from "@/app/hooks/exports";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -21,8 +22,10 @@ export default function Employee () {
     const [employeeDetails, setEmployeeDetails] = useState({
         department: '',
         status: '',
-        position: ''
+        position: '',
+        name: ''
     })
+    const {exportARE} = Exports()
 
     const archiveRelease = async (id) => {
         try {
@@ -51,6 +54,10 @@ export default function Employee () {
                 archiveRelease(id)
             }
         })
+    }
+
+    const exportICS = () => {
+
     }
 
     useEffect(()=>{
@@ -83,11 +90,42 @@ export default function Employee () {
         getEmployees()
     }, [selectedEmployee, month, year])
 
+    const export_are = () => {
+        if (selectedEmployee == '' || selectedEmployee == null) {
+            Swal.fire({
+                title: 'Please select employee',
+                icon: 'warning',
+            })
+        } 
+        else if (employees.length <= 0) {
+            Swal.fire({
+                title: 'No data',
+                icon: 'warning'
+            })
+        }
+        else {
+            exportARE(employees, employeeDetails)
+        }
+    }
+
     return (
         <div>
             <TopNav />
             <SideNav />
-            <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 pb-1">
+            <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 pb-1 space-y-2">
+                <div className="w-full bg-white p-6 rounded-lg shadow-md text-white flex gap-2">
+                    <button
+                        onClick={export_are}
+                        className="w-full md:w-1/3 rounded-lg p-2 bg-teal-600 hover:bg-teal-600/80 hover:font-bold"
+                    >
+                        export ARE
+                    </button>
+                    <button
+                        className="w-full md:w-1/3 rounded-lg p-2 bg-indigo-600 hover:bg-indigo-600/80 hover:font-bold"
+                    >
+                        export ICS
+                    </button>
+                </div>
                 <div className="w-full bg-white p-6 rounded-lg shadow-md">
                     <p className="text-center text-2xl font-bold font-serif">INDIVIDUAL</p>
                     <p className="text-center">( AS OF <SelectMonth onHandleChange={setMonth} /> <SelectYear onSetChange={setYear} /> )</p>

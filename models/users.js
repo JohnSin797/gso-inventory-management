@@ -32,6 +32,7 @@ const userSchema = new Schema(
             type: Date,
             default: null
         },
+        position: String,
         forgotPasswordToken: String,
         forgotPasswordTokenExpiry: Date,
         verifyToken: String,

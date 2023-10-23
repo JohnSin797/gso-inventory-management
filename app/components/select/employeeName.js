@@ -26,7 +26,8 @@ export default function EmployeeName ({ className, onChangeEmployee, onChangeDet
         onChangeDetails({
             department: selectedEmployee?.department?.department_name,
             status: selectedEmployee?.employment_status,
-            position: selectedEmployee?.position
+            position: selectedEmployee?.position,
+            name: selectedEmployee?.first_name + ' ' + selectedEmployee?.last_name
         })
     }
 

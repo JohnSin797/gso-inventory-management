@@ -11,9 +11,11 @@ export async function POST (request) {
     try {
         await connectMongoDB();
         const {search} = await request.json();
-        const employee = await Employee.find({first_name: {$regex: search, $options: 'i'}, last_name: {$regex: search, $options: 'i'}}).exec();
+        const employee = await Employee.find({$or: [{first_name: {$regex: search, $options: 'i'}}, {last_name: {$regex: search, $options: 'i'}}]}).exec();
         const releases = await Release.find({employee: {$in: employee}}).populate('item').populate('employee').populate('department').exec();
-        return NextResponse.json({message: 'OK', data: releases}, {status: 200});
+        const items = await Item.find({item_name: {$regex: search, $options: 'i'}}).exec();
+        const inventory = await Inventory.find({item: {$in: items}}).populate('item').exec();
+        return NextResponse.json({message: 'OK', data: releases, stock: inventory, employee: employee}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
     }

@@ -83,7 +83,14 @@ export default function Department () {
         <div>
             <TopNav />
             <SideNav />
-            <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 pb-5">
+            <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 pb-5 space-y-2">
+                <div className="bg-white rounded-lg shadow-md w-full p-6 flex gap-2">
+                    <button
+                        className="w-full md:w-1/3 bg-teal-600 hover:bg-teal-600/80 text-white rounded-lg p-2"
+                    >
+                        export
+                    </button>
+                </div>
                 <div className="w-full bg-white rounded-lg shadow-md p-6">
                     <p className="text-2xl text-center font-bold font-serif">REPORT ON THE PHYSICAL COUNT OF INVENTORIES</p>                    
                     <p className="text-center">( PER DEPARTMENT )</p>

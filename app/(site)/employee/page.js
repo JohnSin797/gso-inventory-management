@@ -25,13 +25,14 @@ export default function Employee () {
         position: '',
         name: ''
     })
-    const {exportARE} = Exports()
+    const {exportARE, exportICS} = Exports()
 
     const archiveRelease = async (id) => {
         try {
             await axios.post('/api/release/archive', {id:id})
             .then(res=>{
                 Swal.fire(res.data.message)
+                getEmployees()
             })
             .catch(err=>{
                 console.log(err)
@@ -56,37 +57,34 @@ export default function Employee () {
         })
     }
 
-    const exportICS = () => {
+    const calculateTotalCost = (data) => {
+        let totalCost = 0;
 
+        data.forEach(item => {
+            var itemCost = item?.quantity * item?.inventory?.unit_cost;
+            totalCost += itemCost;
+        });
+
+        setTotalCost(totalCost)
+    }
+
+    const getEmployees = async () => {
+        try {
+            await axios.post('/api/employee/index', {id:selectedEmployee, month: month, year: year})
+            .then(res=>{
+                console.log(res)
+                setEmployees(res.data.data)
+                calculateTotalCost(res.data.data)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     useEffect(()=>{
-        const calculateTotalCost = (data) => {
-            let totalCost = 0;
-    
-            data.forEach(item => {
-                var itemCost = item?.quantity * item?.inventory?.unit_cost;
-                totalCost += itemCost;
-            });
-    
-            setTotalCost(totalCost)
-        }
-
-        const getEmployees = async () => {
-            try {
-                await axios.post('/api/employee/index', {id:selectedEmployee, month: month, year: year})
-                .then(res=>{
-                    console.log(res)
-                    setEmployees(res.data.data)
-                    calculateTotalCost(res.data.data)
-                })
-                .catch(err=>{
-                    console.log(err)
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
         getEmployees()
     }, [selectedEmployee, month, year])
 
@@ -104,7 +102,90 @@ export default function Employee () {
             })
         }
         else {
-            exportARE(employees, employeeDetails)
+            Swal.fire({
+                title: 'Enter your purpose for this document',
+                icon: 'info',
+                input: 'text',
+                inputValidator: value=>{
+                    if(!value) {
+                        return 'Please enter your purpose'
+                    }
+                },
+                showCancelButton: true,
+            })
+            .then(res=>{
+                if (res.value) {
+                    exportARE(employees, employeeDetails, res.value)
+                }
+            })
+        }
+    }
+
+    const export_ics = () => {
+        if (selectedEmployee == '' || selectedEmployee == null) {
+            Swal.fire({
+                title: 'Please select employee',
+                icon: 'warning',
+            })
+        } 
+        else if (employees.length <= 0) {
+            Swal.fire({
+                title: 'No data',
+                icon: 'warning'
+            })
+        }
+        else {
+            Swal.fire({
+                title: 'Enter your purpose for this document',
+                icon: 'info',
+                input: 'text',
+                inputValidator: value=>{
+                    if (!value) {
+                        return 'Please enter your purpose'
+                    }
+                },
+                showCancelButton: true,
+            })
+            .then(res=>{
+                if (res.value) {
+                    exportICS(employees, employeeDetails, res.value)
+                }
+            })
+        }
+    }
+
+    const confirmReturn = id => {
+        Swal.fire({
+            title: 'Return',
+            icon: 'info',
+            input: 'number',
+            text: 'Enter the quantity to be returned',
+            inputValidator: value=>{
+                if (!value) {
+                    return 'Quantity is required'
+                }
+            },
+            showCancelButton: true
+        })
+        .then(res=>{
+            if (res.value) {
+                returnItem(id, res.value)
+            }
+        })
+    }
+
+    const returnItem = async (id, quantity) => {
+        try {
+            await axios.post('/api/release/return', {id: id, quantity: quantity})
+            .then(res=>{
+                getEmployees()
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                Swal.fire(err.message)
+            })
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -121,6 +202,7 @@ export default function Employee () {
                         export ARE
                     </button>
                     <button
+                        onClick={export_ics}
                         className="w-full md:w-1/3 rounded-lg p-2 bg-indigo-600 hover:bg-indigo-600/80 hover:font-bold"
                     >
                         export ICS
@@ -207,7 +289,7 @@ export default function Employee () {
                                                 <td className="border border-slate-900">{item?.inventory?.ics_are}</td>
                                                 <td className="border border-slate-900">{item?.returned}</td>
                                                 <td className="border border-slate-900">{item?.remarks}</td>
-                                                <td className="border border-slate-900">
+                                                <td className="border border-slate-900 space-y-1 p-1">
                                                     <Link
                                                         href={'/employee/edit/'+item._id}
                                                         className="block bg-green-600 hover:bg-green-600/80 p-2 rounded-lg text-center text-white"
@@ -219,6 +301,17 @@ export default function Employee () {
                                                         className="bg-red-600 hover:bg-red-600/80 p-2 w-full rounded-lg text-white"
                                                     >
                                                         archive
+                                                    </button>
+                                                    <button
+                                                        onClick={()=>confirmReturn(item._id)}
+                                                        className="bg-teal-600 hover:bg-teal-600/80 p-2 w-full rounded-lg text-white"
+                                                    >
+                                                        return
+                                                    </button>
+                                                    <button
+                                                        className="bg-indigo-600 hover:bg-indigo-600/80 p-2 w-full rounded-lg text-white"
+                                                    >
+                                                        export
                                                     </button>
                                                 </td>
                                             </tr>

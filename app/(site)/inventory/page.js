@@ -64,12 +64,12 @@ export default function Inventory () {
                     >
                         release item
                     </Link>
-                    <Link
+                    {/* <Link
                         href={'/inventory/archive'}
                         className="block w-full md:w-1/3 p-2 rounded-lg bg-red-600 hover:bg-red-600/80 text-center text-white"
                     >
                         archive
-                    </Link>
+                    </Link> */}
                 </div>
                 <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
                     <p className="text-2xl font-bold">Stocks</p>

@@ -61,8 +61,8 @@ export default function SideNav () {
                                 MENU
                             </h3>
                             <ul className="mb-6 flex flex-col gap-1.5">
-                            <SidebarLinkGroup
-                                activeCondition={pathname === "/" || pathname.includes("dashboard")}
+                                <SidebarLinkGroup
+                                    activeCondition={pathname === "/" || pathname.includes("dashboard")}
                                 >
                                 {(handleClick, open) => (
                                     <div>
@@ -156,8 +156,58 @@ export default function SideNav () {
                                         Scan
                                     </Link>
                                 </li>
+                                
                                 <SidebarLinkGroup
-                                activeCondition={pathname === "/" || pathname.includes("dashboard")}
+                                activeCondition={pathname.startsWith('/archive')}
+                                >
+                                {(handleClick, open) => (
+                                    <div>
+                                    <a
+                                        href="#"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-slate-200 duration-300 ease-in-out hover:bg-gray-700 ${
+                                        (pathname === "/archive" || pathname.includes("archive")) &&
+                                        "bg-gray-700"
+                                        }`}
+                                        onClick={(e) => {
+                                        e.preventDefault();
+                                        sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                                        }}
+                                    >
+                                        Archive
+                                    </a>
+                                    <div
+                                        className={`translate transform overflow-hidden ${
+                                        !open && "hidden"
+                                        }`}
+                                    >
+                                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                                            <li>
+                                                <a
+                                                    href="/archive/inventory"
+                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                        pathname.includes("/archive/inventory") ? "text-white" : "text-slate-400"
+                                                    } `}
+                                                >
+                                                    Inventory
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="/archive/release"
+                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                        pathname.includes("/archive/release") ? "text-white" : "text-slate-400"
+                                                    } `}
+                                                >
+                                                    Release
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    </div>
+                                )}
+                                </SidebarLinkGroup>
+                                <SidebarLinkGroup
+                                activeCondition={pathname.startsWith('/data-entry')}
                                 >
                                 {(handleClick, open) => (
                                     <div>

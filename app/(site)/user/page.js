@@ -13,7 +13,8 @@ export default function User () {
         first_name: '',
         last_name: '',
         username: '',
-        pword: generatePassword()
+        pword: generatePassword(),
+        position: ''
     })
 
     useEffect(()=>{
@@ -59,7 +60,8 @@ export default function User () {
                     first_name: '',
                     last_name: '',
                     username: '',
-                    pword: generatePassword()
+                    pword: generatePassword(),
+                    position: ''
                 })
                 setUsers(res.data.data)
                 Swal.fire(res.data.message)
@@ -199,6 +201,17 @@ export default function User () {
                             </button>
                         </div>
                     </div>
+                    <div className="w-full md:w-1/3">
+                        <label className="text-xs font-bold">Position</label>
+                        <input 
+                            type="text"
+                            className="w-full p-1 border rounded-lg hover:border-black"
+                            name="position"
+                            onChange={handleChange}
+                            value={newUser.position}
+                            required
+                        />
+                    </div>
                 </form>
                 
                 <div className="w-full p-6 rounded-lg bg-white h-80 overflow-scroll">
@@ -208,6 +221,7 @@ export default function User () {
                                 <th>Name</th>
                                 <th>Username</th>
                                 <th>Password</th>
+                                <th>Position</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -219,6 +233,7 @@ export default function User () {
                                             <td>{item?.first_name} {item?.last_name}</td>
                                             <td>{item?.username}</td>
                                             <td>{item?.default_password}</td>
+                                            <td>{item?.position}</td>
                                             <td className="p-2 text-white">
                                                 {/* <button
                                                     className="w-1/2 p-1 rounded-lg bg-green-600 hover:bg-green-600/80"

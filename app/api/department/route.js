@@ -9,7 +9,7 @@ import Release from "@/models/release";
 export async function GET () {
     try {
         await connectMongoDB();
-        const employees = await Employee.find({}).populate('department').exec();
+        const employees = await Employee.find({deletedAt: null}).populate('department').exec();
         return NextResponse.json({message: 'OK', data: employees}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
@@ -41,9 +41,9 @@ export async function POST (request) {
             }).populate('inventory').populate('item').populate('employee').populate('department').exec();
         }
         else if(!month) {
-            const departmentObj = await Department.findOne({department_name: department});
+            const departmentObj = await Department.find({department_name: department});
             data = await Release.find({
-                department: departmentObj,
+                department: {$in: departmentObj},
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate
@@ -71,9 +71,9 @@ export async function POST (request) {
         else {
             startDate = new Date(year+'-'+month+'-01');           
             endDate = new Date(year, month, 0, 23, 59, 59, 999);
-            const departmentObj = await Department.findOne({department_name: department});
+            const departmentObj = await Department.find({department_name: department});
             data = await Release.find({
-                department: departmentObj,
+                department: {$in: departmentObj},
                 createdAt: {
                     $gte: startDate,
                     $lte: endDate

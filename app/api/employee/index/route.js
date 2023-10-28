@@ -33,7 +33,7 @@ export async function POST (request) {
         else if(!id) {
             startDate = new Date(year+'-'+month+'-01');           
             endDate = new Date(year, month, 0, 23, 59, 59, 999);
-            const data = await Release.find({createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            const data = await Release.find({createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, employee: {$in: emp}, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').exec();
             return NextResponse.json({message: 'OK', data: data}, {status: 200});
         }
         else {

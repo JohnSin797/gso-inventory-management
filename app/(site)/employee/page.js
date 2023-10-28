@@ -25,7 +25,7 @@ export default function Employee () {
         position: '',
         name: ''
     })
-    const {exportARE, exportICS} = Exports()
+    const {exportARE, exportICS, exportAllItem} = Exports()
 
     const archiveRelease = async (id) => {
         try {
@@ -88,7 +88,31 @@ export default function Employee () {
         getEmployees()
     }, [selectedEmployee, month, year])
 
-    const export_are = () => {
+    const exportAll = () => {
+        if (selectedEmployee == '' || selectedEmployee == null) {
+            Swal.fire({
+                title: 'Please select employee',
+                icon: 'warning',
+            })
+        } 
+        else if (month == '' || month == null) {
+            Swal.fire({
+                title: 'Please select month',
+                icon: 'warning'
+            })
+        }
+        else if (employees.length <= 0) {
+            Swal.fire({
+                title: 'No data',
+                icon: 'warning'
+            })
+        }
+        else {
+            exportAllItem(employees, month, year, employeeDetails, totalCost)
+        }
+    }
+
+    const exportIndividual = idx => {
         if (selectedEmployee == '' || selectedEmployee == null) {
             Swal.fire({
                 title: 'Please select employee',
@@ -102,6 +126,7 @@ export default function Employee () {
             })
         }
         else {
+            const arr = employees[idx]
             Swal.fire({
                 title: 'Enter your purpose for this document',
                 icon: 'info',
@@ -114,41 +139,11 @@ export default function Employee () {
                 showCancelButton: true,
             })
             .then(res=>{
-                if (res.value) {
-                    exportARE(employees, employeeDetails, res.value)
+                if (res.value && arr.inventory.ics_are.toLowerCase() == 'are') {
+                    exportARE(arr, employeeDetails, res.value)
                 }
-            })
-        }
-    }
-
-    const export_ics = () => {
-        if (selectedEmployee == '' || selectedEmployee == null) {
-            Swal.fire({
-                title: 'Please select employee',
-                icon: 'warning',
-            })
-        } 
-        else if (employees.length <= 0) {
-            Swal.fire({
-                title: 'No data',
-                icon: 'warning'
-            })
-        }
-        else {
-            Swal.fire({
-                title: 'Enter your purpose for this document',
-                icon: 'info',
-                input: 'text',
-                inputValidator: value=>{
-                    if (!value) {
-                        return 'Please enter your purpose'
-                    }
-                },
-                showCancelButton: true,
-            })
-            .then(res=>{
-                if (res.value) {
-                    exportICS(employees, employeeDetails, res.value)
+                if (res.value && arr.inventory.ics_are.toLowerCase() == 'ics') {
+                    exportICS(arr, employeeDetails, res.value)
                 }
             })
         }
@@ -196,16 +191,10 @@ export default function Employee () {
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 pb-1 space-y-2">
                 <div className="w-full bg-white p-6 rounded-lg shadow-md text-white flex gap-2">
                     <button
-                        onClick={export_are}
+                        onClick={exportAll}
                         className="w-full md:w-1/3 rounded-lg p-2 bg-teal-600 hover:bg-teal-600/80 hover:font-bold"
                     >
-                        export ARE
-                    </button>
-                    <button
-                        onClick={export_ics}
-                        className="w-full md:w-1/3 rounded-lg p-2 bg-indigo-600 hover:bg-indigo-600/80 hover:font-bold"
-                    >
-                        export ICS
+                        export 
                     </button>
                 </div>
                 <div className="w-full bg-white p-6 rounded-lg shadow-md">
@@ -309,6 +298,7 @@ export default function Employee () {
                                                         return
                                                     </button>
                                                     <button
+                                                        onClick={()=>exportIndividual(id)}
                                                         className="bg-indigo-600 hover:bg-indigo-600/80 p-2 w-full rounded-lg text-white"
                                                     >
                                                         export

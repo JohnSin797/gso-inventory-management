@@ -9,14 +9,19 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import DateFrame from "@/app/components/dateFrame";
+import Exports from "@/app/hooks/exports";
 
 export default function Department () {
 
     const [department, setDepartment] = useState('')
+    const [departmentDetails, setDepartmentDetails] = useState({
+        name: ''
+    })
     const [month, setMonth] = useState('')
     const [year, setYear] = useState(new Date().getFullYear())
     const [total, setTotal] = useState(0)
     const [tableData, setTableData] = useState([])
+    const {exportDepartment} = Exports()
 
     const confirmDelete = id => {
         Swal.fire({
@@ -79,6 +84,30 @@ export default function Department () {
         getData()
     }, [month, year, department])
 
+    const exportFile = () => {
+        if (department == '' || department == null) {
+            Swal.fire({
+                title: 'Please select department',
+                icon: 'warning',
+            })
+        }
+        else if (month == '' || month == null) {
+            Swal.fire({
+                title: 'Please select month',
+                icon: 'warning',
+            })
+        }
+        else if (tableData.length <= 0) {
+            Swal.fire({
+                title: 'No data',
+                icon: 'warning',
+            })
+        }
+        else {
+            exportDepartment(tableData, department, total, year, month)
+        }
+    }
+
     return (
         <div>
             <TopNav />
@@ -86,6 +115,7 @@ export default function Department () {
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 pb-5 space-y-2">
                 <div className="bg-white rounded-lg shadow-md w-full p-6 flex gap-2">
                     <button
+                        onClick={exportFile}
                         className="w-full md:w-1/3 bg-teal-600 hover:bg-teal-600/80 text-white rounded-lg p-2"
                     >
                         export

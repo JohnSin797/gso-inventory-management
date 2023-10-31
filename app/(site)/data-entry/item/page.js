@@ -7,39 +7,50 @@ import axios from "axios";
 import DateFrame from "@/app/components/dateFrame";
 import { useEffect, useState } from "react";
 import BarcodeImage from "@/app/components/barcodeImage";
+import { ImSpinner10 } from "react-icons/im";
 
 export default function Item () {
 
     const [items, setItems] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const deleteItem = async (id) => {
         try {
+            setIsLoading(true)
             await axios.post('/api/item/delete', {id:id})
             .then(res=>{
                 setItems(res.data.data)
+                setIsLoading(false)
             })
             .catch(err=>{
                 console.log(err.message)
+                setIsLoading(false)
             })
         } catch (error) {
             console.log(error.message)
+            setIsLoading(false)
+        }
+    }
+    
+    const getItems = async () => {
+        try {
+            setIsLoading(true)
+            await axios.get('/api/item')
+            .then(res=>{
+                setItems(res.data.data)
+                setIsLoading(false)
+            })
+            .catch(err=>{
+                console.log(err)
+                setIsLoading(false)
+            })
+        } catch (error) {
+            console.log(error.message)
+            setIsLoading(false)
         }
     }
 
     useEffect(()=>{
-        const getItems = async () => {
-            try {
-                await axios.get('/api/item')
-                .then(res=>{
-                    setItems(res.data.data)
-                })
-                .catch(err=>{
-                    console.log(err)
-                })
-            } catch (error) {
-                console.log(error.message)
-            }
-        }
         getItems()
     },[])
 
@@ -62,7 +73,7 @@ export default function Item () {
                         archive
                     </Link>
                 </div>
-                <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md">
+                <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md relative">
                     <table className="w-full table-auto">
                         <thead className="bg-slate-800 text-gray-400 border border-slate-600">
                             <tr>
@@ -76,7 +87,15 @@ export default function Item () {
                             </tr>
                         </thead>
                         <tbody>
-                            {items.map((item, id)=>{
+                            {
+                            isLoading ?
+                            <tr>
+                                <td colSpan={7} className="absolute w-full h-full flex justify-center items-center">
+                                    <ImSpinner10 className="w-5 h-5 animate-spin" />
+                                </td>
+                            </tr>
+                            :
+                            items.map((item, id)=>{
                                 return (
                                     <tr key={id} className="hover:bg-gray-900/50 hover:text-white">
                                         <td className="p-2 border border-slate-600">{item?.user?.first_name} {item?.user?.last_name}</td>

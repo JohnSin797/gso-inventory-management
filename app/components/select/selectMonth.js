@@ -2,7 +2,7 @@ export default function SelectMonth ({ className, onHandleChange }) {
     return (
         <select 
             className={className}
-            onChange={(e)=>onHandleChange(e.target.value)}
+            onChange={onHandleChange}
         >
             <option>-- Select Month --</option>
             <option value={'01'}>January</option>

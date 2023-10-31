@@ -6,10 +6,12 @@ import Link from "next/link";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { ImSpinner10 } from "react-icons/im";
 
 export default function Employee () {
 
     const [employees, setEmployees] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const confirmDelete = (id, index) => {
         Swal.fire({
@@ -39,21 +41,26 @@ export default function Employee () {
             console.log(error)
         }
     }
+    
+    const getEmployees = async () => {
+        try {
+            setIsLoading(true)
+            await axios.get('/api/employee')
+            .then(res=>{
+                setEmployees(res.data.data)
+                setIsLoading(false)
+            })
+            .catch(err=>{
+                console.log(err.message)
+                setIsLoading(false)
+            })
+        } catch (error) {
+            console.log(error.message)
+            setIsLoading(false)
+        }
+    }
 
     useEffect(()=>{
-        const getEmployees = async () => {
-            try {
-                await axios.get('/api/employee')
-                .then(res=>{
-                    setEmployees(res.data.data)
-                })
-                .catch(err=>{
-                    console.log(err.message)
-                })
-            } catch (error) {
-                console.log(error.message)
-            }
-        }
         getEmployees()
     },[])
 
@@ -70,7 +77,7 @@ export default function Employee () {
                         new employee
                     </Link>
                 </div>
-                <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md">
+                <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md relative">
                     <table className="w-full table-auto border border-slate-900">
                         <thead className="bg-slate-800 text-gray-400">
                             <tr>
@@ -84,6 +91,13 @@ export default function Employee () {
                         </thead>
                         <tbody>
                             {
+                                isLoading ?
+                                <tr>
+                                    <td colSpan={6} className="absolute w-full h-full flex justify-center items-center">
+                                        <ImSpinner10 className="w-5 h-5 animate-spin" />
+                                    </td>
+                                </tr>
+                                :
                                 employees.map((item, id)=>{
                                     return(
                                         <tr key={id} className="hover:bg-gray-900/50 hover:text-white">

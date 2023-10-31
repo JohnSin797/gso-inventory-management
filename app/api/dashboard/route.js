@@ -14,7 +14,7 @@ export async function GET () {
         let startDate = new Date(currentDate);
         let endDate = new Date(currentDate);
         let totalStockCost = 0;
-        const totalCostArr = await Inventory.find({stock: {$gte: 1}, deletedAt: null}).exec();
+        const totalCostArr = await Inventory.find({stock: {$gte: 1}, deletedAt: null}).populate('item').exec();
         // const todayStock = await Inventory.find({stock: {$gte: 1}, createdAt: {$gte: new Date(), $lte: new Date()}}).exec();
         // startDate.setDate(currentDate.getDate() - currentDate.getDay());
         // endDate.setDate(currentDate.getDate() + (6 - currentDate.getDay()));

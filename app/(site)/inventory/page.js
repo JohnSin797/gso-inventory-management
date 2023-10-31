@@ -8,16 +8,19 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiPencilSquare, HiTrash } from "react-icons/hi2";
+import { ImSpinner10 } from "react-icons/im";
 import Swal from "sweetalert2";
 
 export default function Inventory () {
 
     const [stocks, setStocks] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const archiveStock = async (id) => {
         try {
             await axios.post('/api/inventory/delete', {id:id})
             .then(res=>{
+                getData()
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
@@ -27,24 +30,29 @@ export default function Inventory () {
             console.log(error)
         }
     }
+    
+    const getData = async () => {
+        try {
+            setIsLoading(true)
+            await axios.get('/api/inventory/index')
+            .then(res=>{
+                console.log(res.data)
+                setStocks(res.data.data)
+                setIsLoading(false)
+            })
+            .catch(err=>{
+                console.log(err.message)
+                setIsLoading(false)
+            })
+        } catch (error) {
+            console.log(error.message)
+            setIsLoading(false)
+        }
+    }
 
     useEffect(()=>{
-        const getData = async () => {
-            try {
-                await axios.get('/api/inventory/index')
-                .then(res=>{
-                    console.log(res.data)
-                    setStocks(res.data.data)
-                })
-                .catch(err=>{
-                    console.log(err.message)
-                })
-            } catch (error) {
-                console.log(error.message)
-            }
-        }
         getData()
-    }, [stocks])
+    }, [])
 
     return (
         <div>
@@ -71,7 +79,7 @@ export default function Inventory () {
                         archive
                     </Link> */}
                 </div>
-                <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll">
+                <div className="w-full bg-white rounded-lg p-6 shadow-md h-96 overflow-scroll relative">
                     <p className="text-2xl font-bold">Stocks</p>
                     <table className="w-full table-auto border border-slate-600">
                         <thead className="bg-slate-800 text-gray-400">
@@ -93,6 +101,13 @@ export default function Inventory () {
                         </thead>
                         <tbody>
                             {
+                                isLoading ?
+                                <tr>
+                                    <td colSpan={13} className="absolute w-full h-full flex justify-center items-center">
+                                        <ImSpinner10 className="w-5 h-5 animate-spin" />
+                                    </td>
+                                </tr>
+                                :
                                 stocks.map((item,id)=>{
                                     return(
                                         <tr key={id} className="hover:bg-gray-900/50 hover:text-white border border-slate-600">

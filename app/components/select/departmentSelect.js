@@ -23,7 +23,7 @@ export default function DepartmentSelect ({className, onHandleChange}) {
     }, [])
 
     return(
-        <select className={className} onChange={(e)=>onHandleChange(e.target.value)}>
+        <select className={className} onChange={onHandleChange}>
             <option>Departments</option>
             {
                 department.map((item,id)=>{

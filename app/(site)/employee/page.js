@@ -11,6 +11,7 @@ import Link from "next/link";
 import Exports from "@/app/hooks/exports";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { ImSpinner10 } from "react-icons/im";
 
 export default function Employee () {
 
@@ -25,7 +26,18 @@ export default function Employee () {
         position: '',
         name: ''
     })
+    const [isLoading, setIsLoading] = useState(false)
     const {exportARE, exportICS, exportAllItem} = Exports()
+
+    const handleMonth = e => {
+        setMonth(e.target.value)
+        getEmployees()
+    }
+
+    const handleYear = e => {
+        setYear(e.target.value)
+        getEmployees()
+    }
 
     const archiveRelease = async (id) => {
         try {
@@ -70,23 +82,27 @@ export default function Employee () {
 
     const getEmployees = async () => {
         try {
+            setIsLoading(true)
             await axios.post('/api/employee/index', {id:selectedEmployee, month: month, year: year})
             .then(res=>{
                 console.log(res)
                 setEmployees(res.data.data)
                 calculateTotalCost(res.data.data)
+                setIsLoading(false)
             })
             .catch(err=>{
                 console.log(err)
+                setIsLoading(false)
             })
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
     }
 
     useEffect(()=>{
         getEmployees()
-    }, [selectedEmployee, month, year])
+    }, [])
 
     const exportAll = () => {
         if (selectedEmployee == '' || selectedEmployee == null) {
@@ -199,10 +215,10 @@ export default function Employee () {
                 </div>
                 <div className="w-full bg-white p-6 rounded-lg shadow-md">
                     <p className="text-center text-2xl font-bold font-serif">INDIVIDUAL</p>
-                    <p className="text-center">( AS OF <SelectMonth onHandleChange={setMonth} /> <SelectYear onSetChange={setYear} /> )</p>
+                    <p className="text-center">( AS OF <SelectMonth onHandleChange={handleMonth} /> <SelectYear onSetChange={handleYear} /> )</p>
                     <div className="md:flex w-full justify-center mt-6">
                         <div>
-                            <EmployeeName className={'border-black border-b'} onChangeDetails={setEmployeeDetails} onChangeEmployee={setSelectedEmployee} />
+                            <EmployeeName className={'border-black border-b'} onChangeDetails={setEmployeeDetails} toActivate={getEmployees} onChangeEmployee={setSelectedEmployee} />
                             <p className="text-center text-gray-800 text-sm">NAME OF EMPLOYEE</p>
                         </div>
                     </div>
@@ -244,7 +260,7 @@ export default function Employee () {
                             <label className="text-center text-xs">Total Cost</label>
                         </div>
                     </div>
-                    <div className="w-full p-6 h-72 overflow-scroll">
+                    <div className="w-full p-6 h-72 overflow-scroll relative">
                         <table className="table-auto w-full border border-slate-900">
                             <thead className="bg-slate-800 text-gray-600">
                                 <tr>
@@ -262,6 +278,11 @@ export default function Employee () {
                             </thead>
                             <tbody>
                                 {
+                                    isLoading ?
+                                    <div className="absolute w-full h-full flex justify-center items-center">
+                                        <ImSpinner10 className="w-5 h-5 animate-spin" />
+                                    </div>
+                                    :
                                     employees.map((item,id)=>{
                                         return(
                                             <tr key={id}>

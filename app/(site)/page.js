@@ -9,6 +9,7 @@ import BorrowedItemChart from "../components/dashboard/borrowedItemChart"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { TodayDate, getWeeklyRelease, getWeeklyStocks, isDateThisMonth } from "../hooks/todayDate"
+import { ImSpinner10 } from "react-icons/im"
 import BarcodeImage from "../components/barcodeImage"
 
 export default function Page () {
@@ -32,6 +33,7 @@ export default function Page () {
         barcode_text: 'sample'
     })
     const [availableStocks, setAvailableStocks] = useState([])
+    const [isStockLoading, setIsStockLoading] = useState(false)
 
     const onSelectedItemSummaryChange = e => {
         e.preventDefault()
@@ -95,17 +97,22 @@ export default function Page () {
     useEffect(()=>{
         const getData = async () => {
             try {
+                setIsStockLoading(true)
                 await axios.get('/api/dashboard')
                 .then(res=>{
                     console.log(res)
                     processWeek(res.data.stock, res.data.total)
                     setItemSummarySelect(res.data.items)
+                    setAvailableStocks(res.data.stock)
+                    setIsStockLoading(false)
                 })
                 .catch(err=>{
                     console.log(err)
+                    setIsStockLoading(false)
                 })
             } catch (error) {
                 console.log(error)
+                setIsStockLoading(false)
             }
         }
         getData()
@@ -187,8 +194,36 @@ export default function Page () {
                     </div>
                     <div className="w-full col-span-12 md:col-span-6 bg-white rounded-lg shadow-md p-6">
                         <p className="text-center text-xl font-bold">Available Stocks</p>
-                        <div className="w-full h-96 overflow-y-scroll">
-                            
+                        <div className="w-full h-96 overflow-scroll relative">
+                            <table className="w-full table-auto">
+                                <thead className="bg-gray-600 text-gray-300">
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Inventory Tag</th>
+                                        <th>Stocks</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        isStockLoading ?
+                                        <div className="absolute w-full h-full bg-slate-900 text-white flex justify-center items-center">
+                                            <ImSpinner10 className="w-5 h-5 animate-spin" />
+                                        </div>
+                                        :
+                                        availableStocks.map((item,index)=>{
+                                            return (
+                                                <tr key={index} className="border-b border-slate-900">
+                                                    <td className="p-2">{item?.item?.item_name}</td>
+                                                    <td className="p-2">{item?.inventory_tag}</td>
+                                                    <td className="p-2">{item?.stock}</td>
+                                                    <td className="p-2"></td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

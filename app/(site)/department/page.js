@@ -10,18 +10,17 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import DateFrame from "@/app/components/dateFrame";
 import Exports from "@/app/hooks/exports";
+import { ImSpinner10 } from "react-icons/im";
 
 export default function Department () {
 
     const [department, setDepartment] = useState('')
-    const [departmentDetails, setDepartmentDetails] = useState({
-        name: ''
-    })
     const [month, setMonth] = useState('')
     const [year, setYear] = useState(new Date().getFullYear())
     const [total, setTotal] = useState(0)
     const [tableData, setTableData] = useState([])
     const {exportDepartment} = Exports()
+    const [isLoading, setIsLoading] = useState(false)
 
     const confirmDelete = id => {
         Swal.fire({
@@ -38,10 +37,26 @@ export default function Department () {
         })
     }
 
+    const handleDepartment = e => {
+        setDepartment(e.target.value)
+        getData()
+    }
+
+    const handleMonth = e => {
+        setMonth(e.target.value)
+        getData()
+    }
+
+    const handleYear = e => {
+        setYear(e.target.value)
+        getData()
+    }
+
     const archiveRelease = async (id) => {
         try {
             await axios.post('/api/release/archive', {id:id})
             .then(res=>{
+                getData()
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
@@ -52,37 +67,42 @@ export default function Department () {
         }
     }
 
-    useEffect(()=>{
-        const setTotalCost = (data) => {
-            let totalCost = 0;
-    
-            data.forEach(item => {
-                var itemCost = item?.quantity * item?.inventory?.unit_cost;
-                totalCost += itemCost;
-            });
-    
-            setTotal(totalCost)
-        }
+    const setTotalCost = (data) => {
+        let totalCost = 0;
 
-        const getData = async () => {
-            try {
-                await axios.post('/api/department', {month: month, year: year, department: department})
-                .then(res=>{
-                    console.log(res)
-                    setTableData(res.data.data)
-                    setTotalCost(res.data.data)
-                })
-                .catch(err=>{
-                    setTableData([])
-                    Swal.fire(err.response.data.message)
-                })
-            } catch (error) {
-                console.log(error.message)
+        data.forEach(item => {
+            var itemCost = item?.quantity * item?.inventory?.unit_cost;
+            totalCost += itemCost;
+        });
+
+        setTotal(totalCost)
+    }
+
+    const getData = async () => {
+        try {
+            setIsLoading(true)
+            await axios.post('/api/department', {month: month, year: year, department: department})
+            .then(res=>{
+                console.log(res)
+                setTableData(res.data.data)
+                setTotalCost(res.data.data)
+                setIsLoading(false)
+            })
+            .catch(err=>{
                 setTableData([])
-            }
+                Swal.fire(err.response.data.message)
+                setIsLoading(false)
+            })
+        } catch (error) {
+            console.log(error.message)
+            setTableData([])
+            setIsLoading(false)
         }
+    }
+
+    useEffect(()=>{
         getData()
-    }, [month, year, department])
+    }, [])
 
     const exportFile = () => {
         if (department == '' || department == null) {
@@ -108,6 +128,41 @@ export default function Department () {
         }
     }
 
+    const confirmReturn = id => {
+        Swal.fire({
+            title: 'Return',
+            icon: 'info',
+            input: 'number',
+            text: 'Enter the quantity to be returned',
+            inputValidator: value=>{
+                if (!value) {
+                    return 'Quantity is required'
+                }
+            },
+            showCancelButton: true
+        })
+        .then(res=>{
+            if (res.value) {
+                returnItem(id, res.value)
+            }
+        })
+    }
+
+    const returnItem = async (id, quantity) => {
+        try {
+            await axios.post('/api/release/return', {id: id, quantity: quantity})
+            .then(res=>{
+                getData()
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                Swal.fire(err.message)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div>
             <TopNav />
@@ -128,13 +183,13 @@ export default function Department () {
                     <div className="w-full flex justify-center p-6">
                         <DepartmentSelect 
                             className="w-full md:w-1/5 placeholder:text-center border-b border-black px-2"
-                            onHandleChange={setDepartment}
+                            onHandleChange={handleDepartment}
                         />
                     </div>
                     <div className="flex justify-between">
                         <div>
-                            <SelectMonth className={'text-center text-xs border-b border-black'} onHandleChange={setMonth} />
-                            <SelectYear className={'text-center text-xs border-b border-black'} onSetChange={setYear} />
+                            <SelectMonth className={'text-center text-xs border-b border-black'} onHandleChange={handleMonth} />
+                            <SelectYear className={'text-center text-xs border-b border-black'} onSetChange={handleYear} />
                         </div>
                         <div>
                             <input
@@ -145,7 +200,7 @@ export default function Department () {
                             <p className="text-center text-xs">TOTAL</p>
                         </div>
                     </div>
-                    <div className="p-6 overflow-scroll h-80">
+                    <div className="p-6 overflow-scroll h-80 relative">
                         <table className="table-auto w-full border border-slate-900">
                             <thead className="bg-slate-800 text-gray-400">
                                 <tr>
@@ -164,6 +219,13 @@ export default function Department () {
                             </thead>
                             <tbody>
                                 {
+                                    isLoading ?
+                                    <tr>
+                                        <td colSpan={11} className="absolute w-full h-full flex justify-center items-center">
+                                            <ImSpinner10 className="w-5 h-5 animate-spin" />
+                                        </td>
+                                    </tr>
+                                    :
                                     tableData.map((item,id)=>{
                                         return(
                                             <tr key={id}>
@@ -190,6 +252,12 @@ export default function Department () {
                                                         className="w-full p-2 rounded-lg hover:font-bold bg-red-600 hover:bg-red-600/80"
                                                     >
                                                         delete
+                                                    </button>
+                                                    <button
+                                                        onClick={()=>confirmReturn(item._id)}
+                                                        className="w-full p-2 rounded-lg hover:font-bold bg-teal-600 hover:bg-teal-600/80"
+                                                    >
+                                                        return
                                                     </button>
                                                 </td>
                                             </tr>

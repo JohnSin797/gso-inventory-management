@@ -17,7 +17,7 @@ export default function SelectYear ({ className, onSetChange }) {
     }, [])
 
     return (
-        <select className={className} onChange={(e)=>onSetChange(e.target.value)}>
+        <select className={className} onChange={onSetChange}>
             {
                 years.map((item, id)=>{
                     return(

@@ -1,5 +1,6 @@
 'use client';
 
+import DateFrame from "@/app/components/dateFrame";
 import SideNav from "@/app/components/navigation/sideNav";
 import TopNav from "@/app/components/navigation/topNav";
 import axios from "axios";
@@ -62,7 +63,7 @@ export default function Archive () {
                                 <tr>
                                     <th>Name</th>
                                     <th>Username</th>
-                                    <th>Password</th>
+                                    <th>Date Deleted</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -70,19 +71,19 @@ export default function Archive () {
                                 {
                                     archive.map((item, index)=>{
                                         return(
-                                            <tr key={index}>
-                                                <td>{item.first_name} {item.last_name}</td>
-                                                <td>{item.username}</td>
-                                                <td>{item.password}</td>
-                                                <td>
+                                            <tr key={index} className="border-b border-slate-900">
+                                                <td className="p-2">{item.first_name} {item.last_name}</td>
+                                                <td className="p-2">{item.username}</td>
+                                                <td className="p-2"><DateFrame dateStr={item.deletedAt} /></td>
+                                                <td className="space-y-2 p-2">
                                                     <button
                                                         onClick={()=>restoreUser(item._id)}
-                                                        className="p-2 rounded-lg bg-teal-600 hover:bg-teal-600/80 text-white"
+                                                        className="w-full p-2 rounded-lg bg-teal-600 hover:bg-teal-600/80 text-white"
                                                     >
                                                         restore
                                                     </button>
                                                     <button
-                                                        className="p-2 rounded-lg bg-red-600 hover:bg-red-600/80"
+                                                        className="w-full p-2 rounded-lg bg-red-600 hover:bg-red-600/80 text-white"
                                                     >
                                                         delete
                                                     </button>

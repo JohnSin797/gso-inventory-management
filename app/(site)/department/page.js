@@ -233,7 +233,7 @@ export default function Department () {
                                                 <td className=" border p-2 border-slate-900">{item.quantity}</td>
                                                 <td className=" border p-2 border-slate-900">{item.item.item_name}</td>
                                                 <td className=" border p-2 border-slate-900">{item.item.property_number}</td>
-                                                <td className=" border p-2 border-slate-900">{item.inventory?.ics_are}</td>
+                                                <td className=" border p-2 border-slate-900">{item.inventory?.ics_are?.toUpperCase()}</td>
                                                 <td className=" border p-2 border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
                                                 <td className=" border p-2 border-slate-900">
                                                     <DateFrame dateStr={item.createdAt} />

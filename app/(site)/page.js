@@ -207,9 +207,9 @@ export default function Page () {
                                 <tbody>
                                     {
                                         isStockLoading ?
-                                        <div className="absolute w-full h-full bg-slate-900 text-white flex justify-center items-center">
-                                            <ImSpinner10 className="w-5 h-5 animate-spin" />
-                                        </div>
+                                        <tr className="absolute w-full h-full bg-slate-900 text-white flex justify-center items-center">
+                                            <td colSpan={4}><ImSpinner10 className="w-5 h-5 animate-spin" /></td>
+                                        </tr>
                                         :
                                         availableStocks.map((item,index)=>{
                                             return (

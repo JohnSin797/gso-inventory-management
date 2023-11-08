@@ -16,7 +16,7 @@ export default function Release () {
 
     const [selectedEmployee, setSelectedEmployee] = useState('')
     const router = useRouter()
-    const [itemStocks, setItemStocks] = useState(0)
+    const [itemStocks, setItemStocks] = useState(null)
     const [selectedItem, setSelectedItem] = useState('')
     const [releaseDate, setReleaseDate] = useState('')
     const [quantity, setQuantity] = useState('')
@@ -58,8 +58,35 @@ export default function Release () {
     }
 
     const onItemChange = e => {
-        setSelectedItem(e.value)
-        setItemStocks(e.stocks)
+        const val = e.value
+        const stock = e.stocks
+        setSelectedItem(val)
+        setItemStocks(stock)
+    }
+
+    function setOptions(items, employees) {
+        let itemArr = []
+        let ampArr = []
+        console.log(items)
+        items.forEach(element => {
+            const itemObj = {
+                value: element?._id,
+                label: element?.item?.item_name,
+                stocks: element?.stock
+            }
+            itemArr.push(itemObj)
+        });
+        employees.forEach(element => {
+            const empObj = {
+                value: element?._id,
+                label: element?.first_name+' '+element?.last_name
+            }
+            ampArr.push(empObj)
+        })
+        setData({
+            items: itemArr,
+            employees: ampArr
+        })
     }
 
     useEffect(()=>{
@@ -77,31 +104,7 @@ export default function Release () {
                 console.log(error.message)
             }
         }
-        function setOptions(items, employees) {
-            let itemArr = []
-            let ampArr = []
-            items.forEach(element => {
-                if(element?.item) {
-                    const itemObj = {
-                        value: element?._id,
-                        label: element?.item?.item_name,
-                        stocks: element?.stock
-                    }
-                    itemArr.push(itemObj)
-                }
-            });
-            employees.forEach(element => {
-                const empObj = {
-                    value: element?._id,
-                    label: element?.first_name+' '+element?.last_name
-                }
-                ampArr.push(empObj)
-            })
-            setData({
-                items: itemArr,
-                employees: ampArr
-            })
-        }
+        
         getData()
     }, [])
 

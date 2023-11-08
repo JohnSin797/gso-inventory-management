@@ -73,7 +73,9 @@ export default function TopNav () {
                 console.log(error)
             }
         }
-        getData()
+        setTimeout(()=>{
+            getData()
+        }, 2000)
     }, [notifications])
 
     return (

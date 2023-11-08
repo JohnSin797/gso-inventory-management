@@ -11,7 +11,7 @@ export default function Exports () {
 
     useEffect(()=>{
         const getData = async () => {
-            await axios.get('/api/user')
+            await axios.get('/api/user/admin')
             .then(res=>{
                 setUser(res.data.data)
             })
@@ -185,7 +185,7 @@ export default function Exports () {
                                 before: 200
                             },
                             children: [
-                                new TextRun({text:details.name,underline:{type:'single'}})
+                                new TextRun({text:user?.first_name+' '+user?.last_name,underline:{type:'single'}})
                             ]
                         }),
                         new Paragraph({
@@ -200,7 +200,7 @@ export default function Exports () {
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             children: [
-                                new TextRun({text:details.position,underline:{type:'single'}})
+                                new TextRun({text:user?.position,underline:{type:'single'}})
                             ]
                         }),
                         new Paragraph({
@@ -240,7 +240,7 @@ export default function Exports () {
                                 before: 200
                             },
                             children: [
-                                new TextRun({text:user?.first_name+' '+user?.last_name,underline:{type:'single'}})
+                                new TextRun({text:details.name,underline:{type:'single'}})
                             ]
                         }),
                         new Paragraph({
@@ -255,7 +255,7 @@ export default function Exports () {
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             children: [
-                                new TextRun({text:user?.position,underline:{type:'single'}})
+                                new TextRun({text:details.position,underline:{type:'single'}})
                             ]
                         }),
                         new Paragraph({

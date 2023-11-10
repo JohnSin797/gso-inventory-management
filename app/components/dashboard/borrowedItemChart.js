@@ -84,7 +84,7 @@ export default function BorrowedItemChart () {
           <div className="mb-4 justify-between gap-4 sm:flex">
             <div>
               <h4 className="text-xl font-semibold text-black">
-                Profit this week
+                Total Cost This Week
               </h4>
             </div>
             <div>

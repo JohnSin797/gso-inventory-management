@@ -10,7 +10,8 @@ const itemSchema = new Schema(
         },
         item_name: {
             type: String,
-            required: [true, 'item name is required']
+            required: [true, 'item name is required'],
+            unique: true
         },
         unit: {
             type: String,
@@ -23,11 +24,12 @@ const itemSchema = new Schema(
         },
         description: {
             type: [String],
-            require: [true, 'description is required']
+            require: [true, 'description is required'],
         },
         property_number: {
             type: String,
-            required: [true, 'property number is required']
+            required: [true, 'property number is required'],
+            unique: true
         },
         deletedAt: {
             type: Date,

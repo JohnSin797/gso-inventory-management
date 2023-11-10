@@ -296,7 +296,7 @@ export default function Employee () {
                                                 <td className="border border-slate-900">{item?.item?.property_number}</td>
                                                 <td className="border border-slate-900"><DateFrame dateStr={item?.createdAt} /></td>
                                                 <td className="border border-slate-900">{(item?.inventory.unit_cost * item?.quantity).toLocaleString('en-US')}</td>
-                                                <td className="border border-slate-900">{item?.inventory?.ics_are}</td>
+                                                <td className="border border-slate-900">{item?.inventory?.ics_are?.toUpperCase()}</td>
                                                 <td className="border border-slate-900">{item?.returned}</td>
                                                 <td className="border border-slate-900">{item?.remarks}</td>
                                                 <td className="border border-slate-900 space-y-1 p-1">

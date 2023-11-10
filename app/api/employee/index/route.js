@@ -22,25 +22,25 @@ export async function POST (request) {
                 item: {$in: item},
                 employee: {$in: emp},
                 department: {$in: department}
-            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
             return NextResponse.json({message: 'OK', data: data}, {status: 201});
         }
         else if(!month) {
             const employee = await Employee.findOne({_id: id}).exec();
-            const data = await Release.find({employee: employee, createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            const data = await Release.find({employee: employee, createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
             return NextResponse.json({message: 'OK', data: data}, {status: 202});
         }
         else if(!id) {
             startDate = new Date(year+'-'+month+'-01');           
             endDate = new Date(year, month, 0, 23, 59, 59, 999);
-            const data = await Release.find({createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, employee: {$in: emp}, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            const data = await Release.find({createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, employee: {$in: emp}, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
             return NextResponse.json({message: 'OK', data: data}, {status: 200});
         }
         else {
             const employee = await Employee.findOne({_id: id}).exec();
             startDate = new Date(year+'-'+month+'-01');           
             endDate = new Date(year, month, 0, 23, 59, 59, 999);
-            const data = await Release.find({employee: employee, createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            const data = await Release.find({employee: employee, createdAt: {$gte: startDate, $lte: endDate}, deletedAt: null, item: {$in: item}, department: {$in: department}}).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
             return NextResponse.json({message: 'OK', data: data}, {status: 200});
         }
     } catch (error) {

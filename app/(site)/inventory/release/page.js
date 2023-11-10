@@ -43,7 +43,9 @@ export default function Release () {
                 setReleaseDate('')
                 setQuantity('')
                 setRemarks('')
+                setItemStocks(null)
                 Swal.fire(res.data.message)
+                router.push('/inventory')
             })
             .catch(err=>{
                 console.log(err)
@@ -122,6 +124,7 @@ export default function Release () {
                             <Select 
                                 options={data.employees}
                                 onChange={onEmployeeChange}
+                                defaultInputValue={selectedEmployee}
                                 required
                             />
                         </div>
@@ -131,6 +134,7 @@ export default function Release () {
                             <Select 
                                 options={data.items}
                                 onChange={onItemChange}
+                                defaultInputValue={selectedItem}
                                 required
                             />
                         </div>

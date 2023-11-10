@@ -38,7 +38,7 @@ export async function POST (request) {
                 employee: {$in: employee},
                 department: {$in: dep},
                 inventory: {$in: inv}
-            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
         }
         else if(!month) {
             const departmentObj = await Department.find({department_name: department});
@@ -52,7 +52,7 @@ export async function POST (request) {
                 item: {$in: item},
                 employee: {$in: employee},
                 inventory: {$in: inv}
-            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
         }
         else if(!department) {
             startDate = new Date(year+'-'+month+'-01');           
@@ -66,7 +66,7 @@ export async function POST (request) {
                 item: {$in: item},
                 employee: {$in: employee},
                 inventory: {$in: inv}
-            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
         }
         else {
             startDate = new Date(year+'-'+month+'-01');           
@@ -82,7 +82,7 @@ export async function POST (request) {
                 item: {$in: item},
                 employee: {$in: employee},
                 inventory: {$in: inv}
-            }).populate('inventory').populate('item').populate('employee').populate('department').exec();
+            }).populate('inventory').populate('item').populate('employee').populate('department').sort([['release_date', -1]]).exec();
         }
         return NextResponse.json({message: 'OK', data: data}, {status: 200});
     } catch (error) {

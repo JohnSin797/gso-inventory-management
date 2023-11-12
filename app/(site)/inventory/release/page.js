@@ -38,14 +38,24 @@ export default function Release () {
                 remarks: remarks
             })
             .then(res=>{
+                console.log(res)
                 setSelectedEmployee('')
                 setSelectedItem('')
                 setReleaseDate('')
                 setQuantity('')
                 setRemarks('')
                 setItemStocks(null)
-                Swal.fire(res.data.message)
-                router.push('/inventory')
+                Swal.fire({
+                    title: res.data.message,
+                    icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: true
+                })
+                .then(res=>{
+                    if (res) {
+                        router.push('/inventory')
+                    }
+                })
             })
             .catch(err=>{
                 console.log(err)

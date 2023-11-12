@@ -19,7 +19,6 @@ export async function POST (request) {
         const token = await request.cookies.get('token')?.value || '';
         const userData = await jwt.decode(token, {complete: true});
         const userObj = await User.findOne({_id:userData.payload.id}).exec();
-        console.log(itemObj, item_id)
         const release = {
             inventory: inventoryObj,
             item: itemObj,
@@ -34,8 +33,8 @@ export async function POST (request) {
         if (!result) {
             return NextResponse.json({message: 'Release of item failed'}, {status: 401});
         }
-        const stocks = inventoryObj.stock - quantity;
-        const borrowed = inventoryObj.released + quantity;
+        const stocks = parseInt(inventoryObj.stock) - parseInt(quantity);
+        const borrowed = parseInt(inventoryObj.released) + parseInt(quantity);
         const totalCost = inventoryObj.unit_cost * stocks;
         await Inventory.findOneAndUpdate({_id: inventoryObj._id}, {stock: stocks, released: borrowed, total_cost: totalCost}).exec();
         return NextResponse.json({message: 'Item successfully released'}, {status: 200});

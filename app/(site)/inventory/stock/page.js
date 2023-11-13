@@ -86,7 +86,7 @@ export default function Stock () {
                             <label className="text-xs font-bold">Inventory Tag</label>
                             <input 
                                 type="text"
-                                className="w-full p-2 border hover:border-black rounded-lg"
+                                className={`w-full p-2 border  rounded-lg ${tag ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}
                                 onChange={(e)=>setTag(e.target.value)}
                                 value={tag}
                                 required
@@ -96,7 +96,7 @@ export default function Stock () {
                             <label className="text-xs font-bold">Source of Funds</label>
                             <input 
                                 type="text"
-                                className="w-full p-2 border hover:border-black rounded-lg"
+                                className={`w-full p-2 border  rounded-lg ${sourceFund ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}
                                 onChange={(e)=>setSourceFund(e.target.value)}
                                 value={sourceFund}
                                 required
@@ -111,12 +111,14 @@ export default function Stock () {
                             <Select 
                                 options={itemSelectOption}
                                 onChange={setSelectedItem}
+                                
+                                className={`w-full p-2 border  rounded-lg ${selectedItem ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}
                             />
                         </div>
                         <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold">Date Added</label>
                             <input 
-                                className="w-full p-2 border hover:border-black rounded-lg"
+                                className={`w-full p-2 border  rounded-lg ${dateAcquired ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}
                                 type="date"
                                 onChange={e=>setDateAcquired(e.target.value)}
                                 value={dateAcquired}
@@ -129,7 +131,7 @@ export default function Stock () {
                                 <label className="text-xs font-bold">Quantity</label>
                                 <input 
                                     type="Number"
-                                    className="w-full p-2 border hover:border-black rounded-lg"
+                                    className={`w-full p-2 border  rounded-lg ${qty ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}
                                     onChange={(e)=>setQty(e.target.value)}
                                     value={qty}
                                     required
@@ -139,7 +141,7 @@ export default function Stock () {
                                 <label className="text-xs font-bold">Unit Cost</label>
                                 <input 
                                     type="Number"
-                                    className="w-full md:w-full p-2 border hover:border-black rounded-lg"
+                                    className={`w-full p-2 border  rounded-lg ${unitCost ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}
                                     onChange={(e)=>setUnitCost(e.target.value)}
                                     value={Number(unitCost).toFixed(2)}
                                     required
@@ -149,7 +151,7 @@ export default function Stock () {
                                 <label className="text-xs font-bold">Total Cost</label>
                                 <input 
                                     type="text"
-                                    className="w-full p-2 border hover:border-black rounded-lg"
+                                    className="w-full p-2 border border-indigo-400 rounded-lg"
                                     value={Number(totalCost).toFixed(2)}
                                     readOnly
                                 />

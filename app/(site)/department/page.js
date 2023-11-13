@@ -11,13 +11,14 @@ import { useEffect, useState } from "react";
 import DateFrame from "@/app/components/dateFrame";
 import Exports from "@/app/hooks/exports";
 import { ImSpinner10 } from "react-icons/im";
+import Link from "next/link";
 
 export default function Department () {
 
     const [department, setDepartment] = useState('')
     const [month, setMonth] = useState('')
     const [year, setYear] = useState(new Date().getFullYear())
-    const [total, setTotal] = useState(0)
+    const [total, setTotal] = useState(null)
     const [tableData, setTableData] = useState([])
     const {exportDepartment} = Exports()
     const [isLoading, setIsLoading] = useState(false)
@@ -39,17 +40,38 @@ export default function Department () {
 
     const handleDepartment = e => {
         setDepartment(e.target.value)
-        getData()
+        updateData(month, year, e.target.value)
     }
 
     const handleMonth = e => {
         setMonth(e.target.value)
-        getData()
+        updateData(e.target.value, year, department)
     }
 
     const handleYear = e => {
         setYear(e.target.value)
-        getData()
+        updateData(month, e.target.value, department)
+    }
+
+    const updateData = async (mon, yr, dep) => {
+        try {
+            setIsLoading(true)
+            await axios.post('/api/department', {month: mon, year: yr, department: dep})
+            .then(res=>{
+                console.log(res)
+                setTableData(res.data.data)
+                setTotalCost(res.data.data)
+                setIsLoading(false)
+            })
+            .catch(err=>{
+                setTableData([])
+                Swal.fire(err.response.data.message)
+                setIsLoading(false)
+            })
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+        }
     }
 
     const archiveRelease = async (id) => {
@@ -195,7 +217,8 @@ export default function Department () {
                             <input
                                 type="text"
                                 className="text-center text-xs border-b border-black"
-                                defaultValue={total.toLocaleString('en-US')}
+                                defaultValue={Number(total).toLocaleString('en-US')}
+                                readOnly
                             />
                             <p className="text-center text-xs">TOTAL</p>
                         </div>
@@ -226,43 +249,51 @@ export default function Department () {
                                         </td>
                                     </tr>
                                     :
-                                    tableData.map((item,id)=>{
-                                        return(
-                                            <tr key={id}>
-                                                <td className=" border p-2 border-slate-900">{item.department?.department_name}</td>
-                                                <td className=" border p-2 border-slate-900">{item.quantity}</td>
-                                                <td className=" border p-2 border-slate-900">{item.item.item_name}</td>
-                                                <td className=" border p-2 border-slate-900">{item.item.property_number}</td>
-                                                <td className=" border p-2 border-slate-900">{item.inventory?.ics_are?.toUpperCase()}</td>
-                                                <td className=" border p-2 border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
-                                                <td className=" border p-2 border-slate-900">
-                                                    <DateFrame dateStr={item.createdAt} />
-                                                </td>
-                                                <td className=" border p-2 border-slate-900">{item.inventory.unit_cost * item.quantity}</td>
-                                                <td className=" border p-2 border-slate-900">{item.returned}</td>
-                                                <td className=" border p-2 border-slate-900">{item.remarks}</td>
-                                                <td className="space-y-2 p-2 border border-slate-900 text-white">
-                                                    <button
-                                                        className="w-full p-2 rounded-lg hover:font-bold bg-green-600 hover:bg-green-600/80"
-                                                    >
-                                                        edit
-                                                    </button>
-                                                    <button
-                                                        onClick={()=>confirmDelete(item._id)}
-                                                        className="w-full p-2 rounded-lg hover:font-bold bg-red-600 hover:bg-red-600/80"
-                                                    >
-                                                        delete
-                                                    </button>
-                                                    <button
-                                                        onClick={()=>confirmReturn(item._id)}
-                                                        className="w-full p-2 rounded-lg hover:font-bold bg-teal-600 hover:bg-teal-600/80"
-                                                    >
-                                                        return
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
+                                    (
+                                        tableData.length > 0 ?
+                                        tableData.map((item,id)=>{
+                                            return(
+                                                <tr key={id}>
+                                                    <td className=" border p-2 border-slate-900">{item.department?.department_name}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.quantity}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.item.item_name}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.item.property_number}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.inventory?.ics_are?.toUpperCase()}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
+                                                    <td className=" border p-2 border-slate-900">
+                                                        <DateFrame dateStr={item.createdAt} />
+                                                    </td>
+                                                    <td className=" border p-2 border-slate-900">{item.inventory.unit_cost * item.quantity}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.returned}</td>
+                                                    <td className=" border p-2 border-slate-900">{item.remarks}</td>
+                                                    <td className="space-y-2 p-2 border border-slate-900 text-white">
+                                                        <Link
+                                                            href={'/employee/edit/'+item?._id}
+                                                            className="block text-center w-full p-2 rounded-lg hover:font-bold bg-green-600 hover:bg-green-600/80"
+                                                        >
+                                                            edit
+                                                        </Link>
+                                                        <button
+                                                            onClick={()=>confirmDelete(item._id)}
+                                                            className="w-full p-2 rounded-lg hover:font-bold bg-red-600 hover:bg-red-600/80"
+                                                        >
+                                                            delete
+                                                        </button>
+                                                        <button
+                                                            onClick={()=>confirmReturn(item._id)}
+                                                            className="w-full p-2 rounded-lg hover:font-bold bg-teal-600 hover:bg-teal-600/80"
+                                                        >
+                                                            return
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                        :
+                                        <tr>
+                                            <td colSpan={11} className="text-center">No data</td>
+                                        </tr>
+                                    )
                                 }
                             </tbody>
                         </table>

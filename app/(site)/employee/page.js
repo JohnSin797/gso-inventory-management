@@ -19,7 +19,7 @@ export default function Employee () {
     const [month, setMonth] = useState('')
     const [year, setYear] = useState(new Date().getFullYear())
     const [selectedEmployee, setSelectedEmployee] = useState('')
-    const [totalCost, setTotalCost] = useState(0)
+    const [totalCost, setTotalCost] = useState(null)
     const [employeeDetails, setEmployeeDetails] = useState({
         department: '',
         status: '',
@@ -31,12 +31,12 @@ export default function Employee () {
 
     const handleMonth = e => {
         setMonth(e.target.value)
-        getEmployees()
+        updateEmployees(selectedEmployee, e.target.value , year)
     }
 
     const handleYear = e => {
         setYear(e.target.value)
-        getEmployees()
+        updateEmployees(selectedEmployee, month, e.target.value)
     }
 
     const archiveRelease = async (id) => {
@@ -78,6 +78,26 @@ export default function Employee () {
         });
 
         setTotalCost(totalCost)
+    }
+
+    const updateEmployees = async (id, mon, yr) => {
+        try {
+            setIsLoading(true)
+            await axios.post('/api/employee/index', {id:id, month: mon, year: yr})
+            .then(res=>{
+                console.log(res)
+                setEmployees(res.data.data)
+                calculateTotalCost(res.data.data)
+                setIsLoading(false)
+            })
+            .catch(err=>{
+                console.log(err)
+                setIsLoading(false)
+            })
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+        }
     }
 
     const getEmployees = async () => {
@@ -218,7 +238,7 @@ export default function Employee () {
                     <p className="text-center">( AS OF <SelectMonth onHandleChange={handleMonth} /> <SelectYear onSetChange={handleYear} /> )</p>
                     <div className="md:flex w-full justify-center mt-6">
                         <div>
-                            <EmployeeName className={'border-black border-b'} onChangeDetails={setEmployeeDetails} toActivate={getEmployees} onChangeEmployee={setSelectedEmployee} />
+                            <EmployeeName className={'border-black border-b'} onChangeDetails={setEmployeeDetails} toActivate={updateEmployees} onChangeEmployee={setSelectedEmployee} month={month} year={year} />
                             <p className="text-center text-gray-800 text-sm">NAME OF EMPLOYEE</p>
                         </div>
                     </div>
@@ -254,83 +274,90 @@ export default function Employee () {
                             <input 
                                 className="border-black w-full border-b"
                                 placeholder="Total Cost"
-                                defaultValue={totalCost.toLocaleString('en-US')}
+                                defaultValue={Number(totalCost).toLocaleString('en-US')}
                                 readOnly
                             />
                             <label className="text-center text-xs">Total Cost</label>
                         </div>
                     </div>
                     <div className="w-full p-6 h-72 overflow-scroll relative">
-                        <table className="table-auto w-full border border-slate-900">
-                            <thead className="bg-slate-800 text-gray-600">
-                                <tr>
-                                    <th>Quantity</th>
-                                    <th>Item</th>
-                                    <th>Description</th>
-                                    <th>Property Number</th>
-                                    <th>Date Issued</th>
-                                    <th>Cost</th>
-                                    <th>ICS / ARE</th>
-                                    <th>Returned</th>
-                                    <th>Remarks</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    isLoading ?
-                                    <div className="absolute w-full h-full flex justify-center items-center">
-                                        <ImSpinner10 className="w-5 h-5 animate-spin" />
-                                    </div>
-                                    :
-                                    employees.map((item,id)=>{
-                                        return(
-                                            <tr key={id}>
-                                                <td className="border border-slate-900">{item?.quantity}</td>
-                                                <td className="border border-slate-900">{item?.item?.item_name}</td>
-                                                <td className="border border-slate-900">{item?.item?.description?.map((desc,idx)=>{
-                                                    return(
-                                                        <p key={idx}>{desc}</p>
-                                                    )
-                                                })}</td>
-                                                <td className="border border-slate-900">{item?.item?.property_number}</td>
-                                                <td className="border border-slate-900"><DateFrame dateStr={item?.createdAt} /></td>
-                                                <td className="border border-slate-900">{(item?.inventory.unit_cost * item?.quantity).toLocaleString('en-US')}</td>
-                                                <td className="border border-slate-900">{item?.inventory?.ics_are?.toUpperCase()}</td>
-                                                <td className="border border-slate-900">{item?.returned}</td>
-                                                <td className="border border-slate-900">{item?.remarks}</td>
-                                                <td className="border border-slate-900 space-y-1 p-1">
-                                                    <Link
-                                                        href={'/employee/edit/'+item._id}
-                                                        className="block bg-green-600 hover:bg-green-600/80 p-2 rounded-lg text-center text-white"
-                                                    >
-                                                        edit
-                                                    </Link>
-                                                    <button
-                                                        onClick={()=>confirmDelete(item._id)}
-                                                        className="bg-red-600 hover:bg-red-600/80 p-2 w-full rounded-lg text-white"
-                                                    >
-                                                        archive
-                                                    </button>
-                                                    <button
-                                                        onClick={()=>confirmReturn(item._id)}
-                                                        className="bg-teal-600 hover:bg-teal-600/80 p-2 w-full rounded-lg text-white"
-                                                    >
-                                                        return
-                                                    </button>
-                                                    <button
-                                                        onClick={()=>exportIndividual(id)}
-                                                        className="bg-indigo-600 hover:bg-indigo-600/80 p-2 w-full rounded-lg text-white"
-                                                    >
-                                                        export
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
+                        {
+                            isLoading ?
+                            <div className="absolute w-full h-full flex justify-center items-center">
+                                <ImSpinner10 className="w-5 h-5 animate-spin" />
+                            </div>
+                            :
+                            <table className="table-auto w-full border border-slate-900">
+                                <thead className="bg-slate-800 text-gray-600">
+                                    <tr>
+                                        <th>Quantity</th>
+                                        <th>Item</th>
+                                        <th>Description</th>
+                                        <th>Property Number</th>
+                                        <th>Date Issued</th>
+                                        <th>Cost</th>
+                                        <th>ICS / ARE</th>
+                                        <th>Returned</th>
+                                        <th>Remarks</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        employees.length > 0 ?
+                                        employees.map((item,id)=>{
+                                            return(
+                                                <tr key={id}>
+                                                    <td className="border border-slate-900">{item?.quantity}</td>
+                                                    <td className="border border-slate-900">{item?.item?.item_name}</td>
+                                                    <td className="border border-slate-900">{item?.item?.description?.map((desc,idx)=>{
+                                                        return(
+                                                            <p key={idx}>{desc}</p>
+                                                        )
+                                                    })}</td>
+                                                    <td className="border border-slate-900">{item?.item?.property_number}</td>
+                                                    <td className="border border-slate-900"><DateFrame dateStr={item?.createdAt} /></td>
+                                                    <td className="border border-slate-900">{(item?.inventory.unit_cost * item?.quantity).toLocaleString('en-US')}</td>
+                                                    <td className="border border-slate-900">{item?.inventory?.ics_are?.toUpperCase()}</td>
+                                                    <td className="border border-slate-900">{item?.returned}</td>
+                                                    <td className="border border-slate-900">{item?.remarks}</td>
+                                                    <td className="border border-slate-900 space-y-1 p-1">
+                                                        <Link
+                                                            href={'/employee/edit/'+item._id}
+                                                            className="block bg-green-600 hover:bg-green-600/80 p-2 rounded-lg text-center text-white"
+                                                        >
+                                                            edit
+                                                        </Link>
+                                                        <button
+                                                            onClick={()=>confirmDelete(item._id)}
+                                                            className="bg-red-600 hover:bg-red-600/80 p-2 w-full rounded-lg text-white"
+                                                        >
+                                                            archive
+                                                        </button>
+                                                        <button
+                                                            onClick={()=>confirmReturn(item._id)}
+                                                            className="bg-teal-600 hover:bg-teal-600/80 p-2 w-full rounded-lg text-white"
+                                                        >
+                                                            return
+                                                        </button>
+                                                        <button
+                                                            onClick={()=>exportIndividual(id)}
+                                                            className="bg-indigo-600 hover:bg-indigo-600/80 p-2 w-full rounded-lg text-white"
+                                                        >
+                                                            export
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                        :
+                                        <tr>
+                                            <td colSpan={10} className="text-center">No data</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>

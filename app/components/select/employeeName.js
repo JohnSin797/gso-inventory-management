@@ -3,7 +3,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-export default function EmployeeName ({ className, onChangeEmployee, onChangeDetails, defaultEmployee, toActivate }) {
+export default function EmployeeName ({ className, onChangeEmployee, onChangeDetails, defaultEmployee, toActivate, month, year }) {
     const [employees, setEmployees] = useState([])
 
     const getEmployees = async () => {
@@ -29,7 +29,7 @@ export default function EmployeeName ({ className, onChangeEmployee, onChangeDet
             position: selectedEmployee?.position,
             name: selectedEmployee?.first_name + ' ' + selectedEmployee?.last_name
         })
-        toActivate()
+        toActivate(selectedEmployee._id, month, year)
     }
 
     useEffect(()=>{

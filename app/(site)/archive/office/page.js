@@ -24,21 +24,22 @@ export default function Office () {
             console.log(error)
         }
     }
+    
+    const getData = async () => {
+        try {
+            await axios.get('/api/department/archive')
+            .then(res=>{
+                setArchive(res.data.data)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(()=>{
-        const getData = async () => {
-            try {
-                await axios.get('/api/department/archive')
-                .then(res=>{
-                    setArchive(res.data.data)
-                })
-                .catch(err=>{
-                    console.log(err)
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
         getData()
     }, [])
 

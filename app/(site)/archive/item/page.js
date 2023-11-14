@@ -24,23 +24,54 @@ export default function Item () {
             console.log(error)
         }
     }
+    
+    const getData = async () => {
+        try {
+            await axios.get('/api/item/archive')
+            .then(res=>{
+                setArchive(res.data.data)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(()=>{
-        const getData = async () => {
-            try {
-                await axios.get('/api/item/archive')
-                .then(res=>{
-                    setArchive(res.data.data)
-                })
-                .catch(err=>{
-                    console.log(err)
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        }
         getData()
     }, [])
+
+    const confirmDelete = id => {
+        Swal.fire({
+            title: 'Continue?',
+            icon: 'warning',
+            text: 'Are you sure you want to delete? Once deleted, it can not be restored.',
+            showCancelButton: true,
+            showConfirmButton: true,
+        })
+        .then(res=>{
+            if (res.isConfirmed) {
+                destroy(id)
+            }
+        })
+    }
+
+    const destroy = async id => {
+        try {
+            await axios.post('/api/item/destroy', {id: id})
+            .then(res=>{
+                getData()
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                Swal.fire(err.response.data.message)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
@@ -77,6 +108,7 @@ export default function Item () {
                                                         restore
                                                     </button>
                                                     <button
+                                                        onClick={()=>confirmDelete(item._id)}
                                                         className="p-2 rounded-lg bg-red-600 hover:bg-red-600/80 w-full"
                                                     >
                                                         delete

@@ -66,12 +66,6 @@ export default function Item () {
                     >
                         new item
                     </Link>
-                    <Link
-                        href={'/data-entry/item/archive'}
-                        className="block w-full md:w-1/3 p-2 rounded-lg bg-red-600 text-center text-white hover:bg-red-600/80"
-                    >
-                        archive
-                    </Link>
                 </div>
                 <div className="w-full bg-white p-6 rounded-lg h-96 overflow-scroll shadow-md relative">
                     <table className="w-full table-auto">

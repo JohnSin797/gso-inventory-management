@@ -57,6 +57,7 @@ export default function Create () {
             })
             .catch(err=>{
                 console.log(err)
+                Swal.fire(err.response.data.message)
             })
         } catch (error) {
             console.log(error)

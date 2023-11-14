@@ -12,7 +12,7 @@ export async function POST (request) {
         const decoded = await jwt.decode(token, {complete: true});
         await connectMongoDB();
         const user = await User.findOne({_id: decoded.payload.id}).exec();
-        const result = await Department.findByIdAndDelete(id).exec();
+        const result = await Department.findOneAndDelete({_id: id}).exec();
         if (!result) {
             return NextResponse.json({message: 'Failed to delete Department'}, {status: 402});
         }

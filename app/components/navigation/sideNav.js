@@ -201,6 +201,36 @@ export default function SideNav () {
                                                     Release
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a
+                                                    href="/archive/office"
+                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                        pathname.includes("/archive/office") ? "text-white" : "text-slate-400"
+                                                    } `}
+                                                >
+                                                    Office
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="/archive/employee"
+                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                        pathname.includes("/archive/employee") ? "text-white" : "text-slate-400"
+                                                    } `}
+                                                >
+                                                    Employee
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="/archive/item"
+                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                        pathname.includes("/archive/item") ? "text-white" : "text-slate-400"
+                                                    } `}
+                                                >
+                                                    Item
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                     </div>

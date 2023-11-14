@@ -172,7 +172,7 @@ export default function Release () {
                                 <label className={`text-xs font-bold ${itemStocks<quantity ? 'text-red-600' : ''}`}>Quantity</label>
                                 <input 
                                     type="number"
-                                    className={`w-full p-2 rounded-lg border ${itemStocks<quantity ? 'border-red-600 text-red-600' : 'hover:border-black'}`}
+                                    className={`w-full p-2 rounded-lg border ${itemStocks<quantity || quantity < 1 ? 'border-red-600 text-red-600' : 'hover:border-black'}`}
                                     onChange={(e)=>setQuantity(e.target.value)}
                                     value={quantity}
                                     required
@@ -198,7 +198,7 @@ export default function Release () {
                             </Link>
                             <button
                                 type="submit"
-                                disabled={itemStocks<quantity}
+                                disabled={itemStocks<quantity || quantity < 1}
                                 className="w-full md:w-1/2 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white"
                             >
                                 save

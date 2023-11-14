@@ -12,7 +12,7 @@ const inventorySchema = new Schema(
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            required: [true, 'user is ']
+            required: [true, 'user is required']
         },
         employee: {
             type: Schema.Types.ObjectId,
@@ -28,7 +28,8 @@ const inventorySchema = new Schema(
         },
         quantity: {
             type: Number,
-            required: [true, 'quantity is required']
+            required: [true, 'quantity is required'],
+            min: 0
         },
         released: {
             type: Number,

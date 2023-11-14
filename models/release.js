@@ -34,7 +34,8 @@ const releaseSchema = new Schema(
         },
         quantity: {
             type: Number,
-            required: [true, 'quantity is required']
+            required: [true, 'quantity is required'],
+            min: 0
         },
         release_date: {
             type: Date,

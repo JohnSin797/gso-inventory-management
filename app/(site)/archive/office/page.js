@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-export default function Archive () {
+export default function Office () {
 
     const [archive, setArchive] = useState([])
 
@@ -48,16 +48,8 @@ export default function Archive () {
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
                 <div className="w-full bg-white rounded-lg shadow-md p-6">
-                    <Link 
-                        href={'/data-entry/office'}
-                        className="block w-full md:w-1/3 p-2 rounded-lg bg-slate-900 hover:bg-slate-900/80 text-white text-center"
-                    >
-                        back
-                    </Link>
-                </div>
-                <div className="w-full bg-white rounded-lg shadow-md p-6">
                     <div className="w-full h-96">
-                        <table className="w-full table-auto">
+                        <table className="w-full table-fixed">
                             <thead>
                                 <tr>
                                     <th>Department</th>
@@ -70,9 +62,9 @@ export default function Archive () {
                                     archive.map((item, index)=>{
                                         return (
                                             <tr key={index}>
-                                                <td>{item.department_name}</td>
-                                                <td>{item.office_name}</td>
-                                                <td>
+                                                <td className="p-2">{item.department_name}</td>
+                                                <td className="p-2">{item.office_name}</td>
+                                                <td className="flex gap-2 p-2">
                                                     <button
                                                         onClick={()=>restoreOffice(item._id)}
                                                         className="p-2 rounded-lg bg-teal-600 hover:bg-teal-600/80 text-white w-full"

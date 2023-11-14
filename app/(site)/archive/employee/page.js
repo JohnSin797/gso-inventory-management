@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-export default function Archive () {
+export default function Employee () {
 
     const [archive, setArchive] = useState([])
 
@@ -47,17 +47,9 @@ export default function Archive () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full flex bg-white shadow-md rounded-lg p-6">
-                    <Link
-                        href={'/user'}
-                        className="p-2 rounded-lg bg-slate-900 hover:bg-slate-900/80 text-center text-white w-full md:w-1/3"
-                    >
-                        back
-                    </Link>
-                </div>
                 <div className="w-full bg-white shadow-md rounded-lg p-6">
                     <div className="w-full h-96 overflow-y-scroll">
-                        <table className="w-full table-auto">
+                        <table className="w-full table-fixed">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -71,18 +63,18 @@ export default function Archive () {
                                     archive.map((item, index)=>{
                                         return(
                                             <tr key={index}>
-                                                <td>{item.first_name} {item.last_name}</td>
-                                                <td>{item?.department?.department_name}</td>
-                                                <td>{item?.department?.office_name}</td>
-                                                <td>
+                                                <td className="p-2">{item.first_name} {item.last_name}</td>
+                                                <td className="p-2">{item?.department?.department_name}</td>
+                                                <td className="p-2">{item?.department?.office_name}</td>
+                                                <td className="text-white flex gap-2 p-2">
                                                     <button
                                                         onClick={()=>restoreEmployee(item._id)}
-                                                        className="p-2 rounded-lg bg-teal-600 hover:bg-teal-600/80 text-white"
+                                                        className="p-2 w-full rounded-lg bg-teal-600 hover:bg-teal-600/80 text-white"
                                                     >
                                                         restore
                                                     </button>
                                                     <button
-                                                        className="p-2 rounded-lg bg-red-600 hover:bg-red-600/80"
+                                                        className="p-2 w-full rounded-lg bg-red-600 hover:bg-red-600/80"
                                                     >
                                                         delete
                                                     </button>

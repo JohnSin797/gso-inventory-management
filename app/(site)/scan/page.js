@@ -63,7 +63,7 @@ export default function Scan () {
                     </div>
                     <div className="w-full h-64 md:h-96 p-6 overflow-y-scroll md:w-1/2 border border-slate-900 rounded-lg">
                         <p><span className="font-bold">Item Name: </span>{searchItemResult?.item_name}</p>
-                        <p><span className="font-bold">Property Number:</span> {searchItemResult?.item_name}</p>
+                        <p><span className="font-bold">Property Number:</span> {searchItemResult?.property_number}</p>
                         <p><span className="font-bold">Barcode:</span> {searchItemResult?.barcode_text}</p>
                         <p><span className="font-bold">Unit:</span> {searchItemResult?.unit}</p>
                         <p className="font-bold">Description:</p>

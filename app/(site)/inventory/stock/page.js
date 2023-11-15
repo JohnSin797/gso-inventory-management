@@ -13,6 +13,7 @@ import Select from "react-select";
 export default function Stock () {
 
     const [items, setItems] = useState([])
+    const [disableBtn, setDisableBtn] = useState(false)
     const [itemSelectOption, setItemSelectOption] = useState([])
     const [selectedItem, setSelectedItem] = useState(null)
     const [sourceFund, setSourceFund] = useState('')
@@ -25,6 +26,7 @@ export default function Stock () {
 
     const addStock = async () => {
         try {
+            setDisableBtn(true)
             await axios.post('/api/inventory/store', {
                 inventory_tag: tag,
                 quantity: qty,
@@ -36,12 +38,23 @@ export default function Stock () {
                 remarks: remark
             })
             .then(res=>{
+                setDisableBtn(false)
+                setTag('')
+                setQty(0)
+                setUnitCost(0.00)
+                setTotalCost(0.00)
+                setDateAcquired('')
+                setSourceFund('')
+                setRemark('')
+                setSelectedItem(null)
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
+                setDisableBtn(false)
                 console.log(err)
             })
         } catch (error) {
+            setDisableBtn(false)
             console.log(error)
         }
     }
@@ -175,6 +188,7 @@ export default function Stock () {
                         back
                     </Link>
                     <button
+                        disabled={disableBtn}
                         className="w-full md:w-1/3 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white"
                         onClick={addStock}
                     >

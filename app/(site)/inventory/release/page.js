@@ -83,7 +83,7 @@ export default function Release () {
         items.forEach(element => {
             const itemObj = {
                 value: element?._id,
-                label: element?.item?.item_name,
+                label: element?.item?.item_name+' || unit cost: '+element?.unit_cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+' || inventory tag: '+element?.inventory_tag,
                 stocks: element?.stock
             }
             itemArr.push(itemObj)

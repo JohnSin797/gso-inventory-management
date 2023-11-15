@@ -185,6 +185,43 @@ export default function Department () {
         }
     }
 
+    const confirmCondemned = id => {
+        Swal.fire({
+            title: 'Condemned',
+            icon: 'warning',
+            text: 'Are you sure you want to report Condemned Item?',
+            input: 'number',
+            inputValidator: value=>{
+                if (!value) {
+                    return 'Quantity is required'
+                }
+            },
+            showCancelButton: true,
+            showConfirmButton: true,
+        })
+        .then(res=>{
+            if (res.value) {
+                condemnItem(id, res.value)
+            }
+        })
+    }
+
+    const condemnItem = async (id, qty) => {
+        try {
+            await axios.post('/api/release/condemn', {id: id, quantity: qty})
+            .then(res=>{
+                getData()
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                console.log(err)
+                Swal.fire(err.response.data.message)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div>
             <TopNav />
@@ -261,7 +298,7 @@ export default function Department () {
                                                     <td className=" border p-2 border-slate-900">{item.inventory?.ics_are?.toUpperCase()}</td>
                                                     <td className=" border p-2 border-slate-900">{item.employee?.first_name} {item.employee?.last_name}</td>
                                                     <td className=" border p-2 border-slate-900">
-                                                        <DateFrame dateStr={item.createdAt} />
+                                                        <DateFrame dateStr={item.release_date} />
                                                     </td>
                                                     <td className=" border p-2 border-slate-900">{item.inventory.unit_cost * item.quantity}</td>
                                                     <td className=" border p-2 border-slate-900">{item.returned}</td>
@@ -284,6 +321,13 @@ export default function Department () {
                                                             className="w-full p-2 rounded-lg hover:font-bold bg-teal-600 hover:bg-teal-600/80"
                                                         >
                                                             return
+                                                        </button>
+                                                        
+                                                        <button
+                                                            onClick={()=>confirmCondemned(item._id)}
+                                                            className="w-full p-2 rounded-lg hover:font-bold bg-indigo-600 hover:bg-indigo-600/80"
+                                                        >
+                                                            condemned
                                                         </button>
                                                     </td>
                                                 </tr>

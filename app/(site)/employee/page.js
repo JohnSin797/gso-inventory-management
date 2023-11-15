@@ -220,6 +220,43 @@ export default function Employee () {
         }
     }
 
+    const confirmCondemned = id => {
+        Swal.fire({
+            title: 'Condemned',
+            icon: 'warning',
+            text: 'Are you sure you want to report Condemned Item?',
+            input: 'number',
+            inputValidator: value=>{
+                if (!value) {
+                    return 'Quantity is required'
+                }
+            },
+            showCancelButton: true,
+            showConfirmButton: true,
+        })
+        .then(res=>{
+            if (res.value) {
+                condemnItem(id, res.value)
+            }
+        })
+    }
+
+    const condemnItem = async (id, qty) => {
+        try {
+            await axios.post('/api/release/condemn', {id: id, quantity: qty})
+            .then(res=>{
+                getEmployees()
+                Swal.fire(res.data.message)
+            })
+            .catch(err=>{
+                console.log(err)
+                Swal.fire(err.response.data.message)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div>
             <TopNav />
@@ -316,7 +353,7 @@ export default function Employee () {
                                                         )
                                                     })}</td>
                                                     <td className="border border-slate-900">{item?.item?.property_number}</td>
-                                                    <td className="border border-slate-900"><DateFrame dateStr={item?.createdAt} /></td>
+                                                    <td className="border border-slate-900"><DateFrame dateStr={item?.release_date} /></td>
                                                     <td className="border border-slate-900">{(item?.inventory?.unit_cost * item?.quantity).toLocaleString('en-US')}</td>
                                                     <td className="border border-slate-900">{item?.inventory?.ics_are?.toUpperCase()}</td>
                                                     <td className="border border-slate-900">{item?.returned}</td>
@@ -345,6 +382,12 @@ export default function Employee () {
                                                             className="bg-indigo-600 hover:bg-indigo-600/80 p-2 w-full rounded-lg text-white"
                                                         >
                                                             export
+                                                        </button>
+                                                        <button
+                                                            onClick={()=>confirmCondemned(item._id)}
+                                                            className="bg-purple-600 hover:bg-purple-600/80 p-2 w-full rounded-lg text-white"
+                                                        >
+                                                            condemned
                                                         </button>
                                                     </td>
                                                 </tr>

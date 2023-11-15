@@ -8,11 +8,28 @@ import DateFrame from "@/app/components/dateFrame";
 import { useEffect, useState } from "react";
 import BarcodeImage from "@/app/components/barcodeImage";
 import { ImSpinner10 } from "react-icons/im";
+import Swal from "sweetalert2";
+import { TbRulerMeasure } from "react-icons/tb";
 
 export default function Item () {
 
     const [items, setItems] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+
+    const confirmDelete = id => {
+        Swal.fire({
+            title: 'Continue?',
+            icon: 'warning',
+            text: 'Are you sure you want to delete Item? Deleting an Item may affect Inventory and Release records.',
+            showCancelButton: true,
+            showConfirmButton: true
+        })
+        .then(res=>{
+            if (res.isConfirmed) {
+                deleteItem(id)
+            }
+        })
+    }
 
     const deleteItem = async (id) => {
         try {
@@ -20,6 +37,7 @@ export default function Item () {
             await axios.post('/api/item/delete', {id:id})
             .then(res=>{
                 setItems(res.data.data)
+                Swal.fire(res.data.message)
                 setIsLoading(false)
             })
             .catch(err=>{
@@ -107,7 +125,7 @@ export default function Item () {
                                             </Link>
                                             <button
                                                 className="w-full p-2 rounded-lg bg-red-600 hover:bg-red-900"
-                                                onClick={()=>deleteItem(item?._id)}
+                                                onClick={()=>confirmDelete(item?._id)}
                                             >
                                                 delete
                                             </button>

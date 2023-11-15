@@ -32,6 +32,7 @@ export default function Employee () {
         try {
             await axios.post('/api/employee/delete', {id: id})
             .then(res=>{
+                getEmployees()
                 Swal.fire(res.data.message)
             })
             .catch(err=>{

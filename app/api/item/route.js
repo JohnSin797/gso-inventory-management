@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 export async function GET (request) {
     try {
         await connectMongoDB();
-        const items = await Item.find({}).populate('user').exec();
+        const items = await Item.find({deletedAt: null}).populate('user').exec();
         return NextResponse.json({message: 'OK', data: items}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});

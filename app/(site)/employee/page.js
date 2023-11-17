@@ -317,7 +317,7 @@ export default function Employee () {
                             <label className="text-center text-xs">Total Cost</label>
                         </div>
                     </div>
-                    <div className="w-full p-6 h-72 overflow-scroll relative">
+                    <div className="w-full p-6 h-72 lg:h-96 overflow-scroll relative">
                         {
                             isLoading ?
                             <div className="absolute w-full h-full flex justify-center items-center">

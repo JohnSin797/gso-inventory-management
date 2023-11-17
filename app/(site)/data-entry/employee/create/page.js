@@ -103,7 +103,6 @@ export default function Create () {
                             name="position"
                             onChange={handleChange}
                             value={formData.position}
-                            required
                         />
                     </div>
                     <div className="w-full">

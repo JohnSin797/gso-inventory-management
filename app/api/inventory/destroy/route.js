@@ -21,7 +21,7 @@ export async function POST (request) {
             message: 'You have deleted Inventory from the Archive'
         }
         await Notification.create(notif);
-        return NextResponse.json({message: 'Inventory successfully deleted'}, 200);
+        return NextResponse.json({message: 'Inventory successfully deleted'}, {status: 200});
     } catch (error) {
         return NextResponse.json({message: error.message}, {status: 500});
     }

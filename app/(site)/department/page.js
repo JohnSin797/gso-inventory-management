@@ -260,7 +260,7 @@ export default function Department () {
                             <p className="text-center text-xs">TOTAL</p>
                         </div>
                     </div>
-                    <div className="p-6 overflow-scroll h-80 relative">
+                    <div className="p-6 overflow-scroll h-80 lg:h-96 relative">
                         <table className="table-auto w-full border border-slate-900">
                             <thead className="bg-slate-800 text-gray-400">
                                 <tr>

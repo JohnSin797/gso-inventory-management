@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from 'next/image'
@@ -14,15 +14,34 @@ import { AiOutlineScan } from "react-icons/ai"
 import { ImMenu } from "react-icons/im"
 import { BiScan } from "react-icons/bi"
 import LogoutButton from "../logoutButton"
+import axios from "axios"
 
 export default function SideNav () {
 
     const [sidebarOpen, setSideBarOpen] = useState(true)
     const pathname = usePathname()
+    const [user, setUser] = useState({})
     let storedSidebarExpanded = "true";
     const [sidebarExpanded, setSidebarExpanded] = useState(
         storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
     );
+
+    useEffect(()=>{
+        const getData = async () => {
+            try {
+                await axios.get('/api/user')
+                .then(res=>{
+                    setUser(res.data.data)
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getData()
+    }, [])
 
     return (
         <div>
@@ -61,57 +80,60 @@ export default function SideNav () {
                                 MENU
                             </h3>
                             <ul className="mb-6 flex flex-col gap-1.5">
-                                <SidebarLinkGroup
-                                    activeCondition={pathname === "/" || pathname.includes("dashboard")}
-                                >
-                                {(handleClick, open) => (
-                                    <div>
-                                    <a
-                                        href="#"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-slate-200 duration-300 ease-in-out hover:bg-gray-700 ${
-                                        (pathname === "/" || pathname.includes("dashboard")) &&
-                                        "bg-gray-700"
-                                        }`}
-                                        onClick={(e) => {
-                                        e.preventDefault();
-                                        sidebarExpanded ? handleClick() : setSidebarExpanded(true);
-                                        }}
+                                {
+                                    user?.role == 'admin' && 
+                                    <SidebarLinkGroup
+                                        activeCondition={pathname === "/" || pathname.includes("dashboard")}
                                     >
-                                        Admin
-                                    </a>
-                                    <div
-                                        className={`translate transform overflow-hidden ${
-                                        !open && "hidden"
-                                        }`}
-                                    >
-                                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                                            <li>
-                                                <a
-                                                    href="/"
-                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
-                                                        pathname === "/" ? "text-white" : "text-slate-400"
-                                                    } `}
-                                                >
-                                                    <RxDashboard />
-                                                    Dashboard
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a
-                                                    href="/user"
-                                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
-                                                        pathname === "/user" ? "text-white" : "text-slate-400"
-                                                    } `}
-                                                >
-                                                    <BsPerson />
-                                                    Users
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    {(handleClick, open) => (
+                                        <div>
+                                        <a
+                                            href="#"
+                                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-slate-200 duration-300 ease-in-out hover:bg-gray-700 ${
+                                            (pathname === "/" || pathname.includes("dashboard")) &&
+                                            "bg-gray-700"
+                                            }`}
+                                            onClick={(e) => {
+                                            e.preventDefault();
+                                            sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                                            }}
+                                        >
+                                            Admin
+                                        </a>
+                                        <div
+                                            className={`translate transform overflow-hidden ${
+                                            !open && "hidden"
+                                            }`}
+                                        >
+                                            <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                                                <li>
+                                                    <a
+                                                        href="/"
+                                                        className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                            pathname === "/" ? "text-white" : "text-slate-400"
+                                                        } `}
+                                                    >
+                                                        <RxDashboard />
+                                                        Dashboard
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="/user"
+                                                        className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                            pathname === "/user" ? "text-white" : "text-slate-400"
+                                                        } `}
+                                                    >
+                                                        <BsPerson />
+                                                        Users
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    </div>
-                                )}
-                                </SidebarLinkGroup>
+                                    )}
+                                    </SidebarLinkGroup>
+                                }
                                 <li>
                                     <Link 
                                         href={'/department'}
@@ -181,6 +203,19 @@ export default function SideNav () {
                                         }`}
                                     >
                                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                                            {
+                                                user?.role == 'admin' &&
+                                                <li>
+                                                    <a
+                                                        href="/archive/user"
+                                                        className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                            pathname.includes("/archive/user") ? "text-white" : "text-slate-400"
+                                                        } `}
+                                                    >
+                                                        User
+                                                    </a>
+                                                </li>
+                                            }
                                             <li>
                                                 <a
                                                     href="/archive/inventory"

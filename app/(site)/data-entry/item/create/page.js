@@ -174,7 +174,7 @@ export default function Create () {
                             name="property_number"
                             onChange={handleFormChange}
                             value={itemForm.property_number}
-                            required
+                            // required
                         />
                     </div>
                     <div className="w-full">

@@ -48,15 +48,15 @@ export default function Archive () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full flex bg-white shadow-md rounded-lg p-6">
+                {/* <div className="w-full flex bg-white shadow-md rounded-lg p-6">
                     <Link
                         href={'/user'}
                         className="p-2 rounded-lg bg-slate-900 hover:bg-slate-900/80 text-center text-white w-full md:w-1/3"
                     >
                         back
                     </Link>
-                </div>
-                <div className="w-full bg-white shadow-md rounded-lg p-6">
+                </div> */}
+                <div className="w-full bg-indigo-900/10 border border-white text-white shadow-md rounded-lg p-6">
                     <div className="w-full h-96 overflow-y-scroll">
                         <table className="w-full table-auto">
                             <thead>

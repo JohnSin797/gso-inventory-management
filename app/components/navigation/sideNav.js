@@ -80,9 +80,7 @@ export default function SideNav () {
                                 MENU
                             </h3>
                             <ul className="mb-6 flex flex-col gap-1.5">
-                                {
-                                    user?.role == 'admin' && 
-                                    <SidebarLinkGroup
+                            <SidebarLinkGroup
                                         activeCondition={pathname === "/" || pathname.includes("dashboard")}
                                     >
                                     {(handleClick, open) => (
@@ -117,23 +115,25 @@ export default function SideNav () {
                                                         Dashboard
                                                     </a>
                                                 </li>
-                                                <li>
-                                                    <a
-                                                        href="/user"
-                                                        className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
-                                                            pathname === "/user" ? "text-white" : "text-slate-400"
-                                                        } `}
-                                                    >
-                                                        <BsPerson />
-                                                        Users
-                                                    </a>
-                                                </li>
+                                                {
+                                                    user?.role == 'admin' && 
+                                                    <li>
+                                                        <a
+                                                            href="/user"
+                                                            className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-white ${
+                                                                pathname === "/user" ? "text-white" : "text-slate-400"
+                                                            } `}
+                                                        >
+                                                            <BsPerson />
+                                                            Users
+                                                        </a>
+                                                    </li>
+                                                }
                                             </ul>
                                         </div>
                                     </div>
                                     )}
                                     </SidebarLinkGroup>
-                                }
                                 <li>
                                     <Link 
                                         href={'/department'}

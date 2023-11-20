@@ -84,7 +84,7 @@ export default function Item () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full rounded-lg bg-white shadow-md p-6">
+                <div className="w-full rounded-lg bg-indigo-900/10 border border-white text-white shadow-md p-6">
                     <p className="text-center text-2xl font-bold">Items</p>
                     <div className="w-full h-96 overflow-y-scroll">
                         {

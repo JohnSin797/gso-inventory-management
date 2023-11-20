@@ -85,7 +85,7 @@ export default function Archive () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6">
-                <div className="bg-white rounded-lg shadow-md p-6 w-full">
+                <div className="bg-indigo-900/10 border border-white text-white rounded-lg shadow-md p-6 w-full">
                     <div className="w-full h-96 overflow-scroll">
                         {
                             isLoading ?

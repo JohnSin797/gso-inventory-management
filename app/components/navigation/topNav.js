@@ -79,8 +79,8 @@ export default function TopNav () {
     }, [notifications])
 
     return (
-        <div className="fixed top-0 right-0 w-full md:w-4/5 h-20 z-50 bg-white">
-            <form className="flex p-6" onSubmit={search}>
+        <div className="fixed top-0 right-0 w-full md:w-4/5 h-20 z-50 backdrop-blur-sm text-gray-400">
+            <form className="flex p-6 gap-2" onSubmit={search}>
                 <button
                     type="submit"
                 >
@@ -88,7 +88,7 @@ export default function TopNav () {
                 </button>
                 <input 
                     type="text"
-                    className="border-none outline-none p-2 md:w-1/2"
+                    className="border-none outline-none p-2 md:w-1/2 bg-indigo-900/10 text-white"
                     placeholder="Type to search..."
                     onChange={e=>setSearchItem(e.target.value)}
                 />

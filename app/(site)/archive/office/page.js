@@ -84,7 +84,7 @@ export default function Office () {
             <TopNav />
             <SideNav />
             <div className="absolute w-full md:w-4/5 top-20 right-0 p-6 space-y-2">
-                <div className="w-full bg-white rounded-lg shadow-md p-6">
+                <div className="w-full bg-indigo-900/10 border border-white text-white rounded-lg shadow-md p-6">
                     <div className="w-full h-96 overflow-y-scroll">
                         {
                             isLoading ?

@@ -32,7 +32,7 @@ export default function SideNav () {
             >
                 <ImMenu className="w-8 h-8 text-gray-600 border border-white active:border-slate-900 active:text-slate-900" />
             </button>
-            <aside className={`fixed left-0 top-0 z-50 pt-6 flex h-screen w-full md:w-1/5 flex-col overflow-y-hidden bg-slate-800 duration-300 ease-linear 
+            <aside className={`fixed left-0 top-0 z-50 pt-6 flex h-screen w-full md:w-1/5 flex-col overflow-y-hidden bg-indigo-950 duration-300 ease-linear 
                 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
             `}>
                 <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">

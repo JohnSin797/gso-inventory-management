@@ -28,7 +28,7 @@ export default function DepartmentSelect ({className, onHandleChange}) {
             {
                 department.map((item,id)=>{
                     return(
-                        <option key={id} value={item.department_name}>{item.department_name} || {item.office_name}</option>
+                        <option className="bg-slate-900 checked:bg-indigo-900" key={id} value={item.department_name}>{item.department_name} || {item.office_name}</option>
                     )
                 })
             }

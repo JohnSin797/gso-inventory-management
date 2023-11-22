@@ -96,7 +96,9 @@ export default function SideNav () {
                                             sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                                             }}
                                         >
-                                            Admin
+                                            {
+                                                user.role == 'admin' ? <span>Admin</span> : <span>User</span>
+                                            }
                                         </a>
                                         <div
                                             className={`translate transform overflow-hidden ${

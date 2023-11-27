@@ -66,7 +66,7 @@ export default function SideNav () {
                     </Link>
 
                     <button
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                        onClick={() => setSideBarOpen(!sidebarOpen)}
                         aria-controls="sidebar"
                         aria-expanded={sidebarOpen}
                         className="block lg:hidden"

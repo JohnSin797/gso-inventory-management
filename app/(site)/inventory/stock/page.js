@@ -96,7 +96,12 @@ export default function Stock () {
             '&:hover': {
                 borderColor: 'border-gray-400',
             },
-            backgroundColor: 'bg-indigo-900/10'
+            backgroundColor: 'bg-indigo-900/10',
+        }),
+        menu: (baseStyle)=>({
+            ...baseStyle,
+            colors: 'black',
+            backgroundColor: 'white',
         }),
       };
 
@@ -130,15 +135,30 @@ export default function Stock () {
                     </div>    
 
                     <div className="w-full md:flex gap-2">
-                        <div className="w-full md:w-1/2 text-slate-900">
+                        <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold text-white">Item</label>
                             {/* <ItemSelect className={`w-full p-2 border hover:border-black rounded-lg`} items={items} onItemChange={setSelectedItem} required/> */}
-                            <Select 
+                            {/* <Select 
                                 options={itemSelectOption}
                                 onChange={setSelectedItem}
                                 styles={customStyles}
-                                className={{input: ()=>{`w-full p-2 border bg-indigo-900/10 rounded-lg ${selectedItem ? 'hover:border-black' : 'border-red-300 hover:border-red-600'}`}}}
-                            />
+                                // classNames={{
+                                //     menuList: (state)=>`bg-slate-900 ${state.isFocused && 'bg-blue-400'} ${state.isSelected && 'bg-blue-400'}`,
+                                // }}
+                            /> */}
+                            <select
+                                onChange={e=>setSelectedItem(e.target.value)}
+                                className="p-2 bg-indigo-900/10 border border-white hover:border-indigo-400 w-full rounded-lg"
+                            >
+                                <option className="bg-slate-900 text-white">Select...</option>
+                                {
+                                    itemSelectOption.map((item,idx)=>{
+                                        return (
+                                            <option key={idx} value={item.value} className="bg-slate-900 text-white">{item.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                         <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold">Date Added</label>

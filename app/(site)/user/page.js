@@ -36,6 +36,21 @@ export default function User () {
         }
     }
 
+    const confirmDelete = id => {
+        Swal.fire({
+            title: 'Delete Confirmation',
+            text: 'Are you sure you want to delete User?',
+            icon: 'warning',
+            showCancelButton: true,
+            showConfirmButton: true
+        })
+        .then(res=>{
+            if (res.isConfirmed) {
+                deleteUser(id)
+            }
+        })
+    }
+
     const deleteUser = async (id) => {
         try {
             await axios.post('/api/user/delete', {id:id})
@@ -235,14 +250,9 @@ export default function User () {
                                             <td>{item?.default_password}</td>
                                             <td>{item?.position}</td>
                                             <td className="p-2 text-white">
-                                                {/* <button
-                                                    className="w-1/2 p-1 rounded-lg bg-green-600 hover:bg-green-600/80"
-                                                >
-                                                    edit
-                                                </button> */}
                                                 <button
                                                     className="w-full p-1 rounded-lg bg-red-600 hover:bg-red-600/80"
-                                                    onClick={()=>deleteUser(item._id)}
+                                                    onClick={()=>confirmDelete(item._id)}
                                                 >
                                                     delete
                                                 </button>

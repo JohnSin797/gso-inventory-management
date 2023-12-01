@@ -15,7 +15,7 @@ export default function Stock () {
     const [items, setItems] = useState([])
     const [disableBtn, setDisableBtn] = useState(false)
     const [itemSelectOption, setItemSelectOption] = useState([])
-    const [selectedItem, setSelectedItem] = useState(null)
+    const [selectedItem, setSelectedItem] = useState('')
     const [sourceFund, setSourceFund] = useState('')
     const [tag, setTag] = useState('')
     const [qty, setQty] = useState(0)
@@ -32,7 +32,7 @@ export default function Stock () {
                 quantity: qty,
                 unit_cost: unitCost,
                 total_cost: totalCost,
-                item_id: selectedItem?.value,
+                item_id: selectedItem,
                 date_acquired: dateAcquired,
                 source_fund: sourceFund,
                 remarks: remark
@@ -51,6 +51,7 @@ export default function Stock () {
             })
             .catch(err=>{
                 setDisableBtn(false)
+                Swal.fire(err.response.data.message)
                 console.log(err)
             })
         } catch (error) {

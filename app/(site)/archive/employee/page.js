@@ -17,6 +17,7 @@ export default function Employee () {
         try {
             await axios.post('/api/employee/archive', {id:id})
             .then(res=>{
+                getData()
                 Swal.fire(res.data.message)
             })
             .catch(err=>{

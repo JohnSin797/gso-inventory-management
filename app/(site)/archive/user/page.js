@@ -16,6 +16,7 @@ export default function Archive () {
         try {
             await axios.post('/api/user/archive', {id:id})
             .then(res=>{
+                getData()
                 Swal.fire(res.data.message)
             })
             .catch(err=>{

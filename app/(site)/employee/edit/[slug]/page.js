@@ -54,6 +54,17 @@ export default function Edit ({ params }) {
         setItemStocks(stock)
     }
 
+    const onQuantityChange = e => {
+        const newQty = parseInt(e.target.value)
+        const qty = parseInt(employee.quantity, 10) - newQty
+        const stc = parseInt(itemStocks) + qty
+        setEmployee({
+            ...employee,
+            quantity: newQty
+        })
+        setItemStocks(stc)
+    }
+
     function setOptions(items, employees) {
         let itemArr = []
         let ampArr = []
@@ -88,7 +99,8 @@ export default function Edit ({ params }) {
                 employee: selectedEmployee, 
                 release_date: employee.release_date, 
                 quantity: employee.quantity, 
-                remarks: employee.remarks
+                remarks: employee.remarks,
+                stock: itemStocks
             })
             .then(res=>{
                 Swal.fire(res.data.message)
@@ -159,21 +171,23 @@ export default function Edit ({ params }) {
                                 />
                             </div>
                             <div className="w-1/4">
-                                <label className="text-xs font-bold text-indigo-600">Stocks</label>
+                                <label className={`text-xs font-bold ${itemStocks < 0? 'text-red-600' : 'text-indigo-600'}`}>Stocks</label>
                                 <input 
                                     type="text"
-                                    className="w-full p-2 rounded-lg border hover:border-indigo-900 bg-indigo-600 text-white"
+                                    className={`w-full p-2 rounded-lg border  ${itemStocks < 0 ? 
+                                        'hover:border-red-600 bg-red-900 text-red-600' : 
+                                        'hover:border-indigo-900 bg-indigo-600 text-white'}`}
                                     defaultValue={itemStocks}
                                     readOnly
                                 />
                             </div>
                             <div className="w-1/4">
-                                <label className={`text-xs font-bold ${itemStocks<employee.quantity ? 'text-red-600' : ''}`}>Quantity</label>
+                                <label className={`text-xs font-bold ${itemStocks < 0 || employee.quantity <= 0 ? 'text-red-600' : ''}`}>Quantity</label>
                                 <input 
                                     type="number"
                                     name="quantity"
-                                    className={`w-full p-2 rounded-lg bg-indigo-900/10 border ${itemStocks<employee.quantity ? 'border-red-600 text-red-600' : 'hover:border-indigo-900'}`}
-                                    onChange={handleEmployeeForm}
+                                    className={`w-full p-2 rounded-lg bg-indigo-900/10 border ${itemStocks < 0 || employee.quantity <= 0 ? 'border-red-600 text-red-600' : 'hover:border-indigo-900'}`}
+                                    onChange={onQuantityChange}
                                     value={employee.quantity}
                                     required
                                 />
@@ -199,7 +213,7 @@ export default function Edit ({ params }) {
                             </Link>
                             <button
                                 type="submit"
-                                disabled={itemStocks<employee.quantity}
+                                disabled={itemStocks < 0 || employee.quantity <= 0}
                                 className="w-full md:w-1/2 p-2 rounded-lg bg-blue-600 hover:bg-blue-600/80 text-white"
                             >
                                 save

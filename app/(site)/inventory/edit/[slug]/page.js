@@ -36,9 +36,10 @@ export default function Edit ({ params }) {
     }
 
     const onItemChange = e => {
+        const val = e.target.value
         setEditForm({
             ...editForm,
-            item_id: e.value
+            item_id: val
         })
     }
 
@@ -164,11 +165,24 @@ export default function Edit ({ params }) {
                     <div className="w-full md:flex gap-2">
                         <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold">Item</label>
-                            <Select 
+                            {/* <Select 
                                 options={itemSelectOption}
                                 onChange={onItemChange}
                                 value={defaultItem}
-                            />
+                            /> */}
+                            <select 
+                                className="w-full p-2 border hover:border-black rounded-lg"
+                                onChange={onItemChange}
+                                value={editForm.item_id}
+                            >
+                                {
+                                    itemSelectOption.map((item,id)=>{
+                                        return (
+                                            <option key={id} value={item.value}>{item.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                         <div className="w-full md:w-1/2">
                             <label className="text-xs font-bold">Date Added</label>

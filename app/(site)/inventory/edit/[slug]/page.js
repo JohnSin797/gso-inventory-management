@@ -77,6 +77,16 @@ export default function Edit ({ params }) {
         }
     }
 
+    const onUnitCostChange = e => {
+        const newUnitCost = parseFloat(e.target.value)
+        const newTotalCost = newUnitCost * parseFloat(editForm.stock)
+        setEditForm({
+            ...editForm,
+            unit_cost: newUnitCost,
+            total_cost: newTotalCost
+        })
+    }
+
     const submitUpdate = async () => {
         try {
             await axios.post('/api/inventory/update', editForm)
@@ -187,8 +197,10 @@ export default function Edit ({ params }) {
                             <label className="text-xs font-bold">Unit Cost</label>
                             <input 
                                 type="Number"
+                                name="unit_cost"
                                 className="w-full md:w-full p-2 border hover:border-black rounded-lg"
-                                value={editForm.unit_cost.toFixed(2)}
+                                value={Number(editForm.unit_cost).toFixed(2)}
+                                onChange={onUnitCostChange}
                                 required
                             />
                         </div>

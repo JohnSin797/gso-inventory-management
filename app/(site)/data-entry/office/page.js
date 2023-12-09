@@ -93,13 +93,13 @@ export default function Department () {
                                             <td className="flex gap-2 p-2 border border-slate-900 text-white">
                                                 <Link
                                                     href={'/data-entry/office/edit/'+item?._id}
-                                                    className="block text-center w-1/2 p-2 rounded-lg bg-green-600 hover:bg-green-600/80"
+                                                    className="block text-center p-2 rounded-lg bg-green-600 hover:bg-green-600/80"
                                                 >
                                                     <HiPencilSquare className="w-6 h-6" />
                                                 </Link>
                                                 <button
                                                     onClick={()=>deleteDepartment(item?._id)}
-                                                    className="w-1/2 p-2 rounded-lg bg-red-600 hover:bg-red-600/80"
+                                                    className="p-2 rounded-lg bg-red-600 hover:bg-red-600/80"
                                                 >
                                                     <HiTrash className="w-6 h-6" />
                                                 </button>

@@ -15,13 +15,13 @@ export default function Stock () {
     const [items, setItems] = useState([])
     const [disableBtn, setDisableBtn] = useState(false)
     const [itemSelectOption, setItemSelectOption] = useState([])
-    const [selectedItem, setSelectedItem] = useState('')
+    // const [selectedItem, setSelectedItem] = useState('')
     const [sourceFund, setSourceFund] = useState('')
     const [tag, setTag] = useState('')
-    const [qty, setQty] = useState(0)
-    const [unitCost, setUnitCost] = useState(0.00)
-    const [totalCost, setTotalCost] = useState(0.00)
-    const [remark, setRemark] = useState('')
+    // const [qty, setQty] = useState(0)
+    // const [unitCost, setUnitCost] = useState(0.00)
+    // const [totalCost, setTotalCost] = useState(0.00)
+    // const [remark, setRemark] = useState('')
     const [dateAcquired, setDateAcquired] = useState('')
     const [stockForm, setStockForm] = useState({
         inventory_tag: '',
@@ -58,13 +58,23 @@ export default function Stock () {
             // }
             )
             .then(res=>{
-                setTag('')
-                setQty(0)
-                setUnitCost(0.00)
-                setTotalCost(0.00)
-                setDateAcquired('')
-                setSourceFund('')
-                setRemark('')
+                // setTag('')
+                // setQty(0)
+                // setUnitCost(0.00)
+                // setTotalCost(0.00)
+                // setDateAcquired('')
+                // setSourceFund('')
+                // setRemark('')
+                setStockForm({
+                    inventory_tag: '',
+                    quantity: 0,
+                    unit_cost: 0,
+                    total_cost: 0,
+                    item_id: '',
+                    date_acquired: new Date(),
+                    source_fund: '',
+                    remarks: ''
+                })
                 setSelectedItem(null)
                 setDisableBtn(false)
                 Swal.fire(res.data.message)
@@ -132,9 +142,9 @@ export default function Stock () {
 
     const handleQuantity = e => {
         const q = e.target.value
-        const newTotal = q * unitCost
-        setQty(q)
-        setTotalCost(newTotal)
+        const newTotal = q * stockForm.unit_cost
+        // setQty(q)
+        // setTotalCost(newTotal)
         setStockForm({
             ...stockForm,
             quantity: q,
@@ -144,9 +154,9 @@ export default function Stock () {
 
     const handleUnitCost = e => {
         const cost = e.target.value
-        const newTotal = qty * cost
-        setUnitCost(cost)
-        setTotalCost(newTotal)
+        const newTotal = stockForm.quantity * cost
+        // setUnitCost(cost)
+        // setTotalCost(newTotal)
         setStockForm({
             ...stockForm,
             unit_cost: cost,

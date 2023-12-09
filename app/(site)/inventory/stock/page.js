@@ -58,7 +58,6 @@ export default function Stock () {
             // }
             )
             .then(res=>{
-                setDisableBtn(false)
                 setTag('')
                 setQty(0)
                 setUnitCost(0.00)
@@ -67,6 +66,7 @@ export default function Stock () {
                 setSourceFund('')
                 setRemark('')
                 setSelectedItem(null)
+                setDisableBtn(false)
                 Swal.fire(res.data.message)
             })
             .catch(err=>{
@@ -240,6 +240,7 @@ export default function Stock () {
                                     onChange={handleQuantity}
                                     // value={qty}
                                     value={stockForm.quantity}
+                                    min={0}
                                     required
                                 />
                             </div>
@@ -251,6 +252,7 @@ export default function Stock () {
                                     onChange={handleUnitCost}
                                     // value={Number(unitCost).toFixed(2)}
                                     value={Number(stockForm.unit_cost).toFixed(2)}
+                                    min={0}
                                     required
                                 />
                             </div>

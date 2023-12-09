@@ -17,7 +17,7 @@ export default function Stock () {
     const [itemSelectOption, setItemSelectOption] = useState([])
     // const [selectedItem, setSelectedItem] = useState('')
     const [sourceFund, setSourceFund] = useState('')
-    const [tag, setTag] = useState('')
+    // const [tag, setTag] = useState('')
     // const [qty, setQty] = useState(0)
     // const [unitCost, setUnitCost] = useState(0.00)
     // const [totalCost, setTotalCost] = useState(0.00)
@@ -176,7 +176,7 @@ export default function Stock () {
                             <input 
                                 type="text"
                                 name="inventory_tag"
-                                className={`w-full p-2 border bg-indigo-900/10 rounded-lg ${tag ? 'hover:border-indigo-900' : 'border-red-300 hover:border-red-600'}`}
+                                className={`w-full p-2 border bg-indigo-900/10 rounded-lg ${stockForm.inventory_tag ? 'hover:border-indigo-900' : 'border-red-300 hover:border-red-600'}`}
                                 // onChange={(e)=>setTag(e.target.value)}
                                 onChange={handleStock}
                                 value={stockForm.inventory_tag}
@@ -246,7 +246,7 @@ export default function Stock () {
                                 <label className="text-xs font-bold">Quantity</label>
                                 <input 
                                     type="Number"
-                                    className={`w-full p-2 border bg-indigo-900/10 rounded-lg ${qty ? 'hover:border-indigo-900' : 'border-red-300 hover:border-red-600'}`}
+                                    className={`w-full p-2 border bg-indigo-900/10 rounded-lg ${stockForm.quantity ? 'hover:border-indigo-900' : 'border-red-300 hover:border-red-600'}`}
                                     onChange={handleQuantity}
                                     // value={qty}
                                     value={stockForm.quantity}
@@ -258,7 +258,7 @@ export default function Stock () {
                                 <label className="text-xs font-bold">Unit Cost</label>
                                 <input 
                                     type="Number"
-                                    className={`w-full p-2 border bg-indigo-900/10 rounded-lg ${unitCost ? 'hover:border-indigo-900' : 'border-red-300 hover:border-red-600'}`}
+                                    className={`w-full p-2 border bg-indigo-900/10 rounded-lg ${stockForm.unit_cost ? 'hover:border-indigo-900' : 'border-red-300 hover:border-red-600'}`}
                                     onChange={handleUnitCost}
                                     // value={Number(unitCost).toFixed(2)}
                                     value={Number(stockForm.unit_cost).toFixed(2)}

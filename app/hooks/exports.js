@@ -25,26 +25,52 @@ export default function Exports () {
         let row = {}
         row['qty'] = arr.quantity
         row['unit'] = arr.item.unit
-        row['desc'] = arr.item.description[0]
+        row['desc'] = arr.item.item_name
         row['pn'] = arr.item.property_number
         row['uc'] = arr.inventory.unit_cost
         row['total'] = arr.inventory.unit_cost * arr.quantity
         totalCost += arr.inventory.unit_cost * arr.quantity
         rearrangedArr.push(row)
         row = {}
-        if (arr.item.description.length > 1) {
-            for (let index = 1; index < arr.item.description.length; index++) {
-                row['qty'] = ''
-                row['unit'] = ''
-                row['desc'] = arr.item.description[index]
-                row['pn'] = ''
-                row['uc'] = ''
-                row['total'] = ''
-                rearrangedArr.push(row)
-            }
-        }
+        const descArr = [...arr.item.description]
+        descArr.forEach((el,id)=>{
+            row['qty'] = ''
+            row['unit'] = ''
+            row['desc'] = descArr[id]
+            row['pn'] = ''
+            row['uc'] = ''
+            row['total'] = ''
+            rearrangedArr.push(row)
+            row = {}
+        })
+        console.log(rearrangedArr)
+        // if (arr.item.description.length > 1) {
+        //     let index = 1
+        //     arr.item.description.forEach(el=>{
+        //         if (index > 1) {
+        //             row['qty'] = ''
+        //             row['unit'] = ''
+        //             row['desc'] = el
+        //             row['pn'] = ''
+        //             row['uc'] = ''
+        //             row['total'] = ''
+        //             rearrangedArr.push(row)
+        //             console.log(el)
+        //         }
+        //         index++
+        //     })
+        //     // for (let index = 1; index < arr.item.description.length; index++) {
+        //     //     row['qty'] = ''
+        //     //     row['unit'] = ''
+        //     //     row['desc'] = arr.item.description[index]
+        //     //     row['pn'] = ''
+        //     //     row['uc'] = ''
+        //     //     row['total'] = ''
+        //     //     rearrangedArr.push(row)
+        //     //     console.log(arr.item.description[index])
+        //     // }
+        // }
         rearrangedArr.forEach(elm=>{
-            console.log(elm)
             const trow = new TableRow({
                 children: [
                     new TableCell({

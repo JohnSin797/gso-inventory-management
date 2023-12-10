@@ -83,7 +83,7 @@ export default function Exports () {
                             size: 15,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(new Intl.NumberFormat("en-US", {
+                        children: [new Paragraph(elm['uc'] == 0 ? '' : new Intl.NumberFormat("en-US", {
                             style: "decimal",
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -95,7 +95,7 @@ export default function Exports () {
                             size: 15,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(new Intl.NumberFormat("en-US", {
+                        children: [new Paragraph(elm['total'] == 0 ? '' : new Intl.NumberFormat("en-US", {
                             style: "decimal",
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -471,7 +471,59 @@ export default function Exports () {
                                 ]
                             })
                         ]
-                    })
+                    }),
+                    new TableRow({
+                        children: [
+                            new TableCell({
+                                columnSpan: 1,
+                                width: {
+                                    size: 10,
+                                    type: WidthType.PERCENTAGE
+                                },
+                                children: [new Paragraph("QTY")]
+                            }),
+                            new TableCell({
+                                columnSpan: 1,
+                                width: {
+                                    size: 10,
+                                    type: WidthType.PERCENTAGE
+                                },
+                                children: [new Paragraph("UNIT")]
+                            }),
+                            new TableCell({
+                                columnSpan: 5,
+                                width: {
+                                    size: 40,
+                                    type: WidthType.PERCENTAGE
+                                },
+                                children: [new Paragraph("Description")]
+                            }),
+                            new TableCell({
+                                columnSpan: 1,
+                                width: {
+                                    size: 10,
+                                    type: WidthType.PERCENTAGE
+                                },
+                                children: [new Paragraph("Property No.")]
+                            }),
+                            new TableCell({
+                                columnSpan: 2,
+                                width: {
+                                    size: 15,
+                                    type: WidthType.PERCENTAGE
+                                },
+                                children: [new Paragraph("Unit Cost")]
+                            }),
+                            new TableCell({
+                                columnSpan: 2,
+                                width: {
+                                    size: 15,
+                                    type: WidthType.PERCENTAGE
+                                },
+                                children: [new Paragraph("Total Amount")]
+                            }),
+                        ]
+                    }),
                 ]
             })
         ]

@@ -1276,7 +1276,7 @@ export default function Exports () {
                     }),
                     new TableCell({
                         children: [
-                            new Paragraph(element.quantity)
+                            new Paragraph(element.quantity.toString())
                         ]
                     }),
                     new TableCell({

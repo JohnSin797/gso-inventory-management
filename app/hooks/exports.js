@@ -32,14 +32,16 @@ export default function Exports () {
         totalCost += arr.inventory.unit_cost * arr.quantity
         rearrangedArr.push(row)
         row = {}
-        for (let index = 1; index < arr.item.description.length; index++) {
-            row['qty'] = ''
-            row['unit'] = ''
-            row['desc'] = arr.item.description[index]
-            row['pn'] = ''
-            row['uc'] = ''
-            row['total'] = ''
-            rearrangedArr.push(row)
+        if (arr.item.description.length > 1) {
+            for (let index = 1; index < arr.item.description.length; index++) {
+                row['qty'] = ''
+                row['unit'] = ''
+                row['desc'] = arr.item.description[index]
+                row['pn'] = ''
+                row['uc'] = ''
+                row['total'] = ''
+                rearrangedArr.push(row)
+            }
         }
         rearrangedArr.forEach(elm=>{
             console.log(elm)
@@ -59,7 +61,7 @@ export default function Exports () {
                             size: 10,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(elm['unit'])]
+                        children: [new Paragraph(elm['unit'].toString())]
                     }),
                     new TableCell({
                         columnSpan: 5,
@@ -67,7 +69,7 @@ export default function Exports () {
                             size: 40,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(elm['desc'])]
+                        children: [new Paragraph(elm['desc'].toString())]
                     }),
                     new TableCell({
                         columnSpan: 1,
@@ -75,7 +77,7 @@ export default function Exports () {
                             size: 10,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(elm['pn'])]
+                        children: [new Paragraph(elm['pn'].toString())]
                     }),
                     new TableCell({
                         columnSpan: 2,
@@ -83,7 +85,7 @@ export default function Exports () {
                             size: 15,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(elm['uc'] == 0 ? '' : new Intl.NumberFormat("en-US", {
+                        children: [new Paragraph(new Intl.NumberFormat("en-US", {
                             style: "decimal",
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -95,7 +97,7 @@ export default function Exports () {
                             size: 15,
                             type: WidthType.PERCENTAGE
                         },
-                        children: [new Paragraph(elm['total'] == 0 ? '' : new Intl.NumberFormat("en-US", {
+                        children: [new Paragraph(new Intl.NumberFormat("en-US", {
                             style: "decimal",
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -406,6 +408,58 @@ export default function Exports () {
 
     const exportICS = (arr, details, purpose) => {
         const title = new TextRun({text:'INVENTORY CUSTODIAN SLIP',color:'FFFFFF', size:48})
+        const header = new TableRow({
+            children: [
+                new TableCell({
+                    columnSpan: 1,
+                    width: {
+                        size: 10,
+                        type: WidthType.PERCENTAGE
+                    },
+                    children: [new Paragraph("QTY")]
+                }),
+                new TableCell({
+                    columnSpan: 1,
+                    width: {
+                        size: 10,
+                        type: WidthType.PERCENTAGE
+                    },
+                    children: [new Paragraph("UNIT")]
+                }),
+                new TableCell({
+                    columnSpan: 5,
+                    width: {
+                        size: 40,
+                        type: WidthType.PERCENTAGE
+                    },
+                    children: [new Paragraph("Description")]
+                }),
+                new TableCell({
+                    columnSpan: 1,
+                    width: {
+                        size: 10,
+                        type: WidthType.PERCENTAGE
+                    },
+                    children: [new Paragraph("Property No.")]
+                }),
+                new TableCell({
+                    columnSpan: 2,
+                    width: {
+                        size: 15,
+                        type: WidthType.PERCENTAGE
+                    },
+                    children: [new Paragraph("Unit Cost")]
+                }),
+                new TableCell({
+                    columnSpan: 2,
+                    width: {
+                        size: 15,
+                        type: WidthType.PERCENTAGE
+                    },
+                    children: [new Paragraph("Total Amount")]
+                }),
+            ]
+        })
         let tableRows = [
             new TableRow({
                 children: [
@@ -472,61 +526,10 @@ export default function Exports () {
                             })
                         ]
                     }),
-                    new TableRow({
-                        children: [
-                            new TableCell({
-                                columnSpan: 1,
-                                width: {
-                                    size: 10,
-                                    type: WidthType.PERCENTAGE
-                                },
-                                children: [new Paragraph("QTY")]
-                            }),
-                            new TableCell({
-                                columnSpan: 1,
-                                width: {
-                                    size: 10,
-                                    type: WidthType.PERCENTAGE
-                                },
-                                children: [new Paragraph("UNIT")]
-                            }),
-                            new TableCell({
-                                columnSpan: 5,
-                                width: {
-                                    size: 40,
-                                    type: WidthType.PERCENTAGE
-                                },
-                                children: [new Paragraph("Description")]
-                            }),
-                            new TableCell({
-                                columnSpan: 1,
-                                width: {
-                                    size: 10,
-                                    type: WidthType.PERCENTAGE
-                                },
-                                children: [new Paragraph("Property No.")]
-                            }),
-                            new TableCell({
-                                columnSpan: 2,
-                                width: {
-                                    size: 15,
-                                    type: WidthType.PERCENTAGE
-                                },
-                                children: [new Paragraph("Unit Cost")]
-                            }),
-                            new TableCell({
-                                columnSpan: 2,
-                                width: {
-                                    size: 15,
-                                    type: WidthType.PERCENTAGE
-                                },
-                                children: [new Paragraph("Total Amount")]
-                            }),
-                        ]
-                    }),
                 ]
             })
         ]
+        tableRows.push(header)
         tableRows = addTable(tableRows, arr, details, purpose)
         const table = new Table({
             alignment: AlignmentType.CENTER,
